@@ -58,7 +58,8 @@ pytest                        # 합치기 전에
 - 라이브러리: Streamlit 1.64.0 (Apache-2.0), LangGraph 1.2.12 (MIT), Pydantic 2.13.5 (MIT), PyYAML 6.0.3 (MIT), pytest (MIT), OpenAI Python SDK 3.20.0 (Apache-2.0, vLLM의 OpenAI 호환 API 호출용), ko-pii 1.16.0 (MIT, https://github.com/Marker-Inc-Korea/ko-pii, 규칙 기반 개인정보 검출 — ② 마스킹)
 - LLM: Qwen3.8-27B-FP8 (Qwen, Hugging Face `Qwen/Qwen3.8-27B-FP8`, 리비전 017b9c7, Apache-2.0)
 - LLM 서빙: vLLM 0.25.1 (Apache-2.0), 로컬 GPU(RTX A6000 2장). 계획서가 서버 밖으로 나가지 않습니다.
-- 법령 원문 (국가법령정보센터 law.go.kr, 확인일 2026-09-29): 생명윤리 및 안전에 관한 법률·시행규칙, 개인정보 보호법, 약사법
+- 법령 원문 (국가법령정보센터 law.go.kr, 확인일 2026-09-29): 생명윤리 및 안전에 관한 법률·시행령·시행규칙, 개인정보 보호법·시행령, 약사법, 의약품 등의 안전에 관한 규칙, 의료기기법·시행규칙, 공용기관생명윤리위원회 고시. 정리본은 `data/laws/` (본선 전 수집)
+- 근거 검색(RAG): `src/agent/retrieve.py` — `data/laws/`를 조문·소제목 단위로 나눠 글자 2-gram BM25로 찾음(직접 구현, 외부 검색 라이브러리·임베딩 모델 없음). 판정에는 쓰지 않고 ⑨ 사무국 질문의 참고 근거와 근거 보기에만 씀
 - 가이드라인: 가명정보 처리 가이드라인 2026.03. (개인정보보호위원회, https://www.pipc.go.kr/np/cop/bbs/selectBoardArticle.do?bbsId=BS217&mCode=G010030000&nttId=11931, 확인일 2026-09-30), 보건의료데이터 활용 가이드라인 2025.12 (보건복지부·개인정보보호위원회, https://www.mohw.go.kr/boardDownload.es?bid=0003&list_no=1488471&seq=1), 공용기관생명윤리위원회 운영기관 안내 (https://public.irb.or.kr/)
 - 판정 규칙표(`data/rules/rules.yaml`)의 원문은 팀이 본선 전(09-29)에 모은 사전 조사 자료에서 옮겼습니다.
 - 공개 심의 일정: 공용기관생명윤리위원회 2026 심의일정 103회 (`data/schedules/public_irb_2026.csv`, e-IRB 심의일정 달력 https://public.irb.or.kr/pt/pt01/PT0103/PT0103R05.do, 확인일 2026-09-29, 본선 전 수집). 접수 마감은 공용위원회 SOP ver5.5 제31조④(심의 7일 전까지 접수)로 계산

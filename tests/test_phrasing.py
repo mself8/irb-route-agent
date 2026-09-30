@@ -11,6 +11,16 @@ GOOD = ('생명윤리법 제16조 ③ 관련 문의입니다. 본 연구는 "후
         "서면동의 면제에 대해 위원회의 확인을 요청드립니다.")
 
 
+REF = {"문서명": "생명윤리 및 안전에 관한 법률 시행규칙", "조항": "제13조(기관위원회의 심의를 면제할 수 있는 인간대상연구)",
+       "원문": "일반 대중에게 공개된 정보를 이용하는 연구 또는 개인식별정보를 수집ㆍ기록하지 않는 연구", "url": "https://www.law.go.kr"}
+
+
+@pytest.fixture(autouse=True)
+def fixed_refs(monkeypatch):
+    """참고 문단을 고정해 법령 자료가 바뀌어도 검사 테스트가 흔들리지 않게 한다."""
+    monkeypatch.setattr(phrasing, "_refs", lambda item, k=2: [REF])
+
+
 @pytest.fixture
 def answer(monkeypatch):
     def install(*texts):
@@ -50,3 +60,23 @@ def test_server_error_falls_back_to_template(monkeypatch):
 
 def test_no_items_no_call():
     assert phrasing.polish([], PLAN, []) == []
+
+
+def test_quote_from_reference_passes(answer):
+    text = ('생명윤리법 제16조 ③ 관련 문의입니다. 시행규칙 제13조는 "개인식별정보를 수집ㆍ기록하지 않는 연구"를 들고 있습니다. '
+            "본 연구에 대해 위원회의 확인을 요청드립니다.")
+    answer(text)
+    assert phrasing.polish([ITEM], PLAN, []) == [text]
+
+
+def test_made_up_reference_quote_is_none(answer):
+    answer('생명윤리법 제16조 ③ 관련 문의입니다. 시행규칙은 "가명정보 연구는 모두 면제한다"고 정합니다. '
+           "위원회의 확인을 요청드립니다.")
+    assert phrasing.polish([ITEM], PLAN, []) == [None]
+
+
+def test_references_shape(monkeypatch):
+    monkeypatch.undo()  # 고정 참고 문단을 풀고 실제 검색을 쓴다
+    refs = phrasing.references(ITEM)
+    assert refs == phrasing.references(ITEM)  # 같은 항목엔 늘 같은 결과
+    assert all(set(r) == {"문서명", "조항", "url"} for r in refs) and len(refs) <= 2
