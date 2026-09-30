@@ -19,6 +19,27 @@ LISTS_DIR = ROOT / "data" / "lists"
 UNAFFILIATED = {"", "없음", "소속 없음", "개인"}
 IRB_NAME = {"own": "소속 기관 IRB", "public": "공용기관생명윤리위원회", "contract": "공용기관생명윤리위원회 (위탁 협약 후)"}
 IRB_RULES = {"own": ["J2"], "public": ["J8"], "contract": ["J2", "J6"]}
+# 가명정보 처리 가이드라인(2026.03.) 인쇄 48쪽 위험도별 적정성 검토 방식
+REVIEW = {"저위험": "담당자 검토", "중위험": "내부 심의(2인 이상)", "고위험": "적정성 검토위원회(3인 이상)"}
+
+
+def _data_state(data, ids, code, key) -> str:
+    """팀 문서 「식별코드 사실 항목 보완」의 네 가지 데이터 상태. 식별자·식별코드·대응표가 계획서의 데이터 형태보다 우선한다.
+
+    identified 식별자가 남음 / coded 코드화, 연구자가 대응표 보유 / pseudo 가명정보(대응표 분리 보관)
+    anonymous 코드·대응표 없음 / unknown 아직 모름
+    """
+    if ids:
+        return "identified"
+    if ids is False and _yes(code) and key == "데이터팀·제3자":
+        return "pseudo"
+    if ids is False and _yes(code) and key == "연구책임자":
+        return "coded"
+    if data == "익명" or (ids is False and (_no(code) or key == "없음(폐기)")):
+        return "anonymous"
+    if data == "가명처리":
+        return "pseudo"
+    return "unknown"
 
 
 @lru_cache(maxsize=1)
@@ -104,15 +125,17 @@ def gates(state: GraphState) -> dict:
         rows.append(_row("T1", "충족", "식약처 임상시험계획 승인 + 실시기관 심사위원회", refs=["F10"]))
         rows.append(_row("T6", "충족", "공용위원회 심의 대상 아님", refs=["F10"]))
         return {"judgments": rows, "decision": {**d, "scope": "trial"}}
-    data = f.get("F03")
-    if data == "익명":
-        rows.append(_row("S7", "충족", "식별할 수 없는 자료만 이용 → 생명윤리법 심의 비대상", refs=["F03"]))
-        return {"judgments": rows, "decision": {**d, "scope": "none"}}
-    if f.get("F01") == "기록 이용" and data in ("원자료", "가명처리"):
-        rows.append(_row("S3", "충족", "인간대상연구", refs=["F01", "F03"]))
+    data, kind = f.get("F03"), f.get("F01")
+    ids, code, key = _has(f.get("F16")), f.get("F17"), f.get("F18")
+    state_ = _data_state(data, ids, code, key)
+    if state_ == "anonymous":
+        rows.append(_row("S7", "판단불가", "익명정보면 생명윤리법 심의 대상이 아닐 수 있으나, 더 이상 알아볼 수 없는지는 위원회 판단"
+                         " → 관할 IRB에 심의면제 확인", "②", ["F03", "F16", "F17", "F18"]))
+    elif kind == "기록 이용" and state_ in ("identified", "coded", "pseudo"):
+        rows.append(_row("S3", "충족", "식별 가능한 정보(가명정보 포함)를 이용하는 인간대상연구", refs=["F01", "F03"]))
 
     # 2. 가명 데이터 → DRB 사전 체크. DRB는 가이드라인 권고라 결론은 기관확인이다
-    if data == "가명처리":
+    if state_ == "pseudo":
         if f.get("F11") == "서면동의":
             rows.append(_row("D2", "충족", "동의 기반 처리 → DRB 검토 경로 아님", refs=["F03", "F11"]))
         else:
@@ -123,7 +146,7 @@ def gates(state: GraphState) -> dict:
                 rows.append(_row("R-05", "판단불가", "데이터 이용 환경 정보 없음", "나", ["F05"]))
             else:
                 level = {"기관 내부": "저위험", "제3자 제공(통제 환경)": "중위험"}.get(env, "고위험")
-                rows.append(_row("R-05", "충족", f"1차 판정 {level} ({env})", refs=["F05"]))
+                rows.append(_row("R-05", "충족", f"1차 판정 {level} ({env}) · 적정성 검토: {REVIEW[level]}", refs=["F05"]))
                 rows.append(_row("R-06", "판단불가", "기관 지침으로 위험도를 조정할 수 있음", "③"))
             if _yes(f.get("F06")):
                 rows.append(_row("D3", "충족", "결합전문기관에서 결합", refs=["F06"]))
@@ -154,17 +177,24 @@ def gates(state: GraphState) -> dict:
     if len(f.get("F12") or []) >= 2:
         rows.append(_row("J10", "판단불가", "공동연구: 한 기관위원회 선정 또는 공용위원회 이용은 수행기관 합의 사항", "③", ["F12"]))
 
-    # 4. 심의면제 후보. 확정은 관할 위원회가 한다
-    kind, records_id = f.get("F01"), f.get("F16")
+    # 4. 심의면제 후보. 데이터 상태로 가르고, 모르는 것은 연구자에게 먼저 묻는다(판단불가 나). 확정은 관할 위원회
     if kind == "기록 이용":
-        if _no(records_id):
+        if ids:
+            rows.append(_row("E3", "미충족", "식별자를 수집·기록함 → 심의 대상", refs=["F16"]))
+        elif ids is None:
+            rows.append(_row("E3", "판단불가", "식별자 수집·기록 여부 정보 없음", "나", ["F16"]))
+        elif code is None and state_ != "anonymous":
+            rows.append(_row("E3", "판단불가", "연구용 식별코드 사용 여부 정보 없음", "나", ["F17"]))
+        elif _yes(code) and key is None:
+            rows.append(_row("E3", "판단불가", "대응표 보관 주체 정보 없음", "나", ["F18"]))
+        elif state_ == "coded":
+            rows.append(_row("E3", "판단불가", "연구자가 대응표를 보유해 식별할 수 있음 → 면제 여부는 위원회 판단", "①",
+                             ["F16", "F17", "F18"]))
+        else:  # 대응표를 연구자가 볼 수 없거나(가명), 코드·대응표가 없음(익명)
             d["exempt"] = True
-            rows.append(_row("E3", "충족", "기존 자료 이용 · 식별정보 미기록 → 심의면제 신청 후보", refs=["F01", "F16"]))
-        elif _yes(records_id):
-            rows.append(_row("E3", "미충족", "식별정보를 기록함 → 심의 대상", refs=["F16"]))
-        else:
-            rows.append(_row("E3", "판단불가", "식별정보 기록 여부 정보 없음", "나", ["F16"]))
-    elif kind == "설문·면담" and _no(records_id) and _has(f.get("F07")) is False:
+            rows.append(_row("E3", "충족", "기존 자료 이용 · 식별자 없음 · 연구자 재식별 불가 → 심의면제 신청 후보",
+                             refs=["F01", "F16", "F17", "F18"]))
+    elif kind == "설문·면담" and ids is False and _has(f.get("F07")) is False:
         vulnerable = _has(f.get("F08"))
         if vulnerable is None:
             rows.append(_row("E4", "판단불가", "취약한 대상 포함 여부 정보 없음", "나", ["F08"]))
@@ -195,8 +225,6 @@ def route(state: GraphState) -> dict:
         return {"route": _route("범위 밖", ["사무국 문의"], ["G1"])}
     if d["scope"] == "trial":
         return {"route": _route("임상시험", ["식약처 임상시험계획 승인", "임상시험실시기관 심사위원회"], ["T1", "T6"])}
-    if d["scope"] == "none":
-        return {"route": _route("비대상", ["생명윤리법 심의 비대상 (기관 규정 확인)"], ["S7"])}
     if d["irb"] == "unknown":
         return {"route": _route("미정", ["소속기관 IRB 보유 여부 확인 필요"], ["J2"])}
     irb = IRB_NAME[d["irb"]] + (" · 심의면제 신청 후보" if d["exempt"] else " · 심의")

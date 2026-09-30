@@ -34,9 +34,9 @@
 
 - id: S7
   gate: 범위
-  requirement: 생명윤리법 심의 대상이 아닌가 (식별 불가능한 자료만 이용)
-  type: 사실형
-  basis: {law: 생명윤리법, article: 제15조 ① (반대해석), text: "인간대상연구를 하려는 자는 … 기관위원회의 심의를 받아야 한다.", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률/제15조"}
+  requirement: 더 이상 개인을 알아볼 수 없는 자료(익명정보)만 이용하는가 (알아볼 수 없는지는 위원회 판단)
+  type: 판단불가(②)
+  basis: {law: 개인정보 보호법, article: 제58조의2, text: "이 법은 시간ㆍ비용ㆍ기술 등을 합리적으로 고려할 때 다른 정보를 사용하여도 더 이상 개인을 알아볼 수 없는 정보에는 적용하지 아니한다.", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/개인정보보호법/제58조의2"}
 
 - id: D1
   team_id: R-04
@@ -57,14 +57,14 @@
   gate: DRB 사전 체크
   requirement: 가명정보 위험도 1차 판정 (활용 주체 × 처리 환경)
   type: 사실형
-  basis: {law: 가명정보 처리 가이드라인(2026.3.31 전면개정), article: "(현장 확인 후 기입)", text: "(현장 확인 후 기입)"}
+  basis: {law: 가명정보 처리 가이드라인 (개인정보보호위원회 2026.03.), article: 인쇄 37쪽 기본 위험도 판단, text: "활용 주체(내부 활용/제3자 제공)와 처리 환경(통제 가능 여부)을 기준으로 기본 위험도를 우선 판단", checked_at: "2026-09-30", url: "https://www.pipc.go.kr/np/cop/bbs/selectBoardArticle.do?bbsId=BS217&mCode=G010030000&nttId=11931"}
 
 - id: R-06
   team_id: R-06
   gate: DRB 사전 체크
   requirement: 기관 지침에 따른 위험도 조정
   type: 판단불가(③)
-  basis: {law: 가명정보 처리 가이드라인(2026.3.31 전면개정), article: "(현장 확인 후 기입)", text: "(현장 확인 후 기입)"}
+  basis: {law: 가명정보 처리 가이드라인 (개인정보보호위원회 2026.03.), article: 인쇄 38쪽 사례별 위험도 조정, text: "개별 사례에 따라 실질적 위험이 다를 수 있으므로 기본 위험도 판단 이후, 다음 요소를 고려해 최종 위험도를 상향･하향 조정할 수 있음", checked_at: "2026-09-30", url: "https://www.pipc.go.kr/np/cop/bbs/selectBoardArticle.do?bbsId=BS217&mCode=G010030000&nttId=11931"}
 
 - id: D3
   gate: DRB 사전 체크

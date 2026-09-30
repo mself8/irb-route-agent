@@ -175,13 +175,35 @@
       },
       {
         "key": "F16",
-        "label": "식별정보(이름·등록번호 등) 수집·기록",
-        "value": "예",
+        "label": "수집·기록하는 식별자",
+        "value": [
+          "등록번호"
+        ],
         "span": "환자 등록번호",
         "span_start": 149,
         "span_end": 156,
         "status": "found",
         "cross_check": "agree"
+      },
+      {
+        "key": "F17",
+        "label": "연구용 식별코드 사용",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F18",
+        "label": "대응표 보관 주체",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
       }
     ]
   },
@@ -204,7 +226,7 @@
         "requirement": "식별 가능한 정보(가명정보 포함)를 이용하는 인간대상연구인가",
         "result": "충족",
         "abstain_reason": null,
-        "result_detail": "인간대상연구",
+        "result_detail": "식별 가능한 정보(가명정보 포함)를 이용하는 인간대상연구",
         "type": "사실형",
         "basis": {
           "law": "생명윤리법 시행규칙",
@@ -243,7 +265,7 @@
         "requirement": "식별정보를 기록하지 않고 기존 자료·문서를 이용하는가 (심의면제 후보)",
         "result": "미충족",
         "abstain_reason": null,
-        "result_detail": "식별정보를 기록함 → 심의 대상",
+        "result_detail": "식별자를 수집·기록함 → 심의 대상",
         "type": "사실형",
         "basis": {
           "law": "생명윤리법 시행규칙",
@@ -339,7 +361,7 @@
         ]
       },
       {
-        "text": "식별정보를 기록하므로 심의면제 후보가 아니며, 심의를 받아야 합니다.",
+        "text": "식별자를 수집·기록하므로 심의면제 후보가 아니며, 심의를 받아야 합니다.",
         "refs": [
           "E3",
           "F16"
