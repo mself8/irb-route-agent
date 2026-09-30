@@ -42,6 +42,16 @@ FAKE=0 streamlit run app.py   # 실제 그래프
 pytest                        # 합치기 전에
 ```
 
+⑪ 제출 도우미 데모 (모의 e-IRB, 실제 기관과 무관)
+
+```bash
+python -m playwright install chromium-headless-shell   # 처음 한 번 (브라우저)
+python demo/mock_eirb/server.py                        # 모의 e-IRB: http://127.0.0.1:8765 (데모 계정 demo/demo)
+FAKE=0 streamlit run app.py                            # 결과 화면 → "제출 준비 (모의 e-IRB)"
+```
+
+제출 도우미는 http(s)://127.0.0.1·localhost만 조작한다. 브라우저에는 쓸 수 없는 프록시를 걸어 그 밖으로 나가는 요청(리다이렉트·새 창·웹소켓 포함)이 모두 실패한다. 캡처와 첨부 사본은 `/tmp/nais_*`에만 둔다.
+
 ## 개발 기간
 
 대회 규정에 따라 모든 개발은 본선 기간(2026-09-30 ~ 10-01) 안에 진행합니다. 이 레포는 본선 시작 전 README만으로 생성했습니다.

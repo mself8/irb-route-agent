@@ -184,6 +184,8 @@ class Submission(BaseModel):
     receipt: Optional[str] = None              # 모의 사이트 접수번호
     email_draft: Optional[str] = None          # 사무국 메일 초안 (보내지 않고 복사만)
     message: Optional[str] = None
+    warnings: list[str] = []                   # 막지는 않지만 승인 전에 볼 것 (빈 칸 N개, 첨부 칸 초과)
+    label_source: Optional[str] = None         # 칸 이름의 출처: 기관 서식 / 표준 항목(서식 비공개·프로필 없음)
 
 
 class Result(BaseModel):

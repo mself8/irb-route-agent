@@ -18,6 +18,7 @@ from .nodes.judge import compare_table
 from .state import FACT_LABELS, Pending, Result, Submission
 
 FAKE = os.getenv("FAKE", "1") == "1"
+_FAKE_RESULTS: dict[str, Result] = {}  # 예시 모드: 판단불가에 답한 결과를 run_id별로 기억(제출 준비가 답을 잃지 않게)
 
 
 @lru_cache(maxsize=1)
@@ -59,8 +60,9 @@ def confirm(run_id: str, confirmed_facts: list[dict], edited_by_user: list[str] 
 
 def rejudge(run_id: str, extra_inputs: dict) -> Result:
     if FAKE:
-        result = confirm(run_id, [])
+        result = (_FAKE_RESULTS.get(run_id) or confirm(run_id, [])).model_copy(deep=True)
         result.abstain = [a for a in result.abstain if a.input_key not in extra_inputs]
+        _FAKE_RESULTS[run_id] = result
         return result
     cfg = _cfg(run_id)
     v = _graph().get_state(cfg).values
@@ -85,7 +87,7 @@ def rejudge(run_id: str, extra_inputs: dict) -> Result:
 def request_submission(run_id: str, checklist: dict[str, bool]) -> Result:
     """⑪ 제출 준비. 조건을 확인하고, 통과하면 모의 e-IRB에 채운 뒤 최종 제출 앞에서 멈춘다(submission.status로 알 수 있다)."""
     if FAKE:
-        result = confirm(run_id, [])
+        result = (_FAKE_RESULTS.get(run_id) or confirm(run_id, [])).model_copy(deep=True)
         result.submission = Submission(**submit.preview(result.model_dump(), checklist))
         return result
     cfg = _cfg(run_id)
@@ -99,7 +101,7 @@ def request_submission(run_id: str, checklist: dict[str, bool]) -> Result:
 def approve_submission(run_id: str, approved: bool) -> Result:
     """⑪ 사람의 최종 승인. True면 최종 제출을 눌러 접수번호를 받고, False면 취소한다."""
     if FAKE:
-        result = confirm(run_id, [])
+        result = (_FAKE_RESULTS.get(run_id) or confirm(run_id, [])).model_copy(deep=True)
         result.submission = Submission(**submit.preview(result.model_dump(), {}))
         return result
     _graph().invoke(Command(resume={"approved": approved}), _cfg(run_id))
