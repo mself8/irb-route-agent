@@ -222,6 +222,33 @@ def warning_section(s1: dict | None, s2: dict | None) -> tuple[list[str], dict]:
                     f"| 많이 낸 규칙 (계획서 수) | {' · '.join(f'{r} {k}' for r, k in fw['top']) or '없음'} |", ""], fw
 
 
+NEGATION = {"A대신B": "'○○ 대신 연구번호를 쓴다'", "A기록안함": "'○○는 기록하지 않는다'", "미성년자제외": "'미성년자는 제외한다'",
+            "민감정보없음명시": "'민감정보는 넣지 않는다'", "대응표연구자아님": "'대응표는 연구책임자가 아닌 데이터팀이'",
+            "주민번호수집안함": "'주민등록번호와 이름은 받지 않는다'", "결합안함명시": "'결합은 없다'", "공동연구아님": "'공동연구가 아니다'",
+            "약안씀": "'약이나 기기를 쓰지 않는다'", "유전자분석안함": "'유전자 분석은 하지 않는다'", "면제요청안함": "'면제는 요청하지 않는다'",
+            "민감문항없음": "'건강 정보는 묻지 않는다'"}
+
+
+def negation_section(t2: dict | None, alarm: dict) -> list[str]:
+    """규칙을 부정문으로 지킨 대조군이 2단계(AI 추출)에서 헛걸리는가. 2단계 표본 + 표본 밖 보충 측정(traps300_stage2_negation.json)."""
+    extra = load(RESULTS / "traps300_stage2_negation.json")
+    cases = [c for r in (t2, extra) if r for c in r["cases"] if c.get("kind") == "control" and c.get("variant") in NEGATION]
+    if not cases:
+        return []
+    lines = ["### 부정문으로 규칙을 지킨 대조군 (2단계, AI 추출)", "",
+             "AI 추출의 F16 부정문 오류는 고치지 않고 그대로 쟀다.", "",
+             "| 표현 | 건수 | 헛경고 | 뽑은 식별자(F16) |", "|---|---|---|---|"]
+    for v, label in NEGATION.items():
+        group = [c for c in cases if c.get("variant") == v]
+        if not group:
+            continue
+        bad = sum(any(FLAG & set(c.get("states", {}).get(r) or []) if not alarm.get(r) else set(alarm[r]) & set(c.get("states", {}).get(r) or [])
+                      for r in c.get("satisfies", [])) for c in group)
+        ids = " · ".join(str((c.get("facts_got") or {}).get("F16")) for c in group)
+        lines.append(f"| {label} | {len(group)} | {bad} | {ids} |")
+    return lines + [""]
+
+
 # 경로 -------------------------------------------------------------------------------------------------------------------
 def route_pairs(run: dict) -> list[tuple[str, str]]:
     return [(c["route_expected"], c.get("route") or "없음") for c in run["cases"] if c.get("route_expected")]
@@ -551,6 +578,7 @@ def main(a: argparse.Namespace) -> None:
     route_lines, route, route_app = route_section(t1, t2, s1, s2, m)
     trap_lines, trap = trap_section(t1, t2)
     warn_lines, warn = warning_section(s1, s2)
+    warn_lines += negation_section(t2, (t2 or t1 or {}).get("alarm", {}))
     judge_lines, judge, judge_app = judgment_section(t1, t2, s1, s2)
     fact_lines, fact, fact_app = fact_section(t2, s2, m)
     origin_lines, by_origin = origin_section(s1, s2)
