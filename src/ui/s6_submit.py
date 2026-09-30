@@ -1,5 +1,6 @@
 """S6 제출 준비 (⑪). 조건 확인 → 모의 e-IRB에 채우고 최종 제출 앞에서 멈춤 → 캡처·입력값 확인 → 승인하면 제출·접수번호.
 모의 사이트(demo/mock_eirb, 127.0.0.1)만 조작한다. 실제 기관 사이트에는 제출하지 않는다.
+제출처가 공용위원회면 실제 e-IRB 신규 심의 신청 화면을 여는 링크만 둔다(열기만 하고 조작하지 않는다).
 """
 from pathlib import Path
 
@@ -7,6 +8,7 @@ import streamlit as st
 
 from agent import api
 
+PUBLIC_EIRB = "https://public.irb.or.kr/rs/rs00/RS0003/RS0003C01.do"  # 공용위원회 e-IRB · 신규 심의 신청
 STATUS = {"blocked": "제출 조건을 아직 못 넘었습니다", "awaiting_approval": "모의 e-IRB에 채웠습니다 · 최종 제출 앞에서 멈춤",
           "submitted": "모의 e-IRB에 제출했습니다", "cancelled": "제출을 취소했습니다", "preview": "예시 모드 미리보기"}
 
@@ -16,6 +18,10 @@ def render() -> None:
     st.info(result.notice)
     st.subheader("제출 준비 · 모의 e-IRB (데모용, 실제 기관과 무관)")
     st.caption(f"경로 {result.route.route} · " + " → ".join(result.route.committees))
+    venue = getattr(result, "venue", None)
+    if (venue and venue.id == "public") or any("공용기관생명윤리위원회" in c for c in result.route.committees):
+        st.link_button("공용위원회 e-IRB에서 신규 심의 신청하기 (실제 사이트)", PUBLIC_EIRB)
+        st.caption("실제 사이트는 열기만 합니다. 로그인·동의·서약·최종 제출은 연구자 본인이 합니다.")
     sub = result.submission
 
     if not (sub and sub.status == "submitted"):  # 접수한 뒤에는 다시 채우지 않는다
