@@ -252,13 +252,19 @@ def highlights(state: GraphState, suggestions: list[dict]) -> list[dict]:
         marks.setdefault((start, start + len(span), key, span), []).append(note)
         return True
 
-    targets = [s["rule_id"] for s in suggestions if s["rule_id"] in rows]  # 기관 층 제안은 판정 행이 없어 칠하지 않는다
+    targets = [s["rule_id"] for s in suggestions  # 기관 기준 행은 아래에서 검사가 찾은 문장을 직접 칠한다
+               if s["rule_id"] in rows and rows[s["rule_id"]].get("type") != "기관 기준"]
     targets += [r for r in ("E2", "E4", "E5") if rows.get(r, {}).get("result") == "미충족"]
     for rule_id in targets:
         r = rows[rule_id]
         note = f"{rule_id} {r['result_detail']}"
         if not any([mark(k, note) for k in r["fact_refs"]]):
             any(mark(k, f"{rule_id} 여기에 서술 추가: {r['result_detail']}") for k in ("F03", "F01"))
+    for r in state["judgments"]:  # 기관 기준 위반: 검사가 찾은 문장(과거형·경어체·만 나이 등)을 칠한다
+        if r.get("type") == "기관 기준" and r["result"] == "미충족":
+            for a, b in r.get("spans") or []:
+                if b > a:
+                    marks.setdefault((a, b, r["rule_id"], text[a:b]), []).append(f"{r['rule_id']} {r['result_detail']}")
     merged: list[dict] = []  # 겹치는 구간은 하나로 합쳐 번호가 어긋나지 않게 한다
     for (a, b, k, _), notes in sorted(marks.items()):
         if merged and a < merged[-1]["span_end"]:

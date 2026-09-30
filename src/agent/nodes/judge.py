@@ -379,6 +379,8 @@ def gates(state: GraphState) -> dict:
         rows.append(_row("R-13", "충족" if told else "미충족",
                          "결합전문기관 절차가 계획서에 적혀 있음" if told else "타 기관 결합인데 결합전문기관 절차가 계획서에 없음",
                          refs=["F06"]))
+    # 7. 기관 기준: 제출처(관할 위원회) 기관의 규정 중 계획서 글로 확인할 수 있는 것을 판정 행으로 낸다. 기관마다 기준이 다르다
+    rows += _venue_rows({**state, "decision": d, "judgments": rows})
     return {"judgments": rows, "decision": d}
 
 
@@ -460,16 +462,139 @@ def venue_view(state: GraphState, venue: dict) -> dict:
     return {k: venue.get(k, "") for k in ("id", "name", "short", "submit", "source", "plan_form")} | {"plan_items": items, "rules": hits}
 
 
-# 기관 규칙의 check 이름 → 계획서 글 검사 함수(위반이면 True). 아직 없는 검사는 판정하지 않는다(헛경고를 내지 않는다)
-CHECKS: dict = {}
+# 계획서 글 검사: 기관 규칙의 check 이름 → 함수. 위반 구간 목록(빈 목록이면 지킴), 판단할 수 없으면 None
+_ACTIONS = "모집|수집|분석|사용|측정|조사|실시|수행|시행|열람|추출|투여|채취|관찰|면담|배포|진행"
+
+
+def _sentences(text: str, pattern: str) -> list[tuple[int, int]]:
+    """pattern이 들어 있는 문장(마침표·줄바꿈 사이) 구간."""
+    return [m.span() for m in re.finditer(rf"[^.\n]*(?:{pattern})[^.\n]*\.?", text)]
+
+
+def _fact_span(state: GraphState, key: str) -> tuple[int, int] | None:
+    text = state.get("masked_text", "")
+    fact = next((x for x in state.get("facts") or state.get("confirmed_facts", []) if x["key"] == key), None)
+    span = (fact or {}).get("span")
+    if not span or fact.get("status") == "not_found":
+        return None
+    start = text.find(span)
+    return (start, start + len(span)) if start >= 0 else None
+
+
+def _past_tense(state):
+    """연구 행위를 이미 한 것처럼 쓴 문장 ('모집하였다', '분석했다'). 선행연구 서술('보고되었다')은 잡지 않는다."""
+    return _sentences(state.get("masked_text", ""), rf"(?:{_ACTIONS})(?:하였|했)다")
+
+
+def _mixed_style(state):
+    """계획서(평서체)에 섞인 경어체 문장."""
+    return _sentences(state.get("masked_text", ""), r"습니다|합니다|입니다|됩니다")
+
+
+def _age_without_man(state):
+    """'만'이 없는 나이 표기 ('19세 이상'). '만 19세'는 지킨 것이다."""
+    return [m.span() for m in re.finditer(r"(?<!만)(?<!만 )\b\d{1,3}\s?세(?:\s?(?:이상|이하|미만|초과))?", state.get("masked_text", ""))]
+
+
+def _sample_size_rationale(state):
+    text = state.get("masked_text", "")
+    if any(w in text for w in ("산출 근거", "산출근거", "표본 수 산출", "검정력", "유의수준", "효과크기")):
+        return []
+    return [_fact_span(state, "F15") or (0, 0)]
+
+
+def _period_before_review(state):
+    """연구(참여) 시작일이 공개 일정상 가장 빠른 심의 결과보다 이른가. 공개 일정이 없는 기관은 판단하지 않는다."""
+    venue = _venue(state)
+    s = (venue or {}).get("schedule", {})
+    if s.get("kind") != "csv":
+        return None
+    f13 = str(_facts(state).get("F13") or "")
+    m = re.match(r"\d{4}-\d{2}-\d{2}", f13)
+    start = date.fromisoformat(m.group(0)) if m else None
+    if start is None and state.get("target_start_date"):
+        start = date.fromisoformat(state["target_start_date"])
+    if start is None:
+        return None
+    today = date.fromisoformat(state["today"]) if state.get("today") else date.today()
+    with (ROOT / s["path"]).open(encoding="utf-8-sig") as fp:
+        meetings = sorted(date.fromisoformat(r["회의일"]) for r in csv.DictReader(fp)
+                          if r["구분"] == "정규" and date.fromisoformat(r["접수마감"]) >= today)
+    if not meetings:
+        return None
+    earliest = meetings[0] + timedelta(days=s["result_days"] + 1)
+    return [_fact_span(state, "F13") or (0, 0)] if start < earliest else []
+
+
+def _recruit_doc(state):
+    """포스터·SNS 같은 공개 모집인데 모집 문건 언급이 없음. 공개 모집이 아니면 해당 없음(지킴)."""
+    text = state.get("masked_text", "")
+    public = _sentences(text, r"포스터|SNS|게시판|온라인 모집|홍보물|전단")
+    if not public or any(w in text for w in ("모집 문건", "모집문건", "모집 문서", "모집문서", "모집 공고문")):
+        return []
+    return public
+
+
+def _crf_identifiers(state):
+    """CRF·분석 자료에 식별자(이름·등록번호 등)를 기록함 (F16)."""
+    ids = _has(_facts(state).get("F16"))
+    if ids is None:
+        return None
+    return [_fact_span(state, "F16") or (0, 0)] if ids else []
+
+
+def _english_title(state):
+    text = state.get("masked_text", "")
+    if re.search(r"[A-Za-z]{2,}(?:[\s:,\-]+[A-Za-z]{2,}){2,}", text):
+        return []
+    title = re.search(r"연구\s*제목\s*[:：][^\n]*", text)
+    return [title.span() if title else (0, 0)]
+
+
+CHECKS = {"past_tense": _past_tense, "mixed_style": _mixed_style, "age_without_man": _age_without_man,
+          "sample_size_rationale": _sample_size_rationale, "period_before_review": _period_before_review,
+          "recruit_doc": _recruit_doc, "crf_identifiers": _crf_identifiers, "english_title": _english_title}
 
 
 def _checked(state: GraphState, rule: dict) -> bool:
-    """check가 붙은 규칙은 그 검사가 위반을 찾았을 때만 낸다. 검사가 아직 없으면 told(서술 여부) 규칙만 그대로 본다."""
+    """check가 붙은 규칙은 검사가 위반을 찾았을 때만 낸다(판단할 수 없으면 내지 않는다)."""
     name = rule.get("check")
-    if not name or (name not in CHECKS and rule.get("told")):
+    if not name:
         return True
-    return name in CHECKS and CHECKS[name](state)
+    if name not in CHECKS:
+        return bool(rule.get("told"))
+    return bool(CHECKS[name](state))
+
+
+def _venue_rows(state: GraphState) -> list[dict]:
+    """제출처 기관의 규정 중 계획서 글로 확인하는 것(check·told)을 판정 행으로. 판단할 수 없는 것은 행을 만들지 않는다."""
+    venue = _venue(state)
+    if not venue:
+        return []
+    text = state.get("masked_text", "")
+    link = re.search(r"https?://[^\s,)]+", venue.get("source", ""))
+    rows = []
+    for r in venue.get("rules", []):
+        if not (r.get("check") or r.get("told")) or not _holds(state, r["when"]):
+            continue
+        if r.get("check") in CHECKS:
+            spans = CHECKS[r["check"]](state)
+            if spans is None:
+                continue
+        elif r.get("told"):
+            spans = [] if any(w in text for w in r["told"]) else [(0, 0)]
+        else:
+            continue
+        bad = bool(spans)
+        where = sum(b > a for a, b in spans)
+        rows.append({"rule_id": r["id"], "team_id": None, "requirement": r["warning"].split(". ")[0].rstrip("."),
+                     "result": "미충족" if bad else "충족", "abstain_reason": None,
+                     "result_detail": (f"{venue['short']} 규정 위반" + (f" {where}곳" if where else "")) if bad else f"{venue['short']} 규정 지킴",
+                     "type": "기관 기준",
+                     "basis": {"law": r["source"], "article": venue["short"], "text": r["warning"],
+                               "checked_at": institutions()["checked_at"], "url": link.group(0) if link else None},
+                     "fact_refs": [], "spans": [list(s) for s in spans]})
+    return rows
 
 
 def compare_table() -> list[dict]:
@@ -574,7 +699,7 @@ def _none(default: int, *why: str) -> dict:
 
 def _schedule(state: GraphState) -> dict:
     d, route_ = state["decision"], state["route"]["route"]
-    needs_fix = any(r["result"] == "미충족" and rules()[r["rule_id"]].get("checkpoint") for r in state["judgments"])
+    needs_fix = any(r["result"] == "미충족" and rules().get(r["rule_id"], {}).get("checkpoint") for r in state["judgments"])
     default = 1 if needs_fix else 0
     target = state.get("target_start_date")
     if route_ == "임상시험":

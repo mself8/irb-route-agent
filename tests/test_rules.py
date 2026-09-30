@@ -334,3 +334,28 @@ def test_unimplemented_checks_do_not_warn():
     assert not {"I-CUK-1", "I-CUK-3", "I-CUK-4", "I-CUK-5"} & fired   # 과거형·문체·만 나이·심의 전 시작: 검사 전이라 내지 않음
     assert "I-CUK-2" in fired                                          # 산출근거는 서술 여부(told)로 확인: 샘플 2에 없음
 
+
+
+def test_institution_criteria_rows():
+    """제출처 기관의 규정이 판정표의 '기관 기준' 행이 되고, 계획서 글 검사가 위반 문장을 찾는다 (가톨릭대 유의사항)."""
+    base = samples.load("sample2_pseudo")
+    clean = run({"F12": ["가톨릭대"]}, "가톨릭대")
+    rows = {r["rule_id"]: r for r in clean["judgments"] if r["type"] == "기관 기준"}
+    assert rows["I-CUK-1"]["result"] == rows["I-CUK-3"]["result"] == rows["I-CUK-4"]["result"] == "충족"
+    assert rows["I-CUK-2"]["result"] == "미충족"                        # 샘플 2엔 대상자 수 산출근거가 없다
+    assert not [r for r in run({})["judgments"] if r["type"] == "기관 기준"]  # 프로필 없는 기관은 기관 기준 행이 없다
+    trap = base["pending"]["masked_text"].replace(
+        "제공받아 분석한다.", "제공받아 분석하였다. 연구대상자는 19세 이상 성인으로 합니다.")
+    facts = [dict(f, value=["가톨릭대"]) if f["key"] == "F12" else
+             dict(f, value="2026-10-15 ~ 2027-10-14") if f["key"] == "F13" else dict(f)
+             for f in base["pending"]["facts"]]
+    state = {"institution_name": "가톨릭대", "target_start_date": "2026-10-15", "today": "2026-09-30", "masked_text": trap,
+             "facts": facts, "confirmed_facts": facts, "extra_inputs": {}}
+    for step in (judge.institution, judge.gates, judge.route, judge.docs_schedule, write.abstain, write.report):
+        state = {**state, **step(state)}
+    bad = {r["rule_id"] for r in state["judgments"] if r["type"] == "기관 기준" and r["result"] == "미충족"}
+    assert {"I-CUK-1", "I-CUK-3", "I-CUK-4", "I-CUK-5"} <= bad          # 과거형·경어체·만 나이 없음·심의 전 시작
+    marked = " ".join(h["span"] for h in state["highlights"])
+    assert "분석하였다" in marked and "19세 이상" in marked
+    other = run({"F12": ["삼성서울병원"]}, "삼성서울병원")               # 기관을 바꾸면 판정 기준도 바뀐다
+    assert not [r for r in other["judgments"] if r["rule_id"].startswith("I-CUK")]
