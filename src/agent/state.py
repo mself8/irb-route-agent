@@ -134,6 +134,24 @@ class AbstainItem(BaseModel):
     references: list[dict] = []                # (가) 설명용 참고 근거 [{문서명, 조항, url}] (근거 검색, 판정에는 안 씀)
 
 
+class Suggestion(BaseModel):
+    """제출 전 보완: 사무국·DRB가 되물을 것을 미리 막는 경고와 계획서에 넣을 문장."""
+    rule_id: str
+    level: Literal["보완 필요", "확인 필요", "안내"]
+    warning: str
+    add_text: Optional[str] = None            # 계획서에 넣을 문장 초안 (○○는 연구자가 채움)
+    basis: Optional[str] = None               # 근거 법령·조항
+
+
+class Highlight(BaseModel):
+    """계획서 원문에서 노란색으로 표시할 곳 (가린 계획서 기준 위치)."""
+    key: str
+    span: str
+    span_start: int
+    span_end: int
+    note: str
+
+
 class ReportSentence(BaseModel):
     """⑩ 결과 리포트 한 문장. 근거 없는 문장은 만들지 않는다."""
     text: str
@@ -151,6 +169,9 @@ class Result(BaseModel):
     schedule: Schedule
     abstain: list[AbstainItem]
     report: list[ReportSentence]
+    suggestions: list[Suggestion] = []
+    highlights: list[Highlight] = []
+    masked_text: str = ""                      # 노란색 표시를 그릴 가린 계획서
     notice: str = NOTICE
 
 
@@ -173,3 +194,5 @@ class GraphState(TypedDict, total=False):
     schedule: dict
     abstain: list[dict]
     report: list[dict]
+    suggestions: list[dict]
+    highlights: list[dict]

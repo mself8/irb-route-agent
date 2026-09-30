@@ -16,7 +16,8 @@ def render() -> None:
                 st.caption("사무국에 보낼 질문 (오른쪽 위 아이콘으로 복사)")
                 st.code(item.question or "", language=None, wrap_lines=True)
                 for ref in item.references:
-                    st.caption(f"참고 근거: {ref.get('문서명', '')} {ref.get('조항', '')} · {ref.get('url', '')}")
+                    url = ref.get("url") or ""
+                    st.caption(f"참고 근거: {ref.get('문서명', '')} {ref.get('조항', '')}" + (f" · {url}" if url else ""))
             elif item.options:
                 value = st.radio(item.ask_input or item.reason, item.options, index=None, key=f"in_{item.rule_id}")
                 if value:

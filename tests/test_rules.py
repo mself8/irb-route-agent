@@ -5,13 +5,18 @@ from agent import samples
 from agent.nodes import judge, write
 
 
-def run(overrides: dict, institution: str = "가상대학교병원", extra: dict | None = None, target: str = "2026-12-01") -> dict:
-    facts = [dict(f) for f in samples.load("sample2_pseudo")["pending"]["facts"]]
+def run(overrides: dict, institution: str = "가상대학교병원", extra: dict | None = None, target: str = "2026-12-01",
+        unwritten: tuple = ()) -> dict:
+    """샘플 2의 사실을 바꿔 ⑤~⑩을 돌린다. unwritten은 연구자가 채웠지만 계획서에는 없는 사실이다."""
+    sample = samples.load("sample2_pseudo")
+    facts = [dict(f) for f in sample["pending"]["facts"]]
     for f in facts:
         if f["key"] in overrides:
             f["value"] = overrides[f["key"]]
             f["status"] = "not_found" if f["value"] is None else "found"
+    extracted = [{**f, "status": "not_found"} if f["key"] in unwritten else f for f in facts]
     state = {"institution_name": institution, "target_start_date": target, "today": "2026-09-30",
+             "masked_text": sample["pending"]["masked_text"], "facts": extracted,
              "confirmed_facts": facts, "extra_inputs": extra or {}}
     for step in (judge.institution, judge.gates, judge.route, judge.docs_schedule, write.abstain, write.report):
         state = {**state, **step(state)}
@@ -183,7 +188,7 @@ def test_fifth_review_fixes():
     unsure = run(IDENTIFIED, "없는병원", {"irb_exists": "없음", "contract": "모름"})  # 모름 → 같은 질문 반복 대신 사무국 확인
     assert "contract" not in asks(unsure) and any(a["rule_id"] == "J3" and a["kind"] == "가" for a in unsure["abstain"])
     done = run(IDENTIFIED, "없는병원", {"irb_exists": "없음", "contract": "예"})    # 협약함 → 협약한 위원회, 협약서·계산 불가 없음
-    assert done["route"]["committees"][0].startswith("협약한")
+    assert done["route"]["committees"][0] == judge.IRB_NAME["contracted_any"] + " · 심의"  # 상대를 말하지 않았으면 단정하지 않는다
     assert not any("협약서" in d["doc"] for d in done["documents"])
     assert next(r for r in done["judgments"] if r["rule_id"] == "J3")["type"] == "사실형"
     assert run({})["route"]["fast_track"]                        # 샘플 2: 자체 IRB · 결합 없음 → 빠른 길
@@ -204,3 +209,36 @@ def test_sixth_review_fixes():
     assert any(c.startswith("공동 수행기관 IRB") for c in joint["route"]["committees"]) and "J10" in joint["route"]["trace"]
     via_public = run(IDENTIFIED, "없는병원", {"irb_exists": "없음", "contract": "예(공용위원회)"})
     assert [s.get("submit_by") for s in via_public["schedule"]["scenarios"]] == ["2026-11-12", "2026-10-29", "2026-10-13"]
+
+
+def test_seventh_review_fixes():
+    other = run(IDENTIFIED, "없는병원", {"irb_exists": "없음", "contract": "예(다른 기관 IRB)"})
+    assert other["route"]["committees"][0] == "협약한 다른 기관 IRB · 심의"
+    joint = run({"F12": ["가상대학교병원", "다른병원"]})          # 공동연구: 빠른 길 아님, 서류·일정·리포트에도 공동 IRB
+    assert joint["route"]["route"] == "A" and not joint["route"]["fast_track"]
+    assert joint["route"]["order"] == [1, 2, 2]                   # 공동 수행기관 IRB는 소속 IRB와 같은 차례
+    assert any("공동 수행기관 IRB" in d["doc"] for d in joint["documents"])
+    assert any("공동 수행기관 IRB" in m for m in joint["schedule"]["missing"])
+    assert any("J10" in s["refs"] for s in joint["report"]) and not any("7일" in s["text"] for s in joint["report"])
+
+
+def test_submission_fixes():
+    clean = run({})                                                # 샘플 2: 식별 관리가 적혀 있어 보완 필요 없음, 빠른 길 유지
+    assert {"R-11", "R-12"} <= ids(clean, "충족") and clean["route"]["fast_track"] and clean["schedule"]["default"] == 0
+    assert not [s for s in clean["suggestions"] if s["level"] == "보완 필요"]
+    told = run({}, unwritten=("F17", "F18"))                       # 연구자가 채웠지만 계획서에 없으면 경고 + 보완 문구
+    assert {"R-11", "R-12"} <= ids(told, "미충족") and told["route"]["route"] == "A"
+    fix = {s["rule_id"]: s for s in told["suggestions"]}
+    assert fix["R-11"]["level"] == fix["R-12"]["level"] == "보완 필요" and "대응표" in fix["R-12"]["add_text"]
+    assert "신규심의로 전환할 수 있습니다" in fix["R-11"]["warning"] and told["schedule"]["default"] == 1  # R-12 → 보완 1회
+    assert any("R-11" in m for m in told["schedule"]["missing"])
+    assert any(h["key"] == "F03" and "R-11" in h["note"] for h in told["highlights"])  # 서술이 없으면 데이터 형태 문장에 표시
+    pi = run({"F18": "연구책임자"})                                  # 가명정보인데 연구자가 대응표 보유 → R-12
+    assert "연구책임자" in next(s for s in pi["suggestions"] if s["rule_id"] == "R-12")["warning"]
+    assert "R-13" in ids(run({"F06": "예"}), "미충족")               # 결합인데 결합전문기관 서술 없음
+    crf = run(IDENTIFIED)                                          # 식별자 기록 → 노란색 표시 + 가명 방식 대안(엔진 재판정)
+    assert crf["route"]["route"] == "C" and any(h["key"] == "F16" and h["note"].startswith("E3") for h in crf["highlights"])
+    e3 = next(s for s in crf["suggestions"] if s["rule_id"] == "E3")
+    assert e3["level"] == "안내" and "경로 A" in e3["warning"]
+    for s in [*told["suggestions"], *crf["suggestions"]]:          # 경고는 가능성으로만 쓴다 (팀 문서 6.6)
+        assert not any(w in s["warning"] for w in ("승인됩니다", "통과", "반려됩니다"))

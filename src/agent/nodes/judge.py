@@ -21,12 +21,14 @@ PUBLIC_SCHEDULE = ROOT / "data" / "schedules" / "public_irb_2026.csv"
 UNAFFILIATED = {"없음", "소속 없음", "개인"}
 IRB_NAME = {"own": "소속 기관 IRB", "public": "공용기관생명윤리위원회",
             "contract": "공용위원회 또는 인증받은 다른 기관 IRB (위탁 협약 필요)",
-            "contracted": "협약한 다른 기관 IRB", "contracted_public": "공용기관생명윤리위원회 (위탁 협약)"}
+            "contracted": "협약한 다른 기관 IRB", "contracted_public": "공용기관생명윤리위원회 (위탁 협약)",
+            "contracted_any": "협약한 위원회 (공용위원회 또는 인증받은 다른 기관 IRB)"}
 IRB_RULES = {"own": ["J2"], "public": ["J8"], "contract": ["J2", "J6"], "contracted": ["J2", "J6", "J3"],
-             "contracted_public": ["J2", "J6", "J3"]}
+             "contracted_public": ["J2", "J6", "J3"], "contracted_any": ["J2", "J6", "J3"]}
 EXEMPT_SUFFIX = {"yes": " · 심의면제 신청 후보", "no": " · 심의", "unknown": " · 심의 또는 심의면제 (확인 필요)"}
 # 가명정보 처리 가이드라인(2026.03.) 인쇄 48쪽 위험도별 적정성 검토 방식
 REVIEW = {"저위험": "담당자 검토", "중위험": "내부 심의(2인 이상)", "고위험": "적정성 검토위원회(3인 이상)"}
+ID_LABEL = {"F16": "식별자", "F17": "연구용 번호", "F18": "대응표 보관"}
 
 # 사실 값 정리: 화면에서 손으로 고친 값이나 표현이 달라도 규칙이 같은 뜻으로 읽게 한다
 NONE_WORDS = {"", "없음", "아니오", "아니요", "해당 없음", "없다"}
@@ -79,6 +81,11 @@ def _facts(state: GraphState) -> dict:
     """확정 사실의 값. 계획서에 없던 사실은 None."""
     return {f["key"]: None if f.get("status") == "not_found" else _clean(f["key"], f.get("value"))
             for f in state.get("confirmed_facts", [])}
+
+
+def _written(state: GraphState) -> set[str]:
+    """계획서에 적혀 있던 사실. ③이 뽑은 상태로 본다(연구자가 ④·⑨에서 채운 값은 계획서에는 없다)."""
+    return {x["key"] for x in state.get("facts") or state.get("confirmed_facts", []) if x.get("status") != "not_found"}
 
 
 def _yes(v) -> bool:
@@ -247,7 +254,7 @@ def gates(state: GraphState) -> dict:
         rows.append(_row("J6", "충족", "위원회를 두지 않아 인증을 받지 못한 기관 → 위탁 협약 가능 기관"))
         contract = state.get("extra_inputs", {}).get("contract")
         if contract in ("예", "예(공용위원회)", "예(다른 기관 IRB)"):
-            d["irb"] = "contracted_public" if contract == "예(공용위원회)" else "contracted"
+            d["irb"] = {"예": "contracted_any", "예(공용위원회)": "contracted_public"}.get(contract, "contracted")
             rows.append(_row("J3", "충족", "위탁 협약을 맺음 → 협약한 위원회에 신청"))
         elif contract == "아니오":
             rows.append(_row("J3", "미충족", "위탁 협약을 맺지 않음"))
@@ -319,19 +326,49 @@ def gates(state: GraphState) -> dict:
         detail = ("가명정보 특례로 동의 없이 쓰는 경우 생명윤리법 동의면제 판단이 필요한지는 가이드라인 안에서도 엇갈림 → 위원회 확인"
                   if d["drb"] else "서면동의 면제는 기관위원회 승인 사항 (위험이 극히 낮은지 등)")
         rows.append(_row("C3", "판단불가", detail, "①", ["F11"]))
+
+    # 6. 제출 전 보완: 판정에 쓴 사실이 계획서에 적혀 있는가 (팀 문서 R-11~R-13). 사무국이 실제로 어떻게 처리할지는 예측하지 않는다
+    written = _written(state)
+    if d["exempt"] == "yes":
+        need = ["F16", "F17"] + ([] if f.get("F17") == "아니오" else ["F18"])  # 연구용 번호가 없으면 대응표도 없다
+        gap = [k for k in need if k not in written]
+        if gap:
+            rows.append(_row("R-11", "미충족", "계획서에 없는 식별 관리 서술: " + ", ".join(ID_LABEL[k] for k in gap)
+                             + " → 면제를 신청해도 신규심의로 전환될 수 있음", refs=gap))
+        else:
+            rows.append(_row("R-11", "충족", "식별자·연구용 번호·대응표 관리가 계획서에 적혀 있음", refs=need))
+    if d["drb"] is True:
+        if key in ("데이터팀·제3자", "없음(폐기)") and "F18" in written:
+            rows.append(_row("R-12", "충족", "대응표(추가정보)의 분리 보관 또는 폐기가 계획서에 적혀 있음", refs=["F18"]))
+        elif key == "연구책임자":
+            rows.append(_row("R-12", "미충족", "연구책임자가 대응표를 보관 → DRB에서 분리 보관 등 안전조치 보완을 요구받을 수 있음",
+                             refs=["F18"]))
+        else:
+            rows.append(_row("R-12", "미충족", "대응표 분리 보관·접근 통제가 계획서에 없음 → DRB에서 안전조치 보완을 요구받을 수 있음",
+                             refs=["F18"]))
+    if any(r["rule_id"] == "D3" and r["result"] == "충족" for r in rows):
+        told = "결합전문기관" in state.get("masked_text", "")
+        rows.append(_row("R-13", "충족" if told else "미충족",
+                         "결합전문기관 절차가 계획서에 적혀 있음" if told else "타 기관 결합인데 결합전문기관 절차가 계획서에 없음",
+                         refs=["F06"]))
     return {"judgments": rows, "decision": d}
 
 
-def _route(label: str, committees: list[str], trace: list[str], fast: bool = False) -> dict:
-    return {"route": label, "committees": committees, "order": list(range(1, len(committees) + 1)),
+def _route(label: str, committees: list[str], trace: list[str], fast: bool = False, order: list[int] | None = None) -> dict:
+    return {"route": label, "committees": committees, "order": order or list(range(1, len(committees) + 1)),
             "fast_track": fast, "trace": trace}
 
 
+def _joint(state: GraphState) -> bool:
+    """공동연구(수행기관 2곳 이상). 기본은 기관마다 심의라 서류·일정도 기관마다 따로다 (prep 케이스 3)."""
+    return len(_facts(state).get("F12") or []) >= 2
+
+
 def _fast(state: GraphState) -> bool:
-    """DRB 승인 뒤 7일 표준절차(빠른 길): 같은 기관의 IRB·DRB이고, 결합이 없고, 전제를 다 확인했을 때만 (prep 이슈 #10)."""
+    """DRB 승인 뒤 7일 표준절차(빠른 길): 한 기관 연구로 같은 기관의 IRB·DRB이고, 결합이 없고, 전제를 다 확인했을 때만 (prep 이슈 #10)."""
     d = state["decision"]
     return (d["drb"] is True and d["exempt"] == "yes" and d["irb"] == "own" and not d["pending"]
-            and _facts(state).get("F06") == "아니오")
+            and _facts(state).get("F06") == "아니오" and not _joint(state))
 
 
 def route(state: GraphState) -> dict:
@@ -351,11 +388,12 @@ def route(state: GraphState) -> dict:
     exempt = [r["rule_id"] for r in rows if r["rule_id"] in ("E2", "E3", "E5")]
     trace = [*drb_rules, *IRB_RULES[d["irb"]], *exempt]
     joint = []
-    if len(_facts(state).get("F12") or []) >= 2:  # 공동연구: 기본은 기관마다 심의, 한 곳 선정·공용위원회는 합의 (prep 케이스 3)
+    if _joint(state):  # 공동연구: 기본은 기관마다 심의, 한 곳 선정·공용위원회는 합의 (prep 케이스 3)
         joint, trace = ["공동 수행기관 IRB (기본은 기관마다 · 한 곳 선정은 합의)"], [*trace, "J10"]
-    if d["drb"]:
-        return {"route": _route("A", [*drb, irb, *joint], trace, fast=_fast(state))}
-    return {"route": _route("C" if d["irb"] == "own" else "B", [irb, *joint], trace)}
+    steps = [*drb, irb]
+    order = [*range(1, len(steps) + 1), *[len(steps)] * len(joint)]  # 공동 수행기관 IRB는 소속 IRB와 같은 차례에 따로 낸다
+    label = "A" if d["drb"] else "C" if d["irb"] == "own" else "B"
+    return {"route": _route(label, [*steps, *joint], trace, fast=_fast(state), order=order)}
 
 
 def docs_schedule(state: GraphState) -> dict:
@@ -372,13 +410,21 @@ def docs_schedule(state: GraphState) -> dict:
         doc = {"yes": f"심의면제 신청서{attach}", "no": "심의 신청서 · 연구계획서",
                "unknown": "심의 또는 심의면제 신청서 (위원회 확인 후 결정)"}[d["exempt"]]
         docs.append({"doc": doc, "level": "기관", "source": "관할 IRB 서식"})
+        if _joint(state):
+            docs.append({"doc": "공동 수행기관 IRB 심의 신청서 (기관마다)", "level": "기관", "source": "각 수행기관 IRB 서식",
+                         "basis": "J10"})
     if d["irb"] == "contract":
         docs.append({"doc": "기관생명윤리위원회 업무위탁 협약서 (시행규칙 별지 제3호서식)", "level": "법정", "basis": "J6"})
     if "D3" in fired and _yes(_facts(state).get("F06")):
         docs.append({"doc": "가명정보 결합 신청서 (결합전문기관)", "level": "법정", "basis": "D3"})
     if "C3" in fired and _facts(state).get("F11") == "동의면제 요청":
         docs.append({"doc": "서면동의 면제 사유서", "level": "기관", "source": "관할 IRB 서식", "basis": "C3"})
-    return {"documents": docs, "schedule": _schedule(state)}
+    schedule = _schedule(state)
+    if _joint(state) and route_["route"] in ("A", "B", "C"):
+        schedule["missing"] = [*schedule["missing"], "공동 수행기관 IRB 회의일·접수 마감: 공개 일정 데이터 없음 → 기관마다 확인"]
+    if any(r["rule_id"] == "R-11" and r["result"] == "미충족" for r in state["judgments"]):
+        schedule["missing"] = [*schedule["missing"], "R-11: 신규심의로 전환되면 이 일정 대신 관할 위원회 정규 심의 일정을 따름"]
+    return {"documents": docs, "schedule": schedule}
 
 
 def _none(default: int, *why: str) -> dict:
@@ -410,7 +456,7 @@ def _schedule(state: GraphState) -> dict:
                 "missing": ["DRB 심의 소요: 공개 수치 없음 (기관확인)",
                             "심의면제 확인서: DRB 승인서가 있으면 7일 이내 발급 가능 (가이드라인 2025.12 표준절차, 기관마다 다름)",
                             "보완 1·2회: 공개 수치 없음"]}
-    if d["irb"] == "contracted":
+    if d["irb"] in ("contracted", "contracted_any"):
         return _none(default, "협약한 위원회 회의일·접수 마감: 공개 일정 데이터 없음")
     if d["irb"] == "contract":
         return _none(default, "위탁 협약 소요: 공개 수치 없음 → 계산 불가 (협약을 마치면 상대 위원회 일정을 따름)")

@@ -60,6 +60,18 @@ SAMPLES = {
                   "F17": ("예", "대상자는 연구번호로 대체하며"),
                   "F18": ("데이터팀·제3자", "대응표는 데이터팀이 별도 보관하고 연구자는 접근하지 않는다")},
     },
+    # 샘플 2에서 식별 관리 문장을 뺀 판본: ④에서 연구용 번호·대응표를 채우면 제출 전 보완(R-11·R-12) 경고가 뜬다 (팀 문서 7장 데모)
+    "sample3_nokey": {
+        "title": "샘플 3 · 가명처리 데이터셋, 대응표 서술 없음",
+        "method": "연구 방법: 가상대학교병원 데이터팀이 2020년 1월부터 2024년 12월까지 대장내시경을 받은 환자의 진료기록을 "
+                  "가명처리한 데이터셋(나이, 성별, 용종 크기, 재발 여부)을 제공받아 분석한다. "
+                  "다른 기관 데이터와 결합하거나 외부로 반출하지 않는다.\n",
+        "facts": {"F02": ("아니오", "가명처리한 데이터셋"),
+                  "F03": ("가명처리", "가명처리한 데이터셋"),
+                  "F04": ("기관 데이터팀", "가상대학교병원 데이터팀이"),
+                  "F06": ("아니오", "다른 기관 데이터와 결합하거나 외부로 반출하지 않는다"),
+                  "F16": ([], "가명처리한 데이터셋(나이, 성별, 용종 크기, 재발 여부)")},
+    },
 }
 
 
@@ -77,12 +89,13 @@ def build_facts(masked: str, table: dict) -> list[dict]:
     return facts
 
 
-def run_engine(plan: str, facts: list[dict]) -> dict:
-    state = {"raw_text": plan, "institution_name": INSTITUTION, "target_start_date": TARGET,
-             "confirmed_facts": facts, "extra_inputs": {}}
+def run_engine(plan: str, masked: str, facts: list[dict]) -> dict:
+    state = {"raw_text": plan, "masked_text": masked, "institution_name": INSTITUTION, "target_start_date": TARGET,
+             "facts": facts, "confirmed_facts": facts, "extra_inputs": {}}
     for step in (judge.institution, judge.gates, judge.route, judge.docs_schedule, write.abstain, write.report):
         state = {**state, **step(state)}
-    return {k: state[k] for k in ("institution", "judgments", "route", "documents", "schedule", "abstain", "report")}
+    return {k: state[k] for k in ("institution", "judgments", "route", "documents", "schedule", "abstain", "report",
+                                  "suggestions", "highlights", "masked_text")}
 
 
 for sample_id, spec in SAMPLES.items():
@@ -95,9 +108,10 @@ for sample_id, spec in SAMPLES.items():
            "pending": {"masked_text": masked,
                        "mask_log": [{"type": "이름", "count": 1}, {"type": "전화번호", "count": 1}, {"type": "이메일", "count": 1}],
                        "facts": facts},
-           "result": run_engine(plan, facts)}
+           "result": run_engine(plan, masked, facts)}
     path = ROOT / "data" / "samples" / f"{sample_id}.json"
     path.write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     r = out["result"]
     print(sample_id, "경로", r["route"]["route"], r["route"]["committees"], "| 판정", len(r["judgments"]),
-          "| 판단불가", [(a["rule_id"], a["kind"]) for a in r["abstain"]])
+          "| 판단불가", [(a["rule_id"], a["kind"]) for a in r["abstain"]],
+          "| 보완", [(s["rule_id"], s["level"]) for s in r["suggestions"]], "| 표시", [h["span"] for h in r["highlights"]])

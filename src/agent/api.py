@@ -89,4 +89,7 @@ def _result(run_id: str) -> Result:
         schedule=v["schedule"],
         abstain=v["abstain"],
         report=v["report"],
+        suggestions=v.get("suggestions", []),
+        highlights=v.get("highlights", []),
+        masked_text=v.get("masked_text", ""),
     )
