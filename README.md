@@ -9,6 +9,39 @@
 
 > 본 에이전트는 심의 결과를 예측하거나 승인 여부를 판정하지 않습니다. 산출물은 연구자가 사무국에 확인할 항목을 정리한 초안입니다.
 
+## 흐름
+
+① 입력(사람) → ② 개인정보 마스킹(규칙) → ③ 사실 추출(AI) → ④ 사실 확인(사람) → ⑤ 기관 대조 → ⑥ 관문 판정 → ⑦ 경로 결정 → ⑧ 서류·일정(규칙) → ⑨ 판단불가 처리 → ⑩ 결과 리포트(AI)
+
+- 판정은 규칙 엔진만 합니다. AI는 사실을 뽑고, 사무국 질문과 설명문을 씁니다.
+- ④에서 연구자가 사실을 확정해야 판정이 시작됩니다.
+- 계획서에 정보가 없는 항목은 연구자에게 입력을 받아 ④부터 다시 판정합니다.
+
+## 구조
+
+```
+app.py            화면 시작점 (Streamlit)
+src/ui/           화면 S1~S8
+src/agent/        로직 (LangGraph 10단계)
+  api.py          화면이 부르는 함수 3개: start · confirm · rejudge
+  state.py        화면과 로직이 주고받는 데이터 모양
+  graph.py        10단계 연결 (④에서 멈춤)
+  nodes/          ②③ 읽기 · ⑤~⑧ 판정 · ⑨⑩ 작성
+data/             규칙표 · 공공 명단 · 공개 일정 · 샘플 (data/README.md)
+tests/            약속 검사
+docs/ scripts/    설계 문서 · 보조 스크립트
+```
+
+## 실행
+
+```bash
+python -m venv .venv && source .venv/bin/activate   # 파이썬 3.10
+pip install -r requirements.txt
+FAKE=1 streamlit run app.py   # 예시 결과로 화면만 (기본)
+FAKE=0 streamlit run app.py   # 실제 그래프
+pytest                        # 합치기 전에
+```
+
 ## 개발 기간
 
 대회 규정에 따라 모든 개발은 본선 기간(2026-09-30 ~ 10-01) 안에 진행합니다. 이 레포는 본선 시작 전 README만으로 생성했습니다.
@@ -20,3 +53,8 @@
 ## 사용한 모델·라이브러리·데이터 출처
 
 본선 중 추가하는 대로 여기에 전량 기록합니다.
+
+- AI 코딩 도구: Claude Code (Anthropic, Claude Opus 5.5) — 코드 뼈대 작성 보조
+- 라이브러리: Streamlit 1.64.0 (Apache-2.0), LangGraph 1.2.12 (MIT), Pydantic 2.13.5 (MIT), PyYAML 6.0.3 (MIT), pytest (MIT)
+- LLM: 모델이 정해지면 이름·버전을 적습니다.
+- 데이터: `data/samples/`의 계획서 2건은 팀이 만든 가상 자료입니다. 공공 데이터는 추가하는 대로 URL과 확인일을 적습니다.
