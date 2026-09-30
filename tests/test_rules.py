@@ -326,3 +326,11 @@ def test_drb_order_follows_data_holder():
     assert all(d.get("to") for d in smc["documents"])                  # 모든 서류에 어디에 내는지가 붙는다
     assert {d["to"] for d in run({"F06": "예"})["documents"]} >= {"DRB", "IRB", "결합전문기관"}
 
+
+def test_unimplemented_checks_do_not_warn():
+    """검사 함수가 아직 없는 기관 규칙(check)은 계획서가 규정을 지켜도 뜨는 헛경고를 내지 않는다."""
+    cuk = run({"F12": ["가톨릭대"]}, "가톨릭대")
+    fired = {s["rule_id"] for s in cuk["suggestions"] if s.get("scope") == "기관"}
+    assert not {"I-CUK-1", "I-CUK-3", "I-CUK-4", "I-CUK-5"} & fired   # 과거형·문체·만 나이·심의 전 시작: 검사 전이라 내지 않음
+    assert "I-CUK-2" in fired                                          # 산출근거는 서술 여부(told)로 확인: 샘플 2에 없음
+

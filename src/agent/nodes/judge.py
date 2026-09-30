@@ -456,8 +456,20 @@ def venue_view(state: GraphState, venue: dict) -> dict:
               "found": any(x in written for x in std[k].get("facts", [])) or any(w in text for w in std[k].get("words", []))}
              for k, label in venue.get("plan", {}).items()]
     hits = [{k: r.get(k) for k in ("id", "level", "warning", "add_text", "source")} for r in venue.get("rules", [])
-            if _holds(state, r["when"]) and not any(w in text for w in r.get("told", []))]
+            if _holds(state, r["when"]) and not any(w in text for w in r.get("told", [])) and _checked(state, r)]
     return {k: venue.get(k, "") for k in ("id", "name", "short", "submit", "source", "plan_form")} | {"plan_items": items, "rules": hits}
+
+
+# 기관 규칙의 check 이름 → 계획서 글 검사 함수(위반이면 True). 아직 없는 검사는 판정하지 않는다(헛경고를 내지 않는다)
+CHECKS: dict = {}
+
+
+def _checked(state: GraphState, rule: dict) -> bool:
+    """check가 붙은 규칙은 그 검사가 위반을 찾았을 때만 낸다. 검사가 아직 없으면 told(서술 여부) 규칙만 그대로 본다."""
+    name = rule.get("check")
+    if not name or (name not in CHECKS and rule.get("told")):
+        return True
+    return name in CHECKS and CHECKS[name](state)
 
 
 def compare_table() -> list[dict]:
