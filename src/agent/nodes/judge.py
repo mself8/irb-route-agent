@@ -396,7 +396,23 @@ def _fast(state: GraphState) -> bool:
     """DRB 승인 뒤 7일 표준절차(빠른 길): 한 기관 연구로 같은 기관의 IRB·DRB이고, 결합이 없고, 전제를 다 확인했을 때만 (prep 이슈 #10)."""
     d, venue = state["decision"], _venue(state)
     return (d["drb"] is True and d["exempt"] == "yes" and d["irb"] == "own" and not d["pending"]
-            and _facts(state).get("F06") == "아니오" and not _joint(state) and not (venue and venue.get("exempt_regular")))
+            and _facts(state).get("F06") == "아니오" and not _joint(state) and not _holder(state)
+            and not (venue and venue.get("exempt_regular")))
+
+
+def _holder(state: GraphState) -> str | None:
+    """데이터를 가진 기관(수행기관 F12)이 연구자 소속과 다르면 그 이름. 같거나, 모르거나, 공동연구면 None.
+    IRB는 소속 기관(또는 공용위원회)에, DRB는 데이터를 가진 기관에 낸다."""
+    f12, inst = _facts(state).get("F12") or [], state["institution"]
+    if len(f12) != 1:
+        return None
+    if inst.get("affiliated") is False:  # 소속 없는 연구자는 데이터를 가진 기관이 따로 있다
+        return f12[0]
+    mine = inst.get("name")
+    if not mine:
+        return None
+    same = _norm(mine) == _norm(f12[0]) or (_profile(mine) is not None and _profile(mine) is _profile(f12[0]))
+    return None if same else f12[0]
 
 
 def _venue(state: GraphState) -> dict | None:
@@ -442,7 +458,9 @@ def route(state: GraphState) -> dict:
         return {"route": _route("범위 밖", ["사무국 문의"], ["G1"])}
     if d["scope"] == "trial":
         return {"route": _route("임상시험", ["식약처 임상시험계획 승인", "임상시험실시기관 심사위원회"], ["T1", "T6"])}
-    drb = {True: ["기관 DRB (가이드라인 권고 · 기관확인)"], "unknown": ["기관 DRB (동의 없이 쓰는 경우 · 확인 필요)"]}.get(d["drb"], [])
+    holder = _holder(state) if d["drb"] else None
+    where = f"데이터 보유 기관 DRB · {holder}" if holder else "기관 DRB"
+    drb = {True: [f"{where} (가이드라인 권고 · 기관확인)"], "unknown": [f"{where} (동의 없이 쓰는 경우 · 확인 필요)"]}.get(d["drb"], [])
     drb_rules = ["D1", "D6"] if d["drb"] else []
     if d["irb"] == "unknown" or d["drb"] == "unknown":
         who = [r["rule_id"] for r in rows if r["rule_id"] in ("J2", "J8")]
@@ -468,7 +486,9 @@ def docs_schedule(state: GraphState) -> dict:
     if route_["route"] == "임상시험":
         docs.append({"doc": "임상시험계획 승인 신청서 (식약처)", "level": "법정", "basis": "T1"})
     if d["drb"] is True:
-        docs.append({"doc": "DRB 심의 신청서", "level": "기관", "source": "기관 DRB 서식 (기관확인)"})
+        holder = _holder(state)
+        docs.append({"doc": "DRB 심의 신청서" + (f" ({holder})" if holder else ""), "level": "기관",
+                     "source": f"{holder or '기관'} DRB 서식 (기관확인)"})
     if route_["route"] in ("A", "B", "C") and venue:  # 기관 프로필이 있으면 그 기관의 서식 이름으로 낸다
         needed = {"데이터승인": d["drb"] is True or _holds(state, "received_data"), "면제점검": d["exempt"] == "yes"}
         std = institutions()["docs"]

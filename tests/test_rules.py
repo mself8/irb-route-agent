@@ -279,7 +279,7 @@ def test_institution_layer():
     assert uos["schedule"]["scenarios"][0]["submit_by"] == "2026-10-26"    # 11-06 회의 + 결과 14일 < 12-01 개시
     assert any("별지서식 9-3" in d["doc"] for d in uos["documents"])
     assert {"I-UOS-1", "I-UOS-2", "I-UOS-P"} <= {s["rule_id"] for s in uos["suggestions"] if s["scope"] == "기관"}
-    cmc = run({}, "서울성모병원")                 # 명단에 없는 별칭도 기관 프로필이 있으면 IRB가 있는 기관
+    cmc = run({"F12": ["서울성모병원"]}, "서울성모병원")  # 명단에 없는 별칭도 기관 프로필이 있으면 IRB가 있는 기관
     assert cmc["venue"]["id"] == "cmc" and cmc["institution"]["irb_exists"] is True and cmc["route"]["fast_track"]
     assert "I-CMC-1" in {s["rule_id"] for s in cmc["suggestions"]}      # IRB 전에 DRB 승인 필요
     public = run({}, "없음")
@@ -288,3 +288,17 @@ def test_institution_layer():
     assert plain["venue"] is None and any(d["source"] == "관할 IRB 서식" for d in plain["documents"])
     rows = judge.compare_table()                                       # 서식 표준화 비교표: 서류 11 + 계획서 항목 10
     assert len(rows) == 21 and {"공용위원회", "서울시립대", "서울성모병원", "질병관리청"} <= set(rows[0])
+
+
+def test_data_holder_differs():
+    """소속 기관과 데이터를 가진 기관이 다르면 IRB는 소속 쪽, DRB는 데이터 보유 기관이고, 7일 빠른 길은 없다 (prep 이슈 #10)."""
+    away = run({}, "질병관리청")                                  # 샘플 2의 데이터는 가상대학교병원 데이터팀이 준다
+    assert away["route"]["route"] == "A" and not away["route"]["fast_track"]
+    assert away["route"]["committees"][0].startswith("데이터 보유 기관 DRB · 가상대학교병원")
+    assert any(d["doc"] == "DRB 심의 신청서 (가상대학교병원)" for d in away["documents"])
+    assert any("데이터를 가진 기관(가상대학교병원)" in s["text"] for s in away["report"])
+    home = run({"F12": ["질병관리청"]}, "질병관리청")            # 같은 기관이면 예전처럼 빠른 길
+    assert home["route"]["fast_track"] and home["route"]["committees"][0].startswith("기관 DRB")
+    alone = run({}, "없음")                                       # 소속 없는 연구자도 DRB는 데이터를 가진 기관
+    assert alone["route"]["committees"][0].startswith("데이터 보유 기관 DRB · 가상대학교병원")
+

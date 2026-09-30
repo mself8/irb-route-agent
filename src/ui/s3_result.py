@@ -100,9 +100,13 @@ def render() -> None:
     choice = left.selectbox("기관", list(venues), index=None, placeholder="기관을 고르면 그 기관 기준으로 다시 판정합니다",
                             label_visibility="collapsed")
     if right.button("이 기관 기준으로 다시 판정", disabled=choice is None):
-        st.session_state.result = api.rejudge(result.run_id, {"institution_name": venues[choice], "irb_exists": None,
-                                                              "contract": None})
+        # 같은 연구를 그 기관에서 한다고 보고 소속과 수행기관(F12)을 함께 바꾼다. 공용위원회는 소속 없는 연구자로 본다
+        change = {"institution_name": venues[choice], "irb_exists": None, "contract": None}
+        if venues[choice] != "없음":
+            change["F12"] = [venues[choice]]
+        st.session_state.result = api.rejudge(result.run_id, change)
         st.rerun()
+    st.caption("같은 연구를 그 기관에서 한다고 보고(소속·수행기관을 함께 바꿔) 다시 판정합니다. 공용위원회는 소속 없는 연구자로 봅니다.")
     with st.expander("기관별 서식 비교 (서식 표준화: 표준 항목 한 줄에 기관마다 다른 서식 이름)"):
         st.dataframe(result.compare, hide_index=True)
     if result.highlights and result.masked_text:

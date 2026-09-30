@@ -148,6 +148,10 @@ def report(state: GraphState) -> dict:
     if result("J10") == "판단불가":
         say("여러 기관이 함께 하는 연구라서 기본은 기관마다 IRB 심의를 받습니다. 한 기관 위원회를 정하거나 공용위원회를 쓰려면 "
             "수행기관끼리 합의해야 합니다.", "J10", "F12")
+    holder = judge._holder(state) if state["decision"].get("drb") is True else None
+    if holder:
+        say(f"IRB는 연구자 소속 쪽에, DRB는 데이터를 가진 기관({holder})에 냅니다. DRB 승인 뒤 7일 안에 면제 확인을 받는 빠른 길은 "
+            "두 위원회가 같은 기관일 때만 해당합니다.", "D1", "F12")
     if state["route"]["route"] == "A" and state["route"]["fast_track"]:
         say("가이드라인 표준절차상 DRB 승인서가 있으면 7일 이내에 심의면제 확인서를 받을 수 있습니다. 기관마다 다를 수 있습니다.", "D7")
     suggestions = suggest(state)
