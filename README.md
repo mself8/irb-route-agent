@@ -55,7 +55,7 @@ pytest                        # 합치기 전에
 본선 중 추가하는 대로 여기에 전량 기록합니다.
 
 - AI 코딩 도구: Claude Code (Anthropic, Claude Opus 5.5) — 코드 뼈대 작성 보조
-- 라이브러리: Streamlit 1.64.0 (Apache-2.0), LangGraph 1.2.12 (MIT), Pydantic 2.13.5 (MIT), PyYAML 6.0.3 (MIT), pytest (MIT), OpenAI Python SDK 3.20.0 (Apache-2.0, vLLM의 OpenAI 호환 API 호출용)
+- 라이브러리: Streamlit 1.64.0 (Apache-2.0), LangGraph 1.2.12 (MIT), Pydantic 2.13.5 (MIT), PyYAML 6.0.3 (MIT), pytest (MIT), OpenAI Python SDK 3.20.0 (Apache-2.0, vLLM의 OpenAI 호환 API 호출용), ko-pii 1.16.0 (MIT, https://github.com/Marker-Inc-Korea/ko-pii, 규칙 기반 개인정보 검출 — ② 마스킹)
 - LLM: Qwen3.8-27B-FP8 (Qwen, Hugging Face `Qwen/Qwen3.8-27B-FP8`, 리비전 017b9c7, Apache-2.0)
 - LLM 서빙: vLLM 0.25.1 (Apache-2.0), 로컬 GPU(RTX A6000 2장). 계획서가 서버 밖으로 나가지 않습니다.
 - 법령 원문 (국가법령정보센터 law.go.kr, 확인일 2026-09-29): 생명윤리 및 안전에 관한 법률·시행규칙, 개인정보 보호법, 약사법
