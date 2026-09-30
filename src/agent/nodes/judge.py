@@ -20,8 +20,9 @@ LISTS_DIR = ROOT / "data" / "lists"
 PUBLIC_SCHEDULE = ROOT / "data" / "schedules" / "public_irb_2026.csv"
 UNAFFILIATED = {"없음", "소속 없음", "개인"}
 IRB_NAME = {"own": "소속 기관 IRB", "public": "공용기관생명윤리위원회",
-            "contract": "공용위원회 또는 인증받은 다른 기관 IRB (위탁 협약 필요)"}
-IRB_RULES = {"own": ["J2"], "public": ["J8"], "contract": ["J2", "J6"]}
+            "contract": "공용위원회 또는 인증받은 다른 기관 IRB (위탁 협약 필요)",
+            "contracted": "협약한 위원회 (공용위원회 또는 인증받은 다른 기관 IRB)"}
+IRB_RULES = {"own": ["J2"], "public": ["J8"], "contract": ["J2", "J6"], "contracted": ["J2", "J6", "J3"]}
 EXEMPT_SUFFIX = {"yes": " · 심의면제 신청 후보", "no": " · 심의", "unknown": " · 심의 또는 심의면제 (확인 필요)"}
 # 가명정보 처리 가이드라인(2026.03.) 인쇄 48쪽 위험도별 적정성 검토 방식
 REVIEW = {"저위험": "담당자 검토", "중위험": "내부 심의(2인 이상)", "고위험": "적정성 검토위원회(3인 이상)"}
@@ -165,7 +166,7 @@ def gates(state: GraphState) -> dict:
     viewed = _yes(f.get("F02"))
     biospecimen = _yes(f.get("F09")) or kind == "인체유래물"
     anonymous = ids is False and not viewed and key != "데이터팀·제3자" and (
-        data == "익명" or key == "없음(폐기)" or (code == "아니오" and data != "가명처리"))
+        data == "익명" or (data != "가명처리" and (key == "없음(폐기)" or code == "아니오")))
     pseudo = not ids and not anonymous and (data == "가명처리" or key == "데이터팀·제3자")
     data_refs = ["F03", "F16", "F17", "F18"]
 
@@ -236,10 +237,13 @@ def gates(state: GraphState) -> dict:
         rows.append(_row("J6", "충족", "위원회를 두지 않아 인증을 받지 못한 기관 → 위탁 협약 가능 기관"))
         contract = state.get("extra_inputs", {}).get("contract")
         if contract == "예":
+            d["irb"] = "contracted"
             rows.append(_row("J3", "충족", "위탁 협약을 맺음 → 협약한 위원회에 신청"))
         elif contract == "아니오":
             rows.append(_row("J3", "미충족", "위탁 협약을 맺지 않음"))
             rows.append(_row("U1", "판단불가", "협약 전에 공용위원회를 한시로 쓸 수 있는지는 사무국 확인 (기관확인)", "③"))
+        elif contract == "모름":
+            rows.append(_row("J3", "판단불가", "협약 여부를 연구자도 모름 → 기관 사무국 확인", "③"))
         else:
             rows.append(_row("J3", "판단불가", "위탁 협약을 맺었는지 정보 없음", "나"))
     if len(f.get("F12") or []) >= 2:
@@ -313,6 +317,13 @@ def _route(label: str, committees: list[str], trace: list[str], fast: bool = Fal
             "fast_track": fast, "trace": trace}
 
 
+def _fast(state: GraphState) -> bool:
+    """DRB 승인 뒤 7일 표준절차(빠른 길): 같은 기관의 IRB·DRB이고, 결합이 없고, 전제를 다 확인했을 때만 (prep 이슈 #10)."""
+    d = state["decision"]
+    return (d["drb"] is True and d["exempt"] == "yes" and d["irb"] == "own" and not d["pending"]
+            and _facts(state).get("F06") == "아니오")
+
+
 def route(state: GraphState) -> dict:
     """⑦ 판정 결과로 경로와 신청 순서를 정하고, 경로를 정한 규칙을 trace로 남긴다."""
     d, rows = state["decision"], state["judgments"]
@@ -330,7 +341,7 @@ def route(state: GraphState) -> dict:
     exempt = [r["rule_id"] for r in rows if r["rule_id"] in ("E2", "E3", "E5")]
     trace = [*drb_rules, *IRB_RULES[d["irb"]], *exempt]
     if d["drb"]:
-        return {"route": _route("A", [*drb, irb], trace, fast=d["exempt"] == "yes" and not d["pending"])}
+        return {"route": _route("A", [*drb, irb], trace, fast=_fast(state))}
     return {"route": _route("C" if d["irb"] == "own" else "B", [irb], trace)}
 
 
@@ -341,10 +352,10 @@ def docs_schedule(state: GraphState) -> dict:
     docs = []
     if route_["route"] == "임상시험":
         docs.append({"doc": "임상시험계획 승인 신청서 (식약처)", "level": "법정", "basis": "T1"})
-    if d["drb"] is True:
+    if d["drb"] is True and not d["pending"]:
         docs.append({"doc": "DRB 심의 신청서", "level": "기관", "source": "기관 DRB 서식 (기관확인)"})
     if route_["route"] in ("A", "B", "C"):
-        attach = " (DRB 승인서 첨부)" if d["drb"] is True else ""
+        attach = " (DRB 승인서 첨부)" if d["drb"] is True and not d["pending"] else ""
         doc = {"yes": f"심의면제 신청서{attach}", "no": "심의 신청서 · 연구계획서",
                "unknown": "심의 또는 심의면제 신청서 (위원회 확인 후 결정)"}[d["exempt"]]
         docs.append({"doc": doc, "level": "기관", "source": "관할 IRB 서식"})
@@ -378,7 +389,7 @@ def _schedule(state: GraphState) -> dict:
     today = date.fromisoformat(state["today"]) if state.get("today") else date.today()
     if d["drb"] is True and _yes(_facts(state).get("F06")):
         return _none(default, "결합전문기관·DRB 소요: 공개 수치 없음 → 계산 불가")
-    if d["drb"] is True and d["exempt"] == "yes" and d["irb"] == "own":
+    if _fast(state):
         latest = target_day - timedelta(days=8)  # 확인서가 개시일 전날까지 오도록 (공용위원회 역산과 같은 기준)
         first = ({"revisions": 0, "submit_by": latest.isoformat(), "step": "IRB 심의면제 신청 (DRB 승인서 첨부)"}
                  if latest >= today else {"revisions": 0, "step": "마감 경과"})
@@ -386,6 +397,8 @@ def _schedule(state: GraphState) -> dict:
                 "missing": ["DRB 심의 소요: 공개 수치 없음 (기관확인)",
                             "심의면제 확인서: DRB 승인서가 있으면 7일 이내 발급 가능 (가이드라인 2025.12 표준절차, 기관마다 다름)",
                             "보완 1·2회: 공개 수치 없음"]}
+    if d["irb"] == "contracted":
+        return _none(default, "협약한 위원회 회의일·접수 마감: 공개 일정 데이터 없음")
     if d["irb"] == "contract":
         return _none(default, "위탁 협약 소요: 공개 수치 없음 → 계산 불가 (협약을 마치면 상대 위원회 일정을 따름)")
     if d["irb"] == "public" and d["exempt"] == "yes":

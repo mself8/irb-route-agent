@@ -159,8 +159,10 @@ def test_report_cites_only_judged_rules():
 
 
 def test_fourth_review_fixes():
-    discarded = run({"F18": "없음(폐기)"})                       # 대응표 폐기 → 익명, DRB 아님 (익명·가명 배타)
+    discarded = run({"F03": "원자료", "F18": "없음(폐기)"})       # 원자료의 대응표 폐기 → 익명, DRB 아님 (익명·가명 배타)
     assert "S7" in ids(discarded) and "D1" not in ids(discarded) and discarded["route"]["route"] == "C"
+    kept = run({"F18": "없음(폐기)", "F06": "예"})              # 가명처리 데이터의 대응표 폐기는 가명정보 안전조치 → DRB 유지
+    assert "D1" in ids(kept, "충족") and "D3" in ids(kept, "충족") and "S7" not in ids(kept)
     for institution, extra in (("없는병원", {"irb_exists": "없음"}), ("없음", {})):
         state = run({}, institution, extra)                     # DRB 빠른 길 날짜는 자체 IRB일 때만
         assert state["schedule"]["scenarios"][0].get("submit_by") is None
@@ -174,3 +176,19 @@ def test_fourth_review_fixes():
     assert "contract" in asks(contract)
     contract = run(IDENTIFIED, "없는병원", {"irb_exists": "없음", "contract": "아니오"})
     assert "J3" in ids(contract, "미충족") and "U1" in ids(contract, "판단불가")
+    assert any(a["rule_id"] == "U1" and "공용위원회 사무국" in a["question"] for a in contract["abstain"])
+
+
+def test_fifth_review_fixes():
+    unsure = run(IDENTIFIED, "없는병원", {"irb_exists": "없음", "contract": "모름"})  # 모름 → 같은 질문 반복 대신 사무국 확인
+    assert "contract" not in asks(unsure) and any(a["rule_id"] == "J3" and a["kind"] == "가" for a in unsure["abstain"])
+    done = run(IDENTIFIED, "없는병원", {"irb_exists": "없음", "contract": "예"})    # 협약함 → 협약한 위원회, 협약서·계산 불가 없음
+    assert done["route"]["committees"][0].startswith("협약한 위원회")
+    assert not any("협약서" in d["doc"] for d in done["documents"])
+    assert next(r for r in done["judgments"] if r["rule_id"] == "J3")["type"] == "사실형"
+    assert run({})["route"]["fast_track"]                        # 샘플 2: 자체 IRB · 결합 없음 → 빠른 길
+    for overrides, institution in (({}, "없음"), ({"F06": "예"}, "가상대학교병원"), ({"F06": None}, "가상대학교병원")):
+        assert not run(overrides, institution)["route"]["fast_track"]  # 공용위원회·결합·결합 미상이면 빠른 길 아님
+    assert not any("DRB" in d["doc"] for d in run({"F10": None})["documents"])
+    r09 = next(r for r in run({})["judgments"] if r["rule_id"] == "R-09")
+    assert "대상에 해당" not in r09["requirement"]              # 다듬기 판정어 검사에 걸리지 않는 문구

@@ -24,7 +24,7 @@
   gate: 범위
   requirement: 임상시험이면 공용위원회 심의 대상에서 제외되는가
   type: 사실형(목록)
-  basis: {law: 공용위원회 운영기관 안내 (2차 출처, 법령 아님), article: e-IRB PT0102R03, text: "약사법 또는 의료기기법에 따라 임상시험실시기관에서 수행되어야 하는 연구는 공용위원회 심의 대상에서 제외", checked_at: "2026-09-29", url: "https://public.irb.or.kr/"}
+  basis: {law: "공용위원회 운영기관 안내 (2차 출처, 법령 아님)", article: e-IRB PT0102R03, text: "약사법 또는 의료기기법에 따라 임상시험실시기관에서 수행되어야 하는 연구는 공용위원회 심의 대상에서 제외", checked_at: "2026-09-29", url: "https://public.irb.or.kr/"}
 
 - id: S3
   gate: 범위
@@ -154,7 +154,7 @@
 - id: R-09
   team_id: R-09
   gate: 심의면제
-  requirement: 이 연구가 심의면제 대상에 해당하는가 (확인은 관할 기관위원회)
+  requirement: 이 연구의 심의면제 여부 (확인은 관할 기관위원회)
   type: 판단불가(①)
   basis: {law: 생명윤리법, article: 제15조 ②, text: "제1항에도 불구하고 연구대상자 및 공공에 미치는 위험이 미미한 경우로서 국가위원회의 심의를 거쳐 보건복지부령으로 정한 기준에 맞는 연구는 기관위원회의 심의를 면제할 수 있다.", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률/제15조"}
 
@@ -192,11 +192,11 @@
 - id: J3
   gate: IRB·위탁
   requirement: 소속 기관이 다른 기관위원회 또는 공용위원회와 위탁 협약을 맺었는가
-  type: 판단불가(③)
+  type: 사실형
   basis: {law: 생명윤리법, article: 제10조 ②, text: "업무의 수행을 위탁하기로 협약을 맺은 기관은 기관위원회를 설치한 것으로 본다.", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률/제10조"}
 
 - id: U1
   gate: IRB·위탁
   requirement: 협약 전에 공용위원회를 한시로 쓸 수 있는가 (설치·협약 예정 기관의 연구자)
   type: 판단불가(③)
-  basis: {law: 국가생명윤리정책원 공용위원회 안내 (2차 출처, 법령 아님), article: 공용위원회 이용 대상, text: "설치 또는 협약 예정인 기관에 속한 연구자(기관위원회 설치 때까지 한시적)", checked_at: "2026-09-29", url: "https://nibp.kr/page/portal206"}
+  basis: {law: "국가생명윤리정책원 공용위원회 안내 (2차 출처, 법령 아님)", article: 공용위원회 이용 대상, text: "설치 또는 협약 예정인 기관에 속한 연구자(기관위원회 설치 때까지 한시적)", checked_at: "2026-09-29", url: "https://nibp.kr/page/portal206"}

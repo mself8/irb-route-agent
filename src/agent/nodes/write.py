@@ -28,7 +28,7 @@ ASK = {
 INPUT_BY_RULE = {"J2": "irb_exists", "J8": "institution_name", "J3": "contract"}
 REASON = {"①": "위원회 판단", "②": "평가어", "③": "기관 재량"}
 ASKED = {"①": "위원회", "②": "위원회", "③": "기관 사무국"}
-ASKED_BY_RULE = {"S7": "데이터 보유기관(개인정보처리자)"}  # prep 판단불가 #14: 익명 여부의 판단 주체
+ASKED_BY_RULE = {"S7": "데이터 보유기관(개인정보처리자)", "U1": "공용위원회 사무국"}  # prep 판단불가 #14: 익명 여부의 판단 주체
 
 
 def abstain(state: GraphState) -> dict:
@@ -100,9 +100,10 @@ def report(state: GraphState) -> dict:
         say("소속 기관에 IRB가 있어 그 IRB에 신청합니다.", "J2")
     if result("J8") == "충족":
         say("소속 기관이 없는 연구자라서 공용기관생명윤리위원회에 신청합니다.", "J8")
-    if result("J6") == "충족":
-        say("소속 기관에 IRB가 없어 공용위원회나 인증받은 다른 기관 IRB와 위탁 협약을 맺고 심의를 받습니다. 이미 협약했는지와 상대는 사무국에 확인해 주세요.",
-            "J6", "J3")
+    if result("J6") == "충족" and result("J3") == "충족":
+        say("소속 기관에 IRB가 없지만 위탁 협약을 맺었으므로, 협약한 위원회에 신청합니다.", "J6", "J3")
+    elif result("J6") == "충족":
+        say("소속 기관에 IRB가 없어 공용위원회나 인증받은 다른 기관 IRB와 위탁 협약을 맺고 심의를 받습니다.", "J6", "J3")
     if exempt == "yes":
         say("심의면제 신청 후보입니다. 면제 여부는 관할 위원회가 확인합니다.", "E3", "R-09")
     elif exempt == "unknown":
