@@ -41,6 +41,13 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, label:focus-w
 .pick label.o:has(input:checked) { border-color: var(--ok); color: var(--ok); font-weight: 700; }
 .pick label.x:has(input:checked) { border-color: var(--bad); color: var(--bad); font-weight: 700; }
 .pick label.u:has(input:checked) { border-color: var(--unk); color: var(--unk); font-weight: 700; }
+.why summary { cursor: pointer; font-weight: 600; }
+.why p { margin: 4px 0; }
+.why .ev { border-top: 1px dashed var(--line); padding-top: 6px; margin-top: 6px; }
+.why blockquote { margin: 4px 0 6px; padding: 4px 10px; border-left: 3px solid var(--line); color: var(--muted); font-size: 14px; }
+.why .steps { margin: 6px 0; padding-left: 22px; }
+.why .steps li { margin: 4px 0; }
+.why .src, .why .facts { font-size: 13px; color: var(--muted); }
 textarea { font: inherit; font-size: 14px; width: 100%; min-height: 2.4em; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--ink); }
 #out { width: 100%; min-height: 8em; font-family: ui-monospace, Menlo, monospace; font-size: 12px; }
 .notice { font-size: 13px; }
@@ -52,6 +59,7 @@ textarea { font: inherit; font-size: 14px; width: 100%; min-height: 2.4em; paddi
   <ol class="how">
     <li>이름을 적고, 문항마다 우리 정답이 맞는지 <b>맞음 · 틀림 · 모르겠음</b> 중 하나를 누르세요. 틀림이면 이유를 한 줄 적어 주세요.</li>
     <li>노란 줄은 규칙을 지킨 계획서에서 함정으로 넣거나 바꾼 곳, 줄 그은 글은 뺀 곳입니다.</li>
+    <li><b>왜 이 정답인가</b>에 요건·판단·근거 조문 원문(합성은 판단 순서)을 적었습니다. 근거가 틀렸으면 틀림을 눌러 주세요.</li>
     <li>다 하면 <b>결과 파일 받기</b>를 눌러 내려받은 파일을 송윤 님께 보내 주세요. 표시한 내용은 이 브라우저에 자동 저장됩니다.</li>
   </ol>
   <div class="bar">
@@ -78,8 +86,8 @@ document.getElementById("list").innerHTML = ITEMS.map((d, i) => `
   <article class="card" id="c${i}">
     <div class="head"><span class="no">${i + 1}</span><span class="chip">${esc(d.kind)}</span><span class="chip">${esc(d.inst)}</span></div>
     <div class="plan">${d.lines.map(([k, t]) => `<div class="${k}">${esc(t) || "&nbsp;"}</div>`).join("")}</div>
-    <div class="ans"><span>${esc(d.question)}</span><span><b>우리 정답</b> ${esc(d.answer)}</span><span><b>경로</b> ${esc(d.route)}</span>
-      <span class="basis">근거: ${esc(d.basis)}</span></div>
+    <div class="ans"><span>${esc(d.question)}</span><span><b>우리 정답</b> ${esc(d.answer)}</span><span><b>경로</b> ${esc(d.route)}</span></div>
+    <details class="why" open><summary>왜 이 정답인가</summary>${whyHtml(d)}</details>
     <div class="pick" role="radiogroup" aria-label="${i + 1}번 판정">
       ${[["O", "맞음", "o"], ["X", "틀림", "x"], ["?", "모르겠음", "u"]].map(([v, t, c]) =>
         `<label class="${c}"><input type="radio" name="v${i}" value="${v}" ${state.v[i] === v ? "checked" : ""}>${t}</label>`).join("")}
@@ -90,6 +98,16 @@ ITEMS.forEach((d, i) => {
   document.querySelectorAll(`input[name=v${i}]`).forEach(r => r.addEventListener("change", e => { state.v[i] = e.target.value; keep(); refresh(); }));
   document.getElementById(`m${i}`).addEventListener("input", e => { state.memo[i] = e.target.value; keep(); refresh(); });
 });
+function whyHtml(d) {
+  const facts = d.facts ? `<p class="facts"><b>판단에 쓴 사실</b> ${esc(d.facts)}</p>` : "";
+  if (d.kind === "함정") {
+    const changed = d.changed.length ? `<p><b>바뀐 곳</b> ${d.changed.map(esc).join(" / ")}</p>` : "";
+    return changed + d.why.map(w => `<div class="ev"><p><b>요건</b> ${esc(w.need)}</p><p><b>판단</b> ${esc(w.say)}</p>
+      <p><b>근거</b> ${esc(w.src)}</p>${w.quote ? `<blockquote>${esc(w.quote)}</blockquote>` : ""}</div>`).join("") + facts;
+  }
+  return `<ol class="steps">${d.steps.map(s => `<li><b>${esc(s.q)}</b> → ${esc(s.then)}<br><span class="src">${esc(s.law)}</span>
+    ${s.quote && !s.quote.startsWith("(") ? `<blockquote>${esc(s.quote)}</blockquote>` : ""}</li>`).join("")}</ol>` + facts;
+}
 function result() {
   return {checker: state.who || "(이름 없음)", date: "{{DATE}}", items: ITEMS.map((d, i) => ({no: i + 1, id: d.id, kind: d.kind,
     verdict: state.v[i] || null, memo: state.memo[i] || ""}))};
