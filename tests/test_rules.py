@@ -156,3 +156,21 @@ def test_report_cites_only_judged_rules():
     assert state["report"]
     for sentence in state["report"]:
         assert all(ref in judged for ref in sentence["refs"] if not ref.startswith("F"))
+
+
+def test_fourth_review_fixes():
+    discarded = run({"F18": "없음(폐기)"})                       # 대응표 폐기 → 익명, DRB 아님 (익명·가명 배타)
+    assert "S7" in ids(discarded) and "D1" not in ids(discarded) and discarded["route"]["route"] == "C"
+    for institution, extra in (("없는병원", {"irb_exists": "없음"}), ("없음", {})):
+        state = run({}, institution, extra)                     # DRB 빠른 길 날짜는 자체 IRB일 때만
+        assert state["schedule"]["scenarios"][0].get("submit_by") is None
+    assert run({"F06": "예"})["schedule"]["scenarios"][0].get("submit_by") is None  # 결합은 소요 비공개
+    no_consent = run({"F11": "없음"})                          # 동의 없이 가명정보를 써도 동의면제 판단은 위원회 몫
+    assert "C3" in ids(no_consent, "판단불가") and not any("사유서" in d["doc"] for d in no_consent["documents"])
+    assert not run({"F10": None})["route"]["fast_track"]        # 전제를 모르면 빠른 길 없음
+    bio = run({**IDENTIFIED, "F09": "예"})
+    assert not any("위원회가 확인" in s["text"] for s in bio["report"])
+    contract = run(IDENTIFIED, "없는병원", {"irb_exists": "없음"})  # 위탁 협약 여부는 연구자에게 묻는다
+    assert "contract" in asks(contract)
+    contract = run(IDENTIFIED, "없는병원", {"irb_exists": "없음", "contract": "아니오"})
+    assert "J3" in ids(contract, "미충족") and "U1" in ids(contract, "판단불가")

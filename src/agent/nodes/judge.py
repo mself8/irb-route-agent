@@ -49,8 +49,9 @@ def rules() -> dict[str, dict]:
 
 def _row(rule_id: str, result: str, detail: str | None = None, reason: str | None = None, refs=()) -> dict:
     r = rules()[rule_id]
+    type_ = f"판단불가({reason})" if result == "판단불가" and reason else r["type"]
     return {"rule_id": rule_id, "team_id": r.get("team_id"), "requirement": r["requirement"], "result": result,
-            "abstain_reason": reason, "result_detail": detail, "type": r["type"], "basis": r["basis"],
+            "abstain_reason": reason, "result_detail": detail, "type": type_, "basis": r["basis"],
             "fact_refs": list(refs)}
 
 
@@ -163,9 +164,9 @@ def gates(state: GraphState) -> dict:
         code = "예"  # 대응표가 있다면 식별코드도 있다 (같은 질문을 되풀이하지 않게 대응표 쪽을 믿는다)
     viewed = _yes(f.get("F02"))
     biospecimen = _yes(f.get("F09")) or kind == "인체유래물"
-    anonymous = ids is False and not viewed and (
+    anonymous = ids is False and not viewed and key != "데이터팀·제3자" and (
         data == "익명" or key == "없음(폐기)" or (code == "아니오" and data != "가명처리"))
-    pseudo = not ids and (data == "가명처리" or key == "데이터팀·제3자")
+    pseudo = not ids and not anonymous and (data == "가명처리" or key == "데이터팀·제3자")
     data_refs = ["F03", "F16", "F17", "F18"]
 
     if kind is None:
@@ -233,7 +234,14 @@ def gates(state: GraphState) -> dict:
         d["irb"] = "contract"
         rows.append(_row("J2", "미충족", "소속 기관위원회 없음", refs=["F12"]))
         rows.append(_row("J6", "충족", "위원회를 두지 않아 인증을 받지 못한 기관 → 위탁 협약 가능 기관"))
-        rows.append(_row("J3", "판단불가", "이미 협약했는지, 상대(공용위원회 또는 인증받은 다른 기관 IRB)는 누구인지 사무국 확인", "③"))
+        contract = state.get("extra_inputs", {}).get("contract")
+        if contract == "예":
+            rows.append(_row("J3", "충족", "위탁 협약을 맺음 → 협약한 위원회에 신청"))
+        elif contract == "아니오":
+            rows.append(_row("J3", "미충족", "위탁 협약을 맺지 않음"))
+            rows.append(_row("U1", "판단불가", "협약 전에 공용위원회를 한시로 쓸 수 있는지는 사무국 확인 (기관확인)", "③"))
+        else:
+            rows.append(_row("J3", "판단불가", "위탁 협약을 맺었는지 정보 없음", "나"))
     if len(f.get("F12") or []) >= 2:
         rows.append(_row("J10", "판단불가", "공동연구: 한 기관위원회 선정 또는 공용위원회 이용은 수행기관 합의 사항", "③", ["F12"]))
 
@@ -293,7 +301,7 @@ def gates(state: GraphState) -> dict:
         rows.append(_row("R-10", "판단불가", "위험이 미미한지는 위원회가 판단", "②"))
 
     # 5. 동의. 가명정보 특례로 쓰는 경우 동의면제 판단이 필요한지는 가이드라인 안에서도 엇갈린다 (prep 이슈 #9)
-    if f.get("F11") == "동의면제 요청":
+    if f.get("F11") == "동의면제 요청" or d["drb"] is True:
         detail = ("가명정보 특례로 동의 없이 쓰는 경우 생명윤리법 동의면제 판단이 필요한지는 가이드라인 안에서도 엇갈림 → 위원회 확인"
                   if d["drb"] else "서면동의 면제는 기관위원회 승인 사항 (위험이 극히 낮은지 등)")
         rows.append(_row("C3", "판단불가", detail, "①", ["F11"]))
@@ -322,7 +330,7 @@ def route(state: GraphState) -> dict:
     exempt = [r["rule_id"] for r in rows if r["rule_id"] in ("E2", "E3", "E5")]
     trace = [*drb_rules, *IRB_RULES[d["irb"]], *exempt]
     if d["drb"]:
-        return {"route": _route("A", [*drb, irb], trace, fast=d["exempt"] == "yes")}
+        return {"route": _route("A", [*drb, irb], trace, fast=d["exempt"] == "yes" and not d["pending"])}
     return {"route": _route("C" if d["irb"] == "own" else "B", [irb], trace)}
 
 
@@ -333,7 +341,7 @@ def docs_schedule(state: GraphState) -> dict:
     docs = []
     if route_["route"] == "임상시험":
         docs.append({"doc": "임상시험계획 승인 신청서 (식약처)", "level": "법정", "basis": "T1"})
-    if d["drb"]:
+    if d["drb"] is True:
         docs.append({"doc": "DRB 심의 신청서", "level": "기관", "source": "기관 DRB 서식 (기관확인)"})
     if route_["route"] in ("A", "B", "C"):
         attach = " (DRB 승인서 첨부)" if d["drb"] is True else ""
@@ -344,7 +352,7 @@ def docs_schedule(state: GraphState) -> dict:
         docs.append({"doc": "기관생명윤리위원회 업무위탁 협약서 (시행규칙 별지 제3호서식)", "level": "법정", "basis": "J6"})
     if "D3" in fired and _yes(_facts(state).get("F06")):
         docs.append({"doc": "가명정보 결합 신청서 (결합전문기관)", "level": "법정", "basis": "D3"})
-    if "C3" in fired:
+    if "C3" in fired and _facts(state).get("F11") == "동의면제 요청":
         docs.append({"doc": "서면동의 면제 사유서", "level": "기관", "source": "관할 IRB 서식", "basis": "C3"})
     return {"documents": docs, "schedule": _schedule(state)}
 
@@ -368,7 +376,9 @@ def _schedule(state: GraphState) -> dict:
         return _none(default, "임상시험·범위·동의 여부를 확인하기 전이라 일정을 계산하지 않음")
     target_day = date.fromisoformat(target)
     today = date.fromisoformat(state["today"]) if state.get("today") else date.today()
-    if d["drb"] is True and d["exempt"] == "yes":
+    if d["drb"] is True and _yes(_facts(state).get("F06")):
+        return _none(default, "결합전문기관·DRB 소요: 공개 수치 없음 → 계산 불가")
+    if d["drb"] is True and d["exempt"] == "yes" and d["irb"] == "own":
         latest = target_day - timedelta(days=8)  # 확인서가 개시일 전날까지 오도록 (공용위원회 역산과 같은 기준)
         first = ({"revisions": 0, "submit_by": latest.isoformat(), "step": "IRB 심의면제 신청 (DRB 승인서 첨부)"}
                  if latest >= today else {"revisions": 0, "step": "마감 경과"})

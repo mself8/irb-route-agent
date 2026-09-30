@@ -269,7 +269,7 @@
         "result": "판단불가",
         "abstain_reason": "나",
         "result_detail": "누가 어디서 분석하는지 정보 없음",
-        "type": "사실형",
+        "type": "판단불가(나)",
         "basis": {
           "law": "가명정보 처리 가이드라인 (개인정보보호위원회 2026.03.)",
           "article": "인쇄 37쪽 기본 위험도 판단",
@@ -288,7 +288,7 @@
         "result": "판단불가",
         "abstain_reason": "나",
         "result_detail": "다른 기관 데이터와 결합하는지 정보 없음",
-        "type": "사실형",
+        "type": "판단불가(나)",
         "basis": {
           "law": "개인정보 보호법",
           "article": "제28조의3 ①②",
