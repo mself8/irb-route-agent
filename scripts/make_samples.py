@@ -1,4 +1,7 @@
-"""데모 샘플 2건(data/samples/*.json)을 만든다. result는 규칙 엔진을 실제로 돌려서 채운다.
+"""데모 샘플(data/samples/*.json)을 만든다. result는 규칙 엔진을 실제로 돌려서 채운다.
+
+- SAMPLES: 기능 확인용 짧은 가상 계획서 (테스트가 쓴다)
+- REAL: 실제로 쓴다고 가정하고 기관 서식 항목대로 쓴 가상 계획서 3건 (데모 화면이 쓴다). 인물·연락처·연구는 지어낸 것이다
 
 실행: python scripts/make_samples.py   (규칙이나 사실 목록이 바뀌면 다시 돌린다)
 """
@@ -11,10 +14,13 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 os.environ.setdefault("LLM", "0")  # 샘플은 모델 없이 틀 문장으로 만든다 (재현 가능하게)
 
+from agent import pii  # noqa: E402
 from agent.nodes import judge, write  # noqa: E402
 from agent.state import FACT_LABELS  # noqa: E402
 
 NOTE = "데모용 가상 계획서다. result는 scripts/make_samples.py가 규칙 엔진을 돌려 만든 값이다."
+REAL_NOTE = ("실제로 쓴다고 가정하고 기관 서식 항목대로 쓴 가상 계획서다(인물·연락처·연구는 지어낸 것). "
+             "result는 scripts/make_samples.py가 규칙 엔진을 돌려 만든 값이다.")
 INSTITUTION = "가상대학교병원"  # data/lists/demo_institutions.csv에 있는 가상 기관
 TARGET = "2026-12-01"
 PII = [("홍길동", "[이름]"), ("010-1234-5678", "[전화번호]"), ("hong@example.ac.kr", "[이메일]")]
@@ -90,6 +96,186 @@ SAMPLES = {
 }
 
 
+# 실제로 쓴다고 가정한 계획서. 사실 표는 ④에서 사람이 확인한 정답이다 (구간은 가린 계획서의 원문 그대로)
+REAL = {
+    # 잘 쓴 계획서에서 흔히 빠지는 것: 대응표 보관(R-11·R-12), 보관·폐기(I-CMC-10), 가명정보 처리 근거(C3)
+    "real1_cdw_cmc": {
+        "title": "서울성모병원 · CDW 가명자료 후향적 코호트",
+        "institution": "가톨릭대학교 서울성모병원",
+        "plan": """연구 제목: 수술 전 빈혈과 비심장 수술 후 급성 신손상의 연관성: 임상데이터웨어하우스 가명정보를 이용한 후향적 코호트 연구
+영문 제목: Association between Preoperative Anemia and Acute Kidney Injury after Non-cardiac Surgery: A Retrospective Cohort Study Using Pseudonymized Clinical Data Warehouse Data
+연구책임자: 홍길동 (마취통증의학과 부교수, 010-0000-0001, gildong.hong@example.org)
+공동연구자: 김철수 (신장내과 조교수)
+수행기관: 가톨릭대학교 서울성모병원 (단일기관 연구)
+
+1. 연구 배경 및 필요성
+수술 후 급성 신손상은 비심장 수술 환자의 사망률과 입원 기간을 늘리는 주요 합병증이다. 수술 전 빈혈은 교정 가능한 위험인자로 알려져 있으나, 국내 대규모 임상자료로 둘의 관련성을 확인한 연구는 적다.
+
+2. 연구 목적
+비심장 수술 환자에서 수술 전 헤모글로빈 수치와 수술 후 7일 이내 급성 신손상 발생의 연관성을 분석한다.
+
+3. 연구 대상
+선정 기준: 2018년 1월 1일부터 2024년 12월 31일까지 본원에서 전신마취하 비심장 수술을 받은 만 19세 이상 성인 환자
+제외 기준: 수술 전 투석 중인 환자, 수술 전 크레아티닌 측정값이 없는 환자, 신장 이식 수술을 받은 환자
+
+4. 예상 연구대상자 수 및 산출 근거
+약 42,000명이다. 수술 전 빈혈 유병률 30%, 급성 신손상 발생률 8%에서 오즈비 1.3을 유의수준 0.05, 검정력 90%로 검출하는 데 필요한 최소 표본은 약 12,000명이며, 해당 기간 대상자 전수를 분석한다.
+
+5. 연구 방법
+본원 임상데이터웨어하우스(CDW)에서 의료정보팀이 선정 기준에 맞는 자료를 추출하여 가명처리하고, 연구진은 이 가명 자료를 제공받아 원내 분석실의 폐쇄망 컴퓨터에서만 분석한다.
+수집 항목: 나이, 성별, 체질량지수, 수술 종류, 마취 시간, 수술 전 헤모글로빈과 크레아티닌, 수술 후 7일 이내 크레아티닌 최고값, 동반질환(당뇨병, 고혈압, 만성신장병), 수술 전후 사용 약물
+
+6. 개인정보 보호 대책
+가명처리 담당: 의료정보팀(연구에 참여하지 않는 제3자)
+의료정보팀이 성명, 등록번호, 주민등록번호, 연락처를 삭제하고 대상자마다 연구번호를 부여하여 가명처리한다. 연구진은 이 식별정보를 제공받지 않는다. 자료는 다른 기관 자료와 결합하거나 원외로 반출하지 않는다.
+
+7. 자료 분석
+수술 전 빈혈 여부에 따른 급성 신손상 발생률을 비교하고, 나이, 성별, 수술 종류, 동반질환을 보정한 다변량 로지스틱 회귀분석으로 오즈비와 95% 신뢰구간을 구한다.
+
+8. 동의 면제
+이미 진료 목적으로 수집된 의무기록을 가명처리해 이용하는 후향적 연구로, 대상자에게 연락해 동의를 받는 것이 현실적으로 불가능하고 동의 거부를 추정할 사유가 없으며 대상자에게 미치는 위험이 극히 낮다. 이에 서면동의 면제를 요청한다.
+
+9. 위험과 이익
+대상자와 직접 접촉하지 않아 신체적 위험은 없다. 개인정보 노출 위험은 가명처리와 폐쇄망 분석으로 줄인다. 대상자에게 직접적인 이익은 없다.
+
+10. 연구 기간
+IRB 승인일부터 2027년 12월 31일까지""",
+        "facts": {
+            "F01": ("기록 이용", "후향적 코호트 연구"),
+            "F02": ("아니오", "연구진은 이 식별정보를 제공받지 않는다"),
+            "F03": ("가명처리", "연구진은 이 가명 자료를 제공받아"),
+            "F04": ("기관 데이터팀", "의료정보팀이 선정 기준에 맞는 자료를 추출하여 가명처리하고"),
+            "F05": ("기관 내부", "원내 분석실의 폐쇄망 컴퓨터에서만 분석한다"),
+            "F06": ("아니오", "자료는 다른 기관 자료와 결합하거나 원외로 반출하지 않는다"),
+            "F07": ([], "수집 항목: 나이, 성별, 체질량지수, 수술 종류, 마취 시간"),
+            "F08": ([], "만 19세 이상 성인 환자"),
+            "F09": ("아니오", "수집 항목: 나이, 성별, 체질량지수, 수술 종류, 마취 시간"),
+            "F10": ("아니오", "후향적 코호트 연구"),
+            "F11": ("동의면제 요청", "서면동의 면제를 요청한다"),
+            "F12": (["가톨릭대학교 서울성모병원"], "수행기관: 가톨릭대학교 서울성모병원 (단일기관 연구)"),
+            "F13": (None, None),  # 'IRB 승인일부터 2027년 12월 31일까지'라 시작일이 없다 → 목표 개시일을 쓴다
+            "F14": ("아니오", "수술 전 빈혈과 비심장 수술 후 급성 신손상의 연관성"),
+            "F15": (42000, "약 42,000명이다"),
+            "F16": ([], "수집 항목: 나이, 성별, 체질량지수, 수술 종류, 마취 시간"),
+            "F17": ("예", "대상자마다 연구번호를 부여하여 가명처리한다"),
+            "F18": (None, None),
+        },
+    },
+    # CRF에 등록번호를 적는 흔한 설계: 심의 대상(E3), 경희대병원 CRF 규정(I-KHMC-1), 영문 제목 없음(I-KHMC-4)
+    "real2_chart_khmc": {
+        "title": "경희대병원 · 소아 천식 의무기록 조사 (CRF)",
+        "institution": "경희대학교병원",
+        "plan": """연구 제목: 소아 천식 환아의 흡입스테로이드 처방 순응도와 1년 내 재입원의 관련성: 후향적 의무기록 조사 연구
+연구책임자: 이영희 (소아청소년과 교수, 010-0000-0002, younghee.lee@example.org)
+연구담당자: 박철수 (소아청소년과 전공의)
+수행기관: 경희대학교병원
+
+1. 연구 배경 및 목적
+소아 천식은 흡입스테로이드를 꾸준히 쓰면 악화를 줄일 수 있으나 실제 처방 순응도는 낮다고 알려져 있다. 본 연구는 퇴원 후 흡입스테로이드 처방 순응도와 1년 내 천식 재입원의 관련성을 확인한다.
+
+2. 연구 대상
+선정 기준: 2019년 1월부터 2023년 12월까지 본원 소아청소년과에서 천식 악화로 입원 치료를 받은 만 6세 이상 만 18세 미만 환아
+제외 기준: 선천성 심질환, 기관지폐이형성증, 낭성섬유증이 있는 환아
+예상 대상자 수: 약 450명 (해당 기간 전수)
+
+3. 연구 방법
+연구담당자가 전자의무기록을 직접 열람하여 증례기록서(CRF)에 환자 등록번호, 생년월일, 성별, 진단일, 퇴원 후 흡입스테로이드 처방과 조제 기록, 1년 내 재입원 여부를 옮겨 적는다. 등록번호는 재입원 기록을 이어 찾는 데 필요하다. CRF는 암호를 건 연구용 컴퓨터에만 보관한다.
+자료는 본원 안에서만 분석하며 다른 기관 자료와 결합하거나 원외로 반출하지 않는다.
+
+4. 자료 분석
+처방 순응도(처방 일수 대비 조제 일수 비율)를 80% 기준으로 나누어 재입원율을 비교하고, 나이와 중증도를 보정한 콕스 비례위험 모형으로 위험비를 구한다.
+
+5. 동의
+과거 진료기록을 이용하는 후향적 연구로 환아와 보호자에게 동의를 받기 어려워 동의면제를 요청한다.
+
+6. 위험과 이익
+대상자와 직접 접촉하지 않아 신체적 위험은 없다. 대상자에게 직접적인 이익은 없다.
+
+7. 자료 보관과 폐기
+연구 자료는 연구 종료 후 3년간 보관한 뒤 파기한다.
+
+8. 연구 기간
+2026년 12월 1일부터 2027년 11월 30일까지""",
+        "facts": {
+            "F01": ("기록 이용", "후향적 의무기록 조사 연구"),
+            "F02": ("예", "연구담당자가 전자의무기록을 직접 열람하여"),
+            "F03": ("원자료", "연구담당자가 전자의무기록을 직접 열람하여"),
+            "F04": (None, None),
+            "F05": ("기관 내부", "자료는 본원 안에서만 분석하며"),
+            "F06": ("아니오", "다른 기관 자료와 결합하거나 원외로 반출하지 않는다"),
+            "F07": ([], "환자 등록번호, 생년월일, 성별, 진단일, 퇴원 후 흡입스테로이드 처방과 조제 기록, 1년 내 재입원 여부"),
+            "F08": (["미성년자"], "만 6세 이상 만 18세 미만 환아"),
+            "F09": ("아니오", "전자의무기록을 직접 열람하여"),
+            "F10": ("아니오", "후향적 의무기록 조사 연구"),
+            "F11": ("동의면제 요청", "환아와 보호자에게 동의를 받기 어려워 동의면제를 요청한다"),
+            "F12": (["경희대학교병원"], "수행기관: 경희대학교병원"),
+            "F13": ("2026-12-01 ~ 2027-11-30", "2026년 12월 1일부터 2027년 11월 30일까지"),
+            "F14": ("아니오", "소아 천식 환아의 흡입스테로이드 처방 순응도와 1년 내 재입원의 관련성"),
+            "F15": (450, "약 450명"),
+            "F16": (["등록번호", "전체 생년월일"], "환자 등록번호, 생년월일"),
+            "F17": (None, None),
+            "F18": (None, None),
+        },
+    },
+    # 대학원생 첫 초안에서 반려되는 실수: 과거형·경어체 혼용·만 나이·산출근거·모집 문건·승인 전 시작·답례용 연락처
+    "real3_survey_cuk": {
+        "title": "가톨릭대 · 대학생 수면 설문 (첫 초안)",
+        "institution": "가톨릭대학교",
+        "plan": """연구 제목: 대학생의 취침 전 스마트폰 사용 시간과 수면의 질의 관계
+연구책임자: 김영희 (심리학과 석사과정, 010-0000-0003, younghee.kim@example.org)
+지도교수: 이철수 교수 (심리학과)
+수행기관: 가톨릭대학교
+연구 유형: 인간대상연구(설문조사)
+
+1. 연구 배경
+대학생의 취침 전 스마트폰 사용이 늘면서 잠드는 시각이 늦어지고 수면의 질이 떨어진다는 보고가 많다. 선행연구에서 취침 전 스마트폰 사용이 수면 잠복기를 늘린다고 보고되었다.
+
+2. 연구 목적
+대학생의 취침 전 스마트폰 사용 시간과 수면의 질의 관계를 확인한다.
+
+3. 연구 대상 및 모집
+가톨릭대학교 재학생 중 19세 이상 성인 200명을 대상으로 한다.
+교내 커뮤니티 게시판과 SNS(인스타그램)에 모집 글을 올려 참여자를 모집한다.
+
+4. 연구 방법
+온라인 설문(구글 폼)으로 취침 전 스마트폰 사용 시간, 피츠버그 수면의 질 지수(PSQI), 주간 졸림 척도(ESS)를 측정하였다. 예비조사로 학부생 30명에게 설문을 실시하였고 문항을 다듬었다.
+수집 정보는 나이, 성별, 학년, 스마트폰 사용 시간, 수면 점수입니다. 설문을 마친 참여자에게는 답례로 모바일 기프티콘을 지급하며, 이를 위해 휴대전화 번호를 수집합니다.
+
+5. 자료 분석
+스마트폰 사용 시간과 PSQI 점수의 상관을 보고, 성별과 학년을 보정한 다중회귀분석을 한다.
+
+6. 동의
+온라인 설문 첫 화면에서 연구 설명을 읽고 동의한 사람만 참여합니다.
+
+7. 위험과 이익
+설문에 약 15분이 걸리며 신체적 위험은 없습니다. 참여자에게 직접적인 이익은 없다.
+
+8. 연구 기간
+2026년 10월 1일부터 2027년 2월 28일까지""",
+        "facts": {
+            "F01": ("설문·면담", "연구 유형: 인간대상연구(설문조사)"),
+            "F02": (None, None),
+            "F03": (None, None),
+            "F04": (None, None),
+            "F05": (None, None),
+            "F06": (None, None),
+            "F07": ([], "수집 정보는 나이, 성별, 학년, 스마트폰 사용 시간, 수면 점수입니다"),
+            "F08": ([], "가톨릭대학교 재학생 중 19세 이상 성인 200명을 대상으로 한다"),
+            "F09": (None, None),
+            "F10": ("아니오", "연구 유형: 인간대상연구(설문조사)"),
+            "F11": ("서면동의", "온라인 설문 첫 화면에서 연구 설명을 읽고 동의한 사람만 참여합니다"),
+            "F12": (["가톨릭대학교"], "수행기관: 가톨릭대학교"),
+            "F13": ("2026-10-01 ~ 2027-02-28", "2026년 10월 1일부터 2027년 2월 28일까지"),
+            "F14": ("아니오", "대학생의 취침 전 스마트폰 사용 시간과 수면의 질의 관계"),
+            "F15": (200, "19세 이상 성인 200명"),
+            "F16": (["연락처"], "이를 위해 휴대전화 번호를 수집합니다"),
+            "F17": (None, None),
+            "F18": (None, None),
+        },
+    },
+}
+
+
 def build_facts(masked: str, table: dict) -> list[dict]:
     facts = []
     for key, label in FACT_LABELS.items():
@@ -104,8 +290,8 @@ def build_facts(masked: str, table: dict) -> list[dict]:
     return facts
 
 
-def run_engine(plan: str, masked: str, facts: list[dict]) -> dict:
-    state = {"raw_text": plan, "masked_text": masked, "institution_name": INSTITUTION, "target_start_date": TARGET,
+def run_engine(plan: str, masked: str, facts: list[dict], institution: str = INSTITUTION) -> dict:
+    state = {"raw_text": plan, "masked_text": masked, "institution_name": institution, "target_start_date": TARGET,
              "facts": facts, "confirmed_facts": facts, "extra_inputs": {}}
     for step in (judge.institution, judge.gates, judge.route, judge.docs_schedule, write.abstain, write.report):
         state = {**state, **step(state)}
@@ -113,17 +299,25 @@ def run_engine(plan: str, masked: str, facts: list[dict]) -> dict:
                                   "suggestions", "highlights", "masked_text", "venue")}
 
 
-for sample_id, spec in SAMPLES.items():
-    plan = HEAD + spec["method"] + TAIL + (f"\n{spec['extra']}" if spec.get("extra") else "")
-    masked = plan
-    for original, token in PII:
-        masked = masked.replace(original, token)
-    facts = build_facts(masked, {**COMMON, **spec["facts"]})
-    out = {"id": sample_id, "title": spec["title"], "_note": NOTE, "institution_name": INSTITUTION, "plan_text": plan,
-           "pending": {"masked_text": masked,
-                       "mask_log": [{"type": "이름", "count": 1}, {"type": "전화번호", "count": 1}, {"type": "이메일", "count": 1}],
-                       "facts": facts},
-           "result": run_engine(plan, masked, facts)}
+def inputs():
+    """(id, 제목, 메모, 기관, 계획서, 가린 계획서, mask_log, 사실 표)"""
+    for sample_id, spec in SAMPLES.items():
+        plan = HEAD + spec["method"] + TAIL + (f"\n{spec['extra']}" if spec.get("extra") else "")
+        masked = plan
+        for original, token in PII:
+            masked = masked.replace(original, token)
+        log = [{"type": "이름", "count": 1}, {"type": "전화번호", "count": 1}, {"type": "이메일", "count": 1}]
+        yield sample_id, spec["title"], NOTE, INSTITUTION, plan, masked, log, {**COMMON, **spec["facts"]}
+    for sample_id, spec in REAL.items():
+        masked, log = pii.mask(spec["plan"])  # 실제 모드와 같은 ② 마스킹
+        yield sample_id, spec["title"], REAL_NOTE, spec["institution"], spec["plan"], masked, log, spec["facts"]
+
+
+for sample_id, title, note, institution, plan, masked, log, table in inputs():
+    facts = build_facts(masked, table)
+    out = {"id": sample_id, "title": title, "_note": note, "institution_name": institution, "plan_text": plan,
+           "pending": {"masked_text": masked, "mask_log": log, "facts": facts},
+           "result": run_engine(plan, masked, facts, institution)}
     path = ROOT / "data" / "samples" / f"{sample_id}.json"
     path.write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     r = out["result"]

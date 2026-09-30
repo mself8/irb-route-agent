@@ -13,6 +13,7 @@ from pathlib import Path
 import pytest
 
 from agent import api, samples, submit
+from test_app_smoke import paste_sample
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -215,7 +216,7 @@ def test_ui_demo_flow(monkeypatch, mock_site):
     monkeypatch.setattr(api, "FAKE", False)
     app = AppTest.from_file(str(ROOT / "app.py")).run(timeout=30)
     click = lambda label: next(b for b in app.button if b.label == label).click().run(timeout=90)  # noqa: E731
-    app.button(key="sample_sample2_pseudo").click().run(timeout=30)
+    paste_sample(app, "sample2_pseudo")
     click("사실 추출 시작")
     click("사실 확정하고 판정")
     click("제출 준비 (모의 e-IRB)")

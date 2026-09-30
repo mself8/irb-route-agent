@@ -3,6 +3,16 @@ from pathlib import Path
 
 from streamlit.testing.v1 import AppTest
 
+from agent import samples
+
+
+def paste_sample(app, sample_id: str):
+    """S1 샘플 버튼처럼 계획서와 기관을 입력칸에 넣는다. 화면의 샘플 목록(실제형)과 상관없이 테스트용 짧은 샘플을 쓴다."""
+    s = samples.load(sample_id)
+    app.session_state["plan_text"] = s["plan_text"]
+    app.session_state["institution_name"] = s["institution_name"]
+    return app.run(timeout=30)
+
 
 def test_app_starts():
     app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py")).run(timeout=30)
@@ -15,7 +25,7 @@ def test_switch_institution(monkeypatch):
     from agent import api
     monkeypatch.setattr(api, "FAKE", False)
     app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py")).run(timeout=30)
-    app.button(key="sample_sample2_pseudo").click().run(timeout=30)
+    paste_sample(app, "sample2_pseudo")
     next(b for b in app.button if b.label == "사실 추출 시작").click().run(timeout=60)
     next(b for b in app.button if b.label == "사실 확정하고 판정").click().run(timeout=60)
     app.selectbox[0].select("서울시립대").run(timeout=30)
@@ -30,8 +40,26 @@ def test_switch_disabled_in_fake_mode(monkeypatch):
     from agent import api
     monkeypatch.setattr(api, "FAKE", True)
     app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py")).run(timeout=30)
-    app.button(key="sample_sample2_pseudo").click().run(timeout=30)
+    paste_sample(app, "sample2_pseudo")
     next(b for b in app.button if b.label == "사실 추출 시작").click().run(timeout=30)
     next(b for b in app.button if b.label == "사실 확정하고 판정").click().run(timeout=30)
     assert not app.exception and app.selectbox[0].disabled
     assert any("예시 모드(FAKE=1)" in c.value for c in app.caption)
+
+
+def test_demo_samples(monkeypatch):
+    """화면의 실제형 샘플 3건: 버튼 → 추출 → 확정이 실제 그래프로 돌고, 기관마다 그 기관 기준으로 판정한다."""
+    monkeypatch.setenv("LLM", "0")
+    from agent import api
+    monkeypatch.setattr(api, "FAKE", False)
+    expect = {"real1_cdw_cmc": ("A", "cmc", "I-CMC-10"), "real2_chart_khmc": ("C", "khmc", "I-KHMC-1"),
+              "real3_survey_cuk": ("C", "cuk", "I-CUK-1")}
+    for sample_id, (route, venue, rule) in expect.items():
+        app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py")).run(timeout=30)
+        app.button(key=f"sample_{sample_id}").click().run(timeout=30)
+        next(b for b in app.button if b.label == "사실 추출 시작").click().run(timeout=60)
+        next(b for b in app.button if b.label == "사실 확정하고 판정").click().run(timeout=60)
+        r = app.session_state.result
+        assert not app.exception
+        assert (r.route.route, r.venue.id) == (route, venue), sample_id
+        assert any(j.rule_id == rule and j.result == "미충족" for j in r.judgments), sample_id
