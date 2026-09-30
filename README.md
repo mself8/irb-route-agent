@@ -67,6 +67,7 @@ FAKE=0 streamlit run app.py                            # 결과 화면 → "제�
 - AI 코딩 도구: Claude Code (Anthropic, Claude Opus 5.5) — 코드·테스트·문서 작성 전반. 개발자(송윤)가 지시하고 검토했으며, 세션 2개가 나눠 맡았다(규칙 엔진·화면 / 추출·마스킹·평가). 커밋마다 별도 Claude 리뷰 에이전트가 검토했고, 커밋 메시지에 Co-Authored-By로 표기
 - 기획 단계 생성형 AI: OpenAI Codex CLI — 참가신청서를 바탕으로 한 초기 구조도 초안(본선 전). 발표자료·목업 이미지에 쓴 도구는 제출 전 팀이 확인해 추가
 - 라이브러리: Streamlit 1.64.0 (Apache-2.0), LangGraph 1.2.12 (MIT), Pydantic 2.13.5 (MIT), PyYAML 6.0.3 (MIT), pytest (MIT), OpenAI Python SDK 3.20.0 (Apache-2.0, vLLM의 OpenAI 호환 API 호출용), ko-pii 1.16.0 (MIT, https://github.com/Marker-Inc-Korea/ko-pii, 규칙 기반 개인정보 검출 — ② 마스킹), Playwright for Python 1.63.0 (Apache-2.0, https://github.com/microsoft/playwright-python) + Chromium Headless Shell 153 (BSD-3-Clause, Playwright 배포 v1243) — ⑪ 제출 도우미가 모의 e-IRB(`demo/mock_eirb`, 127.0.0.1)만 조작
+- 데모 영상(제출물): 실제 모드(FAKE=0) 화면을 Playwright for Python 1.63.0으로 녹화하고, FFmpeg 7.0.2 (GPL 빌드, imageio-ffmpeg 0.6.0 배포본, https://github.com/imageio/imageio-ffmpeg)로 AI 대기 구간을 잘랐다. 잘라 낸 자리에 생략한 초를 적은 자막은 Pillow 12.3.0 (MIT-CMU, https://python-pillow.org)과 Noto Sans CJK KR (SIL OFL 1.1, https://github.com/notofonts/noto-cjk)으로 그렸다. 샘플은 `data/samples/real1_cdw_cmc.json`, 제출은 로컬 모의 e-IRB에만 했다
 - LLM: Qwen3.8-27B-FP8 (Qwen, Hugging Face `Qwen/Qwen3.8-27B-FP8`, 리비전 017b9c7, Apache-2.0)
 - LLM 서빙: vLLM 0.25.1 (Apache-2.0), 로컬 GPU(RTX A6000 2장). 계획서가 서버 밖으로 나가지 않습니다.
 - 법령 원문 (국가법령정보센터 law.go.kr, 확인일 2026-09-29): 생명윤리 및 안전에 관한 법률·시행령·시행규칙, 개인정보 보호법·시행령, 약사법, 의약품 등의 안전에 관한 규칙, 의료기기법·시행규칙, 공용기관생명윤리위원회 고시. 정리본은 `data/laws/` (본선 전 수집)
