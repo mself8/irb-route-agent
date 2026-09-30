@@ -2,6 +2,8 @@
 
 지금은 틀 문장이다. TODO: LLM으로 문장을 다듬되, 인용과 근거 검사는 그대로 통과해야 출력한다.
 """
+import re
+
 from ..state import GraphState
 from . import judge
 from .read import _impl
@@ -41,12 +43,15 @@ KEY_TEXT = {"데이터팀·제3자": "연구번호와 실제 대상자를 연결
             "없음(폐기)": "연구번호와 실제 대상자를 연결하는 대응표는 연구번호를 부여한 뒤 파기한다."}
 NO_CODE_TEXT = "본 연구는 성명, 주민등록번호, 병원 등록번호, 연락처 등 개인식별정보를 수집·기록하지 않으며, 연구번호와 대응표를 만들지 않는다."
 LINK_TEXT = ("다른 기관 자료와의 결합은 개인정보 보호법 제28조의3에 따라 [결합전문기관]이 수행한다. "
-             "결합된 정보를 결합전문기관 밖으로 반출할 때는 가명정보 또는 익명정보로 처리한 뒤 전문기관의 장의 승인을 받는다.")
+             "결합된 정보를 결합전문기관 밖으로 반출할 때는 가명정보 또는 개인정보 보호법 제58조의2에 해당하는 정보로 처리한 뒤 "
+             "전문기관의 장의 승인을 받는다.")
 SENSITIVE_TEXT = "민감정보([종류])는 [접근 권한자]만 접근하고, [분석 장소]에서만 분석하며 외부로 반출하지 않는다."
 PSEUDO_TEXT = "본 연구는 개인정보 보호법 제28조의2에 따라 과학적 연구를 위하여 정보주체의 동의 없이 가명정보를 처리한다."
 WAIVER_TEXT = ("[이유]로 연구대상자의 동의를 받는 것이 연구 진행과정에서 현실적으로 불가능하거나 연구의 타당성에 심각한 영향을 미치며, "
                "연구대상자의 동의 거부를 추정할 만한 사유가 없고 동의를 면제하여도 연구대상자에게 미치는 위험이 극히 낮으므로 "
                "서면동의 면제를 요청한다(생명윤리법 제16조 제3항).")
+WAIVER_BIO = "(인체유래물연구는 생명윤리법 제37조 제4항에 따라 제16조 제3항을 준용하며, 연구대상자는 인체유래물 기증자로 본다.)"
+GENERIC = {"예", "있음", "네"}  # (나) 답이 목록 대신 들어온 경우 괄호에 넣지 않는다
 # 식별 데이터를 가명 데이터로 바꿨을 때(샘플 2의 방식) 규칙 엔진이 어떻게 판정하는지 보여 준다
 PSEUDO_DESIGN = {"F02": "아니오", "F03": "가명처리", "F16": [], "F17": "예", "F18": "데이터팀·제3자"}
 
@@ -161,39 +166,57 @@ def suggest(state: GraphState) -> list[dict]:
         out.append({"rule_id": rule_id, "level": level, "warning": warning, "add_text": add_text,
                     "basis": f"{b['law']} {b['article']}"})
 
+    code = "예" if f.get("F18") in ("연구책임자", "데이터팀·제3자") else f.get("F17")  # 판정(⑥)과 같이 대응표 쪽을 믿는다
     if result("R-11") == "미충족":
         gap = ", ".join(judge.ID_LABEL[k] for k in rows["R-11"]["fact_refs"])
-        text = NO_CODE_TEXT if f.get("F17") == "아니오" else f"{ID_TEXT} {KEY_TEXT.get(f.get('F18'), KEY_TEXT['데이터팀·제3자'])}"
+        text = NO_CODE_TEXT if code == "아니오" else f"{ID_TEXT} {KEY_TEXT.get(f.get('F18'), KEY_TEXT['데이터팀·제3자'])}"
         add("R-11", "보완 필요", f"계획서에 {gap} 서술이 없습니다. 이대로 심의면제를 신청하면 사무국이 신규심의로 전환할 수 있습니다.", text)
     if result("R-12") == "미충족":
-        warning = ("가명정보를 쓰는데 대응표를 연구책임자가 갖고 있습니다." if f.get("F18") == "연구책임자"
-                   else "대응표 분리 보관과 접근 통제가 계획서에 없습니다.")
-        text = KEY_TEXT["없음(폐기)"] if f.get("F18") == "없음(폐기)" else KEY_TEXT["데이터팀·제3자"]
-        add("R-12", "보완 필요", warning + " DRB에서 안전조치 보완을 요구받을 수 있습니다.", text)
+        if f.get("F18") == "연구책임자":  # 지금 설계를 바꾸는 일이라 계획서에 바로 넣을 문장은 주지 않는다
+            add("R-12", "보완 필요", "가명정보를 쓰는데 대응표를 연구책임자가 갖고 있습니다. DRB에서 안전조치 보완을 요구받을 수 있습니다. "
+                "대응표를 연구진이 아닌 부서(예: 데이터팀)가 보관하도록 바꾸는 방안을 검토하세요.")
+        else:
+            text = KEY_TEXT["없음(폐기)"] if f.get("F18") == "없음(폐기)" else KEY_TEXT["데이터팀·제3자"]
+            add("R-12", "보완 필요", "대응표 분리 보관과 접근 통제가 계획서에 없습니다. DRB에서 안전조치 보완을 요구받을 수 있습니다.", text)
     if result("R-13") == "미충족":
-        add("R-13", "보완 필요", "다른 기관 데이터와 결합하려면 결합전문기관을 거쳐야 하는데, 그 절차가 계획서에 없습니다.", LINK_TEXT)
-    if result("D4") == "미충족":
-        add("D4", "확인 필요", f"민감정보({', '.join(f.get('F07') or [])})가 들어 있습니다. DRB가 처리 근거와 보호조치를 확인할 수 있습니다.",
-            SENSITIVE_TEXT)
+        add("R-13", "보완 필요", "다른 기관 데이터와 결합한다면 결합전문기관을 거쳐야 하는데, 그 절차가 계획서에 없습니다. "
+            "결합 없이 반출만 한다면 해당하지 않습니다.", LINK_TEXT)
+    sensitive = result("D4") == "미충족"
+    if sensitive:
+        add("D4", "확인 필요", f"민감정보{_named(f.get('F07'))}가 들어 있습니다. 이런 정보는 본인 동의를 받아 쓰는 것이 원칙입니다"
+            "(보건의료데이터 활용 가이드라인). 동의 없이 쓰려면 DRB가 처리 근거와 보호조치를 확인합니다.", SENSITIVE_TEXT)
     if "C3" in rows:
-        texts = [PSEUDO_TEXT] if state["decision"].get("drb") is True else []
-        texts += [WAIVER_TEXT] if f.get("F11") == "동의면제 요청" else []
+        texts = [PSEUDO_TEXT] if state["decision"].get("drb") is True and not sensitive else []
+        if f.get("F11") == "동의면제 요청":
+            texts += [WAIVER_TEXT] + ([WAIVER_BIO] if result("S6") == "충족" else [])
         add("C3", "확인 필요", "동의 없이 진행하는 근거를 계획서에 적어 두세요. 서면동의 면제는 기관위원회가 승인합니다.", " ".join(texts) or None)
     if result("E3") == "미충족":
-        alt = _what_if(state, PSEUDO_DESIGN)
-        steps = " → ".join(c.split(" (")[0] for c in alt["committees"])
-        add("E3", "안내", f"식별자({', '.join(f.get('F16') or [])})를 기록해서 심의면제 대상이 아닙니다. 데이터팀이 식별자를 지운 가명 데이터를 "
-            f"받는 방식으로 바꾸면, 규칙 엔진으로 다시 판정한 결과 경로 {alt['route']}({steps})입니다. 면제 여부는 위원회가 확인하며, "
-            "연구에 식별자가 꼭 필요하면 지금 경로를 따릅니다.", f"{ID_TEXT} {KEY_TEXT['데이터팀·제3자']}")
+        fix = f"{ID_TEXT} {KEY_TEXT['데이터팀·제3자']}"
+        alt, alt_rows = _what_if(state, PSEUDO_DESIGN, fix)
+        if alt["route"] in ("A", "B", "C"):
+            names = [re.sub(r" \((가이드라인 권고|동의 없이)[^)]*\)", "", c) for c in alt["committees"]]
+            steps = " → ".join(" + ".join(c for n, c in zip(alt["order"], names) if n == k) for k in dict.fromkeys(alt["order"]))
+            left = [r["rule_id"] for r in alt_rows if r["result"] == "미충족"]
+            add("E3", "안내", f"식별자{_named(f.get('F16'))}를 기록해서 심의면제 대상이 아닙니다. 데이터팀이 식별자를 지운 가명 데이터를 "
+                f"받는 방식으로 바꾸고 아래 문장을 넣으면, 규칙 엔진으로 다시 판정한 결과 경로 {alt['route']}입니다({steps})."
+                + (f" 다만 그 방식에서도 {', '.join(left)} 미충족이 남습니다." if left else "")
+                + " 면제 여부는 위원회가 확인하며, 연구에 식별자가 꼭 필요하면 지금 경로를 따릅니다.", fix)
     return out
 
 
-def _what_if(state: GraphState, changes: dict) -> dict:
-    """사실 몇 개를 바꿔 규칙 엔진(⑥⑦)을 다시 돌린 경로. 연구자에게 대안을 보여 줄 때만 쓴다."""
+def _named(values) -> str:
+    """경고 문구에 넣을 목록. (나)에서 '예'·'있음'처럼 답한 값은 이름이 아니라서 뺀다."""
+    names = [v for v in values or [] if v not in GENERIC]
+    return f"({', '.join(names)})" if names else ""
+
+
+def _what_if(state: GraphState, changes: dict, add_text: str = "") -> tuple[dict, list[dict]]:
+    """사실 몇 개를 바꾸고 문장을 넣었을 때 규칙 엔진(⑥⑦)이 내는 경로와 판정 행. 연구자에게 대안을 보여 줄 때만 쓴다."""
     facts = [{**x, "value": changes[x["key"]], "status": "found"} if x["key"] in changes else x for x in state["confirmed_facts"]]
-    s = {**state, "confirmed_facts": facts}
+    s = {**state, "facts": facts, "confirmed_facts": facts, "edited_by_user": [],
+         "masked_text": state.get("masked_text", "") + "\n" + add_text}
     s = {**s, **judge.gates(s)}
-    return judge.route(s)["route"]
+    return judge.route(s)["route"], s["judgments"]
 
 
 def highlights(state: GraphState, suggestions: list[dict]) -> list[dict]:
@@ -222,5 +245,14 @@ def highlights(state: GraphState, suggestions: list[dict]) -> list[dict]:
         note = f"{rule_id} {r['result_detail']}"
         if not any([mark(k, note) for k in r["fact_refs"]]):
             any(mark(k, f"{rule_id} 여기에 서술 추가: {r['result_detail']}") for k in ("F03", "F01"))
-    return [{"key": k, "span": span, "span_start": a, "span_end": b, "note": " / ".join(notes)}
-            for (a, b, k, span), notes in sorted(marks.items())]
+    merged: list[dict] = []  # 겹치는 구간은 하나로 합쳐 번호가 어긋나지 않게 한다
+    for (a, b, k, _), notes in sorted(marks.items()):
+        if merged and a < merged[-1]["span_end"]:
+            m = merged[-1]
+            m["span_end"] = max(m["span_end"], b)
+            m["key"] += f",{k}"
+            m["note"] += " / " + " / ".join(notes)
+            m["span"] = text[m["span_start"]:m["span_end"]]
+        else:
+            merged.append({"key": k, "span": text[a:b], "span_start": a, "span_end": b, "note": " / ".join(notes)})
+    return merged

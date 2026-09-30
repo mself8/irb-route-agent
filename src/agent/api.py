@@ -31,7 +31,9 @@ def _cfg(run_id: str) -> dict:
 
 def start(plan_text: str, institution_name: str, target_start_date: str) -> Pending:
     if FAKE:
-        sample = samples.match(plan_text) or samples.load(samples.all_ids()[0])
+        sample = samples.match(plan_text)
+        if sample is None:
+            raise ValueError("예시 모드(FAKE=1)에서는 샘플 계획서만 판정합니다. 고친 계획서는 실제 모드(FAKE=0)에서 판정하세요.")
         return Pending(run_id=f"fake:{sample['id']}", **sample["pending"])
     run_id = uuid.uuid4().hex[:8]
     _graph().invoke(

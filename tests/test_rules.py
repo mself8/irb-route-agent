@@ -250,3 +250,24 @@ def test_submission_fixes():
     assert e3["level"] == "안내" and "경로 A" in e3["warning"]
     for s in [*told["suggestions"], *crf["suggestions"]]:          # 경고는 가능성으로만 쓴다 (팀 문서 6.6)
         assert not any(w in s["warning"] for w in ("승인됩니다", "통과", "반려됩니다"))
+
+
+def test_eighth_review_fixes():
+    pi = run({"F18": "연구책임자"})                              # 연구자가 대응표를 가지면 사실과 반대인 문장을 주지 않는다
+    assert next(s for s in pi["suggestions"] if s["rule_id"] == "R-12")["add_text"] is None
+    rare = run({"F07": ["희귀질환"]})                             # 민감정보면 '동의 없이 처리' 문장을 권하지 않고 동의 원칙을 알린다
+    fix = {s["rule_id"]: s for s in rare["suggestions"]}
+    assert "본인 동의" in fix["D4"]["warning"] and "동의 없이 가명정보를 처리" not in (fix["C3"]["add_text"] or "")
+    crf = run({**IDENTIFIED, "F07": ["희귀질환"]})               # 대안 설계에서도 남는 미충족을 숨기지 않는다
+    e3 = next(s for s in crf["suggestions"] if s["rule_id"] == "E3")["warning"]
+    assert "D4 미충족이 남습니다" in e3 and "R-11" not in e3
+    answered = run({**IDENTIFIED, "F16": "예"})                  # (나) 답 '예'는 괄호 목록에 넣지 않는다
+    assert "식별자(예)" not in next(s for s in answered["suggestions"] if s["rule_id"] == "E3")["warning"]
+    edited = run({})                                            # S2에서 고친 값은 계획서에 적힌 것으로 보지 않는다
+    edited = {**edited, "edited_by_user": ["F18"]}
+    edited = {**edited, **judge.gates(edited)}
+    assert {"R-11", "R-12"} <= ids(edited, "미충족")
+    assert "R-13" in ids(run({"F06": "예"}), "미충족")
+    marks = run({}, unwritten=("F17", "F18"))["highlights"]      # 겹치는 표시 구간은 하나로 합친다
+    assert all(a["span_end"] <= b["span_start"] for a, b in zip(marks, marks[1:]))
+

@@ -88,9 +88,13 @@ def _facts(state: GraphState) -> dict:
 
 
 def _written(state: GraphState) -> set[str]:
-    """계획서에 적혀 있던 사실. ③이 뽑은 상태로 보되(연구자가 ④·⑨에서 채운 값은 계획서에는 없다), 연구용 번호·대응표는 원문 낱말도 확인한다."""
+    """계획서에 적혀 있던 사실. ③이 뽑은 상태로 보되 연구자가 ④·⑨에서 채우거나 고친 값은 계획서에 없는 것으로 보고,
+    연구용 번호·대응표는 원문 낱말도 확인한다."""
     text = state.get("masked_text", "")
-    found = {x["key"] for x in state.get("facts") or state.get("confirmed_facts", []) if x.get("status") != "not_found"}
+    confirmed = {x["key"]: x.get("value") for x in state.get("confirmed_facts", [])}
+    edited = set(state.get("edited_by_user") or [])
+    found = {x["key"] for x in state.get("facts") or state.get("confirmed_facts", [])
+             if x.get("status") != "not_found" and x["key"] not in edited and confirmed.get(x["key"], x.get("value")) == x.get("value")}
     return {k for k in found if k not in TOLD or not text or any(w in text for w in TOLD[k])}
 
 
@@ -336,7 +340,7 @@ def gates(state: GraphState) -> dict:
     # 6. 제출 전 보완: 판정에 쓴 사실이 계획서에 적혀 있는가 (팀 문서 R-11~R-13). 사무국이 실제로 어떻게 처리할지는 예측하지 않는다
     written = _written(state)
     if d["exempt"] == "yes":
-        need = ["F16", "F17"] + ([] if f.get("F17") == "아니오" else ["F18"])  # 연구용 번호가 없으면 대응표도 없다
+        need = ["F16", "F17"] + ([] if code == "아니오" else ["F18"])  # 연구용 번호가 없으면 대응표도 없다
         gap = [k for k in need if k not in written]
         if gap:
             rows.append(_row("R-11", "미충족", "계획서에 없는 식별 관리 서술: " + ", ".join(ID_LABEL[k] for k in gap)
@@ -353,7 +357,7 @@ def gates(state: GraphState) -> dict:
             rows.append(_row("R-12", "미충족", "대응표 분리 보관·접근 통제가 계획서에 없음 → DRB에서 안전조치 보완을 요구받을 수 있음",
                              refs=["F18"]))
     if any(r["rule_id"] == "D3" and r["result"] == "충족" for r in rows):
-        told = "결합전문기관" in state.get("masked_text", "")
+        told = any(w in state.get("masked_text", "") for w in ("결합전문기관", "전문기관", "결합키관리기관"))
         rows.append(_row("R-13", "충족" if told else "미충족",
                          "결합전문기관 절차가 계획서에 적혀 있음" if told else "타 기관 결합인데 결합전문기관 절차가 계획서에 없음",
                          refs=["F06"]))

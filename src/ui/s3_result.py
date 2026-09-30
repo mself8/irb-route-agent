@@ -16,7 +16,8 @@ def _marked(text: str, highlights) -> str:
                 f'<mark style="background:{YELLOW};color:#1F2A44">{html.escape(text[h.span_start:h.span_end])}<sup>{n}</sup></mark>']
         pos = h.span_end
     out.append(html.escape(text[pos:]))
-    return '<div style="white-space:pre-wrap;line-height:1.8">' + "".join(out) + "</div>"
+    # 줄바꿈을 <br>로 바꿔 빈 줄에서 HTML 블록이 끊겨 마크다운으로 읽히지 않게 한다
+    return '<div style="line-height:1.8">' + "".join(out).replace("\n", "<br>") + "</div>"
 
 
 def render() -> None:
@@ -55,11 +56,16 @@ def render() -> None:
                     st.code(s.add_text, language=None, wrap_lines=True)
                 if s.basis:
                     st.caption(f"근거: {s.basis}")
-        fixes = [s.add_text for s in need if s.add_text]
+        fixes = []
+        for s in need:  # R-11 문구에 R-12 문구가 들어 있으면 한 번만 넣는다
+            if s.add_text and s.add_text not in " ".join(fixes):
+                fixes.append(s.add_text)
         if fixes and st.button("보완 문구를 계획서 끝에 넣고 처음부터 다시"):
-            text, institution = st.session_state.get("last_input", ("", ""))
+            text, institution, start_date = st.session_state.get("last_input", ("", "", None))
             st.session_state.plan_text = text.rstrip() + "\n" + "\n".join(fixes)
             st.session_state.institution_name = institution
+            if start_date:
+                st.session_state.start_date = start_date
             st.session_state.step = 0
             st.rerun()
     if result.highlights and result.masked_text:
