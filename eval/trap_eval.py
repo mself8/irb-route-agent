@@ -15,6 +15,7 @@
 import argparse
 import json
 import os
+import random
 import re
 import subprocess
 import sys
@@ -235,12 +236,132 @@ LIMITS = [
     "- 해소는 보완 문장을 넣고 다시 돌렸을 때 경고가 풀리는지만 본다. 대부분 낱말 검사라 문장만 넣으면 풀린다. 내용이 맞는지는 사람이 본다."]
 
 
+# ---------- 시험용 600건 (함정 300 · 합성 300): 기능 동결 뒤 코드로만 한 번 잰다. 결과를 보고 규칙을 고치지 않는다 ----------
+SEALED = {"traps": ROOT / "eval" / "traps" / "traps300.json", "synth": ROOT / "eval" / "synth" / "synth300.json"}
+SYNTH_NOTE = "평가용 합성 데이터(가상 계획서, Claude Code로 생성) · 정답은 T3 확인 전 초안"
+
+
+def gold_facts(gold: dict) -> list[dict]:
+    """정답 사실을 ③ 추출 결과 모양으로. 값이 없으면 계획서에 없는 사실(not_found)."""
+    from agent.state import FACT_LABELS
+    return [{"key": k, "label": FACT_LABELS[k], "value": v, "span": None, "span_start": None, "span_end": None,
+             "status": "not_found" if v is None else "found", "cross_check": None} for k, v in gold.items()]
+
+
+def engine_states(result: dict) -> dict[str, list[str]]:
+    """규칙마다 엔진이 낸 상태: 판정 행(판단불가는 사유까지, R-05는 위험도까지) + 보완 제안이면 '경고'."""
+    out: dict[str, list[str]] = {}
+    for r in result["judgments"]:
+        state = r["result"]
+        if state == "판단불가" and r.get("abstain_reason"):
+            state = f"판단불가({r['abstain_reason']})"
+        level = re.search(r"1차 판정 (\S+위험)", r.get("result_detail") or "")
+        if r["rule_id"] == "R-05" and state == "충족" and level:
+            state = f"충족({level.group(1)})"
+        out.setdefault(r["rule_id"], []).append(state)
+    for g in result["suggestions"] or []:
+        if g["level"] in ("보완 필요", "확인 필요"):
+            out.setdefault(g["rule_id"], []).append("경고")
+    return out
+
+
+def committee(result: dict) -> str:
+    """에이전트가 고른 위원회 종류: own · public · contract · trial · out · unknown."""
+    r = result["route"]
+    if r["route"] == "임상시험":
+        return "trial"
+    if r["route"] in ("범위 밖", "비대상"):
+        return "out"
+    if r["route"] == "미정":
+        return "unknown"
+    text = " ".join(r["committees"])
+    return "public" if "공용" in text else "contract" if "위탁" in text or "협약" in text else "own"
+
+
+def sealed_run(case: dict, stage: int) -> dict:
+    """1단계: ③을 정답 사실로 바꿔 끼우고 엔진만(LLM 없음). 2단계: ② 마스킹·③ 추출부터 끝까지(LLM). 둘 다 설명문 다듬기(AI)는 끈다."""
+    from agent.nodes import read as read_node, write as write_node
+    t = time.time()
+    got = None
+    try:
+        p = api.start(case["plan"], case["institution"], case.get("target_start_date") or TARGET)
+        facts = [f.model_dump() for f in p.facts]
+        got = {f["key"]: (f["value"] if f.get("status") != "not_found" else None) for f in facts} if stage == 2 else None
+        result = api.confirm(p.run_id, facts).model_dump()
+        out = {"route": result["route"]["route"], "committee": committee(result), "states": engine_states(result), "error": None}
+    except Exception as e:  # noqa: BLE001  한 건이 실패해도 나머지는 남긴다
+        out = {"route": "오류", "committee": "unknown", "states": {}, "error": f"{type(e).__name__}: {e}"}
+    keep = ("id", "kind", "rule", "variant", "scope", "check", "institution", "expect", "satisfies", "route_expected",
+            "committee_expected", "strata", "facts_gold", "plan", "pii_gold", "cris")
+    return {**{k: case.get(k) for k in keep}, "kind": case.get("kind", "synth"), "expect": case.get("expect", {}),
+            "satisfies": case.get("satisfies", []), **out, "facts_got": got, "seconds": round(time.time() - t, 1)}
+
+
+def sample(cases: list[dict], which: str, n: int = 100) -> list[dict]:
+    """2단계 층화 표본. 함정: 규칙마다 돌아가며 75건 + 대조군 종류마다 돌아가며 25건. 합성: (출처, 연구 유형)마다 돌아가며."""
+    rng = random.Random(20260930)
+
+    def round_robin(items, key, k):
+        groups: dict = {}
+        for c in sorted(items, key=lambda c: c["id"]):
+            groups.setdefault(key(c), []).append(c)
+        for g in groups.values():
+            rng.shuffle(g)
+        out, keys = [], sorted(groups)
+        while len(out) < k and any(groups.values()):
+            for g in keys:
+                if groups[g] and len(out) < k:
+                    out.append(groups[g].pop())
+        return out
+    if which == "traps":
+        return (round_robin([c for c in cases if c["kind"] == "trap"], lambda c: c["rule"], 75)
+                + round_robin([c for c in cases if c["kind"] == "control"], lambda c: c["base"].split("-")[0] + (c["variant"] or ""), 25))
+    return round_robin(cases, lambda c: (c.get("strata", {}).get("origin", ""), c.get("strata", {}).get("type", "")), n)
+
+
+def sealed(which: str, stage: int, workers: int) -> None:
+    from agent.nodes import read as read_node, write as write_node
+    data = json.loads(SEALED[which].read_text(encoding="utf-8"))
+    cases = data["cases"] if stage == 1 else sample(data["cases"], which)
+    original = read_node._impl
+    write_node._impl = lambda name: None if name == "phrasing" else original(name)  # 설명문 다듬기(AI)는 판정·경로와 무관해 끈다
+    api._graph()
+    if stage == 1:  # 정답 사실은 건마다 달라 순서대로 바꿔 끼운다 (엔진만이라 빠르다)
+        out = []
+        for c in cases:
+            gold = gold_facts(c["facts_gold"])
+            fixed = type("Fixed", (), {"extract": staticmethod(lambda masked_text, g=gold: g)})
+            read_node._impl = lambda name, f=fixed: f if name == "llm" else original(name)
+            out.append(sealed_run(c, 1))
+        read_node._impl = original
+    else:
+        with ThreadPoolExecutor(workers) as pool:
+            out = list(pool.map(lambda c: sealed_run(c, 2), cases))
+    alarm: dict[str, set] = {}
+    for c in json.loads(SEALED["traps"].read_text(encoding="utf-8"))["cases"]:
+        for rule, st in c["expect"].items():
+            alarm.setdefault(rule, set()).update(("미충족", "경고") if st in FLAG else (st,))
+    commit = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "--short", "HEAD"], capture_output=True, text=True).stdout.strip()
+    dest = RESULTS / f"{which}300_stage{stage}.json"
+    dest.write_text(json.dumps({"note": f"{SYNTH_NOTE} · 측정 커밋 {commit}", "commit": commit, "stage": stage, "set": which,
+                                "alarm": {k: sorted(v) for k, v in alarm.items()}, "cases": out}, ensure_ascii=False, indent=1),
+                    encoding="utf-8")
+    bad = [c["id"] for c in out if c["error"]]
+    route_ok = sum(c["route"] == c["route_expected"] for c in out)
+    print(f"{which} {stage}단계 {len(out)}건 · 경로 일치 {route_ok}/{len(out)} · 오류 {len(bad)} {bad[:5]} → {dest.relative_to(ROOT)}")
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--report", type=Path, help="다시 돌리지 않고 이 실행 결과(json)로 표만 쓴다 (같은 이름의 .md)")
     ap.add_argument("--before", type=Path, help="비교할 이전 실행 결과(json)")
+    ap.add_argument("--sealed", choices=list(SEALED), help="시험용 600건: traps 또는 synth")
+    ap.add_argument("--stage", type=int, choices=[1, 2], default=1, help="1=정답 사실로 엔진만, 2=LLM으로 끝까지(층화 100건)")
+    ap.add_argument("--workers", type=int, default=1)
     a = ap.parse_args()
-    if a.report:
+    if a.sealed:
+        sealed(a.sealed, a.stage, a.workers)
+    elif a.report:
         spec = yaml.safe_load((ROOT / "eval" / "traps" / "traps.yaml").read_text(encoding="utf-8"))
         report(spec, json.loads(a.report.read_text(encoding="utf-8")), a.report.with_suffix(".md"), a.before)
     else:
