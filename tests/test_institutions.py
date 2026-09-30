@@ -12,6 +12,13 @@ ROOT = Path(__file__).resolve().parents[1]
 PROFILES = sorted((ROOT / "data" / "institutions" / "profiles").glob("*.yaml"))
 STD = yaml.safe_load((ROOT / "data" / "institutions" / "standard.yaml").read_text(encoding="utf-8"))
 WHEN = {"always", "drb", "exempt", "export", "received_data"}
+
+
+def ok_when(when) -> bool:
+    """조건: 이름 하나, 목록(모두 만족), kind=연구유형|연구유형."""
+    if isinstance(when, list):
+        return bool(when) and all(ok_when(w) for w in when)
+    return when in WHEN or (isinstance(when, str) and when.startswith("kind="))
 LEVEL = {"보완 필요", "확인 필요", "안내"}
 
 
@@ -27,7 +34,12 @@ def test_profile_shape(path):
     ids = [r["id"] for r in p.get("rules", [])]
     assert len(ids) == len(set(ids))
     for r in p.get("rules", []):
-        assert r["id"].startswith("I-") and r["when"] in WHEN and r["level"] in LEVEL and r["warning"] and r["source"]
+        assert r["id"].startswith("I-") and ok_when(r["when"]) and r["level"] in LEVEL and r["warning"] and r["source"]
+    for k, v in p["docs"].items():                                      # 서류 칸은 이름, 또는 {name, when}
+        assert isinstance(v, str) or (v.get("name") and ok_when(v["when"])), k
+    for v in p.get("variants", []):                                     # 연구 유형·면제별 서식 변형
+        assert ok_when(v["when"]) and set(v.get("docs", {})) <= set(STD["docs"]) and set(v.get("plan", {})) <= set(STD["plan"])
+    assert p.get("drb_order", "drb_first") in ("drb_first", "irb_first")
     s = p["schedule"]
     assert s["kind"] in ("public", "csv", "none")
     if s["kind"] == "csv":

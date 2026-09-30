@@ -277,17 +277,28 @@ def test_institution_layer():
     uos = run({}, "서울시립대학교")               # 기관 프로필: 제출처·기관 서식·정규심의 일정·기관 규칙
     assert uos["venue"]["id"] == "uos" and not uos["route"]["fast_track"]  # 면제도 정규심의 안건 → 7일 빠른 길 없음
     assert uos["schedule"]["scenarios"][0]["submit_by"] == "2026-10-26"    # 11-06 회의 + 결과 14일 < 12-01 개시
-    assert any("별지서식 9-3" in d["doc"] for d in uos["documents"])
+    assert any("별지서식 9-3" in d["doc"] for d in uos["documents"])     # 심의면제 후보 → 면제용 서식 9-3
+    assert any("별지서식 9-1" in d["doc"] for d in run(IDENTIFIED, "서울시립대학교")["documents"])  # 정규심의 → 9-1
     assert {"I-UOS-1", "I-UOS-2", "I-UOS-P"} <= {s["rule_id"] for s in uos["suggestions"] if s["scope"] == "기관"}
+    assert "I-UOS-2" not in {s["rule_id"] for s in run(IDENTIFIED, "서울시립대학교")["suggestions"]}  # 허가 공문은 면제 문맥만
+    assert run({}, "서울시립대학교", target="2026-12-28")["schedule"]["scenarios"][0]["submit_by"] == "2026-11-23"  # 연말도 계산
     cmc = run({"F12": ["서울성모병원"]}, "서울성모병원")  # 명단에 없는 별칭도 기관 프로필이 있으면 IRB가 있는 기관
     assert cmc["venue"]["id"] == "cmc" and cmc["institution"]["irb_exists"] is True and cmc["route"]["fast_track"]
-    assert "I-CMC-1" in {s["rule_id"] for s in cmc["suggestions"]}      # IRB 전에 DRB 승인 필요
+    assert "I-CMC-1" not in {s["rule_id"] for s in cmc["suggestions"]}  # IRB 전 DRB 승인은 반출 연구 항목
+    export = run({"F12": ["서울성모병원"], "F06": "예"}, "서울성모병원")
+    assert "I-CMC-1" in {s["rule_id"] for s in export["suggestions"]}
     public = run({}, "없음")
     assert public["venue"]["id"] == "public" and "제37호" in public["venue"]["plan_form"]
+    survey = run({**IDENTIFIED, "F01": "설문·면담"}, "없음")            # 공용위원회 서식은 연구 유형마다 다르다
+    assert "제33호" in survey["venue"]["plan_form"] and any("서면동의 면제 사유서" in d["doc"] for d in survey["documents"])
+    smc = run({"F12": ["삼성서울병원"]}, "삼성서울병원")               # 삼성서울병원은 IRB 승인 → 데이터 수집 → DRB
+    assert smc["route"]["route"] == "A" and smc["route"]["committees"][0].startswith("소속 기관 IRB")
+    assert not smc["route"]["fast_track"]
     plain = run({})                                                    # 프로필이 없는 기관은 예전처럼 공통 서류
     assert plain["venue"] is None and any(d["source"] == "관할 IRB 서식" for d in plain["documents"])
-    rows = judge.compare_table()                                       # 서식 표준화 비교표: 서류 11 + 계획서 항목 10
-    assert len(rows) == 21 and {"공용위원회", "서울시립대", "서울성모병원", "질병관리청"} <= set(rows[0])
+    rows = judge.compare_table()                                       # 서식 표준화 비교표: 서류 12 + 계획서 항목 13
+    assert len(rows) == 25 and {"공용위원회", "서울시립대", "서울성모병원", "질병관리청"} <= set(rows[0])
+    assert "—" not in {v for r in rows for v in r.values()}            # 빈칸은 '안내문에 없음'으로 쓴다
 
 
 def test_data_holder_differs():

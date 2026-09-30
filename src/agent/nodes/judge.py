@@ -397,7 +397,7 @@ def _fast(state: GraphState) -> bool:
     d, venue = state["decision"], _venue(state)
     return (d["drb"] is True and d["exempt"] == "yes" and d["irb"] == "own" and not d["pending"]
             and _facts(state).get("F06") == "아니오" and not _joint(state) and not _holder(state)
-            and not (venue and venue.get("exempt_regular")))
+            and not (venue and (venue.get("exempt_regular") or venue.get("drb_order") == "irb_first")))
 
 
 def _holder(state: GraphState) -> str | None:
@@ -419,15 +419,28 @@ def _venue(state: GraphState) -> dict | None:
     """관할 위원회의 기관 프로필. 공용위원회로 가면 공용위원회, 소속 IRB로 가면 소속 기관. 프로필이 없으면 None."""
     irb = state["decision"].get("irb")
     if irb in ("public", "contracted_public"):
-        return next(p for p in institutions()["profiles"] if p["id"] == "public")
-    return _profile(state["institution"].get("name")) if irb == "own" else None
+        p = next(p for p in institutions()["profiles"] if p["id"] == "public")
+    else:
+        p = _profile(state["institution"].get("name")) if irb == "own" else None
+    for v in (p or {}).get("variants", []):  # 연구 유형·심의면제 신청에 따라 서식이 다른 기관: 먼저 맞는 변형을 덮는다
+        if _holds(state, v["when"]):
+            return {**p, **{k: v[k] for k in ("plan_form", "plan") if k in v}, "docs": {**p["docs"], **v.get("docs", {})}}
+    return p
 
 
-def _holds(state: GraphState, when: str) -> bool:
-    """기관 규칙의 조건. 판정(⑥) 요약과 확정 사실로만 본다."""
+def _holds(state: GraphState, when) -> bool:
+    """기관 규칙·서식 변형의 조건. 판정(⑥) 요약과 확정 사실로만 본다. 목록이면 모두, kind=A|B는 연구 유형(F01)."""
+    if isinstance(when, list):
+        return all(_holds(state, w) for w in when)
     d, f = state["decision"], _facts(state)
+    if when.startswith("kind="):
+        return f.get("F01") in when.removeprefix("kind=").split("|")
     return {"always": True, "drb": d.get("drb") is True, "exempt": d.get("exempt") == "yes", "export": _yes(f.get("F06")),
             "received_data": f.get("F03") == "가명처리" or f.get("F04") in ("기관 데이터팀", "외부 기관")}[when]
+
+
+def _doc_name(value) -> str:
+    return value["name"] if isinstance(value, dict) else value
 
 
 def venue_view(state: GraphState, venue: dict) -> dict:
@@ -444,9 +457,11 @@ def venue_view(state: GraphState, venue: dict) -> dict:
 def compare_table() -> list[dict]:
     """서식 표준화: 표준 서류·계획서 항목 한 줄에 기관마다 다른 서식 이름을 모은다. 없으면 '—'."""
     inst = institutions()
-    rows = [{"구분": "제출 서류", "표준 항목": name, **{p["short"]: p["docs"].get(k, "—") for p in inst["profiles"]}}
+    none = "안내문에 없음"
+    rows = [{"구분": "제출 서류", "표준 항목": name,
+             **{p["short"]: _doc_name(p["docs"][k]) if k in p["docs"] else none for p in inst["profiles"]}}
             for k, name in inst["docs"].items()]
-    rows += [{"구분": "계획서 항목", "표준 항목": k, **{p["short"]: p.get("plan", {}).get(k, "—") for p in inst["profiles"]}}
+    rows += [{"구분": "계획서 항목", "표준 항목": k, **{p["short"]: p.get("plan", {}).get(k, none) for p in inst["profiles"]}}
              for k in inst["plan"]]
     return rows
 
@@ -472,8 +487,12 @@ def route(state: GraphState) -> dict:
     joint = []
     if _joint(state):  # 공동연구: 기본은 기관마다 심의, 한 곳 선정·공용위원회는 합의 (prep 케이스 3)
         joint, trace = ["공동 수행기관 IRB (기본은 기관마다 · 한 곳 선정은 합의)"], [*trace, "J10"]
-    steps = [*drb, irb]
-    order = [*range(1, len(steps) + 1), *[len(steps)] * len(joint)]  # 공동 수행기관 IRB는 소속 IRB와 같은 차례에 따로 낸다
+    venue = _venue(state)
+    if drb and venue and venue.get("drb_order") == "irb_first":  # 기관 안내: IRB 승인 → 데이터 수집 → DRB (D7 '순서는 기관마다')
+        steps = [irb, f"{drb[0].split(' (')[0]} (IRB 승인·데이터 수집 뒤 신청 · {venue['short']} 안내)"]
+    else:
+        steps = [*drb, irb]
+    order = [*range(1, len(steps) + 1), *[steps.index(irb) + 1] * len(joint)]  # 공동 수행기관 IRB는 소속 IRB와 같은 차례에 따로 낸다
     label = "A" if d["drb"] else "C" if d["irb"] == "own" else "B"
     return {"route": _route(label, [*steps, *joint], trace, fast=_fast(state), order=order)}
 
@@ -490,10 +509,14 @@ def docs_schedule(state: GraphState) -> dict:
         docs.append({"doc": "DRB 심의 신청서" + (f" ({holder})" if holder else ""), "level": "기관",
                      "source": f"{holder or '기관'} DRB 서식 (기관확인)"})
     if route_["route"] in ("A", "B", "C") and venue:  # 기관 프로필이 있으면 그 기관의 서식 이름으로 낸다
-        needed = {"데이터승인": d["drb"] is True or _holds(state, "received_data"), "면제점검": d["exempt"] == "yes"}
+        needed = {"데이터승인": d["drb"] is True or _holds(state, "received_data"), "면제점검": d["exempt"] == "yes",
+                  "모집문서": _facts(state).get("F01") not in ("기록 이용", None)}
         std = institutions()["docs"]
-        docs += [{"doc": name, "level": "기관", "source": f"{venue['short']} 서식 · 표준 서류: {std[k]}"}
-                 for k, name in venue["docs"].items() if needed.get(k, True)]
+        docs += [{"doc": _doc_name(v), "level": "기관", "source": f"{venue['short']} 서식 · 표준 서류: {std[k]}"}
+                 for k, v in venue["docs"].items()
+                 if (_holds(state, v["when"]) if isinstance(v, dict) else needed.get(k, True))]
+        if _fast(state) and "데이터승인" not in venue["docs"]:  # 빠른 길은 DRB 승인서를 붙여 면제를 신청한다
+            docs.append({"doc": "DRB 승인서 (IRB 심의면제 신청에 첨부)", "level": "기관", "source": "가이드라인 2025.12 표준절차", "basis": "D7"})
     elif route_["route"] in ("A", "B", "C"):
         attach = " (DRB 승인서 첨부)" if d["drb"] is True and not d["pending"] and d["irb"] == "own" else ""
         doc = {"yes": f"심의면제 신청서{attach}", "no": "심의 신청서 · 연구계획서",
@@ -507,12 +530,14 @@ def docs_schedule(state: GraphState) -> dict:
         docs.append({"doc": "기관생명윤리위원회 업무위탁 협약서 (시행규칙 별지 제3호서식)", "level": "법정", "basis": "J6"})
     if "D3" in fired and _yes(_facts(state).get("F06")):
         docs.append({"doc": "가명정보 결합 신청서 (결합전문기관)", "level": "법정", "basis": "D3"})
-    if "C3" in fired and _facts(state).get("F11") == "동의면제 요청" and not venue:  # 기관 서식이 있으면 그 기관의 동의 서류 칸에 들어 있다
+    waiver_in_venue = venue is not None and "면제" in _doc_name(venue["docs"].get("동의서류", ""))
+    if "C3" in fired and _facts(state).get("F11") == "동의면제 요청" and not waiver_in_venue:  # 기관 서식에 면제 서류가 있으면 그 칸으로
         docs.append({"doc": "서면동의 면제 사유서", "level": "기관", "source": "관할 IRB 서식", "basis": "C3"})
     schedule = _schedule(state)
     if _joint(state) and route_["route"] in ("A", "B", "C"):
         schedule["missing"] = [*schedule["missing"], "공동 수행기관 IRB 회의일·접수 마감: 공개 일정 데이터 없음 → 기관마다 확인"]
-    if any(r["rule_id"] == "R-11" and r["result"] == "미충족" for r in state["judgments"]):
+    regular = venue is not None and venue.get("exempt_regular")  # 이미 정규심의 일정으로 계산한 기관은 전환 안내가 겹친다
+    if any(r["rule_id"] == "R-11" and r["result"] == "미충족" for r in state["judgments"]) and not regular:
         schedule["missing"] = [*schedule["missing"], "R-11: 신규심의로 전환되면 이 일정 대신 관할 위원회 정규 심의 일정을 따름"]
     if venue and route_["route"] in ("A", "B", "C") and venue["schedule"].get("note"):
         schedule["missing"] = [*schedule["missing"], venue["schedule"]["note"]]
@@ -578,7 +603,7 @@ def _meetings(path: Path, target: date, today: date, result_days: int = 7, cycle
     with path.open(encoding="utf-8-sig") as fp:
         meetings = sorted((date.fromisoformat(r["회의일"]), r["접수마감"]) for r in csv.DictReader(fp) if r["구분"] == "정규")
     limit = target - timedelta(days=result_days + 1)  # 회의+통보 기한 < 개시일 (prep 케이스 1: 통보가 개시일 당일이면 탈락)
-    if not meetings or limit > meetings[-1][0]:
+    if not meetings or target > date(meetings[-1][0].year, 12, 31):  # 공개 일정이 있는 해를 넘어가면 계산하지 않는다
         return [{"revisions": n, "step": "공개된 회의 일정(2026) 밖이라 계산 불가"} for n in (0, 1, 2)]
     scenarios = []
     for n in (0, 1, 2):
