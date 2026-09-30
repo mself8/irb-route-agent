@@ -54,7 +54,8 @@ pytest                        # 합치기 전에
 
 본선 중 추가하는 대로 여기에 전량 기록합니다.
 
-- AI 코딩 도구: Claude Code (Anthropic, Claude Opus 5.5) — 코드 뼈대 작성 보조
+- AI 코딩 도구: Claude Code (Anthropic, Claude Opus 5.5) — 코드·테스트·문서 작성 전반. 개발자(송윤)가 지시하고 검토했으며, 세션 2개가 나눠 맡았다(규칙 엔진·화면 / 추출·마스킹·평가). 커밋마다 별도 Claude 리뷰 에이전트가 검토했고, 커밋 메시지에 Co-Authored-By로 표기
+- 기획 단계 생성형 AI: OpenAI Codex CLI — 참가신청서를 바탕으로 한 초기 구조도 초안(본선 전). 발표자료·목업 이미지에 쓴 도구는 제출 전 팀이 확인해 추가
 - 라이브러리: Streamlit 1.64.0 (Apache-2.0), LangGraph 1.2.12 (MIT), Pydantic 2.13.5 (MIT), PyYAML 6.0.3 (MIT), pytest (MIT), OpenAI Python SDK 3.20.0 (Apache-2.0, vLLM의 OpenAI 호환 API 호출용), ko-pii 1.16.0 (MIT, https://github.com/Marker-Inc-Korea/ko-pii, 규칙 기반 개인정보 검출 — ② 마스킹)
 - LLM: Qwen3.8-27B-FP8 (Qwen, Hugging Face `Qwen/Qwen3.8-27B-FP8`, 리비전 017b9c7, Apache-2.0)
 - LLM 서빙: vLLM 0.25.1 (Apache-2.0), 로컬 GPU(RTX A6000 2장). 계획서가 서버 밖으로 나가지 않습니다.
@@ -64,4 +65,6 @@ pytest                        # 합치기 전에
 - 판정 규칙표(`data/rules/rules.yaml`)의 원문은 팀이 본선 전(09-29)에 모은 사전 조사 자료에서 옮겼습니다.
 - 공개 심의 일정: 공용기관생명윤리위원회 2026 심의일정 103회 (`data/schedules/public_irb_2026.csv`, e-IRB 심의일정 달력 https://public.irb.or.kr/pt/pt01/PT0103/PT0103R05.do, 확인일 2026-09-29, 본선 전 수집). 접수 마감은 공용위원회 SOP ver5.5 제31조④(심의 7일 전까지 접수)로 계산
 - 기관 층(`data/institutions/profiles.yaml`, `data/schedules/uos_irb_2026.csv`, 확인일 2026-09-29, 본선 전 수집한 사전 조사 자료에서 서류 이름·규칙 요지·일정 같은 사실만 옮김): 공용기관생명윤리위원회 e-IRB 제출서류 안내·SOP ver5.5·연구계획서 권고서식 제37호 (https://public.irb.or.kr/), 서울시립대학교 생명윤리위원회 표준운영지침 Ver.2.3·FAQ v3·R-BAY 공지·2026 정규심의 일정 (https://research.uos.ac.kr/institutionalbioethicscommittee), 가톨릭중앙의료원 CMC 임상연구윤리규정집 Ver.10.0 별표1·신규과제 유의사항·심사면제 절차 안내·개인정보 관련 IRB 심의 안내 (https://cmcirb.cmcnu.or.kr/), 질병관리청 IRB 표준운영지침 개정 내용 소개 (PHWR 2026;19(5):268, CC BY 4.0, https://doi.org/10.56786/PHWR.2026.19.5.3)
+- 실제 연구 비교 자료: CRIS(임상연구정보서비스, 질병관리청) 공개 등록 연구 8건 — seq 29626·29627·29675·29685·29703·29714·29814·29826 (https://cris.nih.go.kr/cris/search/detailSearch.do?seq=번호, 확인일 2026-09-30). 연구책임자 성명 등 개인정보는 빼고 연구 요약만 입력으로 쓰며, 승인 위원회와 관할 유형만 비교한다(`data/cases/cris/`)
+- 평가용 가상 계획서 10건(`data/cases/`): 팀이 만든 가상 자료, 정답은 T3 확인 전 초안
 - 데이터: `data/samples/`의 계획서 4건과 `data/lists/demo_institutions.csv`의 기관은 팀이 만든 가상 자료입니다. 공공 데이터는 추가하는 대로 URL과 확인일을 적습니다.
