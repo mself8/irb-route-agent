@@ -41,7 +41,7 @@ def _schema(n: int) -> dict:
 
 
 def _call(payload: dict, n: int) -> dict:
-    client = OpenAI(base_url=BASE_URL, api_key="local", timeout=120)
+    client = OpenAI(base_url=BASE_URL, api_key="local", timeout=30, max_retries=0)  # 늦으면 틀 문장으로 간다
     resp = client.chat.completions.create(
         model=MODEL,
         temperature=0,

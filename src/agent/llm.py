@@ -108,7 +108,7 @@ def _prompt(keys: list[str]) -> str:
 
 def _call(system: str, masked_text: str) -> dict:
     """모델 한 번 호출. 스키마에 맞는 dict를 돌려준다."""
-    client = OpenAI(base_url=BASE_URL, api_key="local", timeout=120)
+    client = OpenAI(base_url=BASE_URL, api_key="local", timeout=60, max_retries=0)  # 서버가 멈춰도 1분 안에 오류로 알린다
     resp = client.chat.completions.create(
         model=MODEL,
         temperature=0,
