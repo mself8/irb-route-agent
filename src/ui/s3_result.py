@@ -98,15 +98,22 @@ def render() -> None:
     venues = {("소속 없음 → 공용위원회" if n == "공용위원회" else n): ("없음" if n == "공용위원회" else n) for n in names}
     left, right = st.columns([3, 1])
     choice = left.selectbox("기관", list(venues), index=None, placeholder="기관을 고르면 그 기관 기준으로 다시 판정합니다",
-                            label_visibility="collapsed")
-    if right.button("이 기관 기준으로 다시 판정", disabled=choice is None):
-        # 같은 연구를 그 기관에서 한다고 보고 소속과 수행기관(F12)을 함께 바꾼다. 공용위원회는 소속 없는 연구자로 본다
+                            label_visibility="collapsed", disabled=api.FAKE)
+    if right.button("이 기관 기준으로 다시 판정", disabled=choice is None or api.FAKE):
+        # 같은 연구를 그 기관에서 한다고 보고 소속과 수행기관(F12)을 함께 바꾼다. 공용위원회는 소속 없는 연구자로 본다.
+        # 공동연구면 첫 기관만 바꿔 다른 수행기관을 남긴다
         change = {"institution_name": venues[choice], "irb_exists": None, "contract": None}
         if venues[choice] != "없음":
-            change["F12"] = [venues[choice]]
+            f12 = next((f.value for f in result.facts if f.key == "F12"), None)
+            change["F12"] = [venues[choice], *f12[1:]] if isinstance(f12, list) and len(f12) >= 2 else [venues[choice]]
+        text, _, start_date = st.session_state.get("last_input", ("", "", None))
+        st.session_state.last_input = (text, venues[choice], start_date)  # "보완 문구 넣고 다시"도 바꾼 기관으로 간다
         st.session_state.result = api.rejudge(result.run_id, change)
         st.rerun()
-    st.caption("같은 연구를 그 기관에서 한다고 보고(소속·수행기관을 함께 바꿔) 다시 판정합니다. 공용위원회는 소속 없는 연구자로 봅니다.")
+    if api.FAKE:
+        st.caption("예시 모드(FAKE=1)는 미리 만든 결과라서 기관을 바꿔 다시 판정하지 않습니다. 실제 모드(FAKE=0)에서 쓰세요.")
+    else:
+        st.caption("같은 연구를 그 기관에서 한다고 보고(소속·수행기관을 함께 바꿔) 다시 판정합니다. 공용위원회는 소속 없는 연구자로 봅니다.")
     with st.expander("기관별 서식 비교 (서식 표준화: 표준 항목 한 줄에 기관마다 다른 서식 이름)"):
         st.dataframe(result.compare, hide_index=True)
     if result.highlights and result.masked_text:

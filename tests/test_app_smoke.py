@@ -23,3 +23,15 @@ def test_switch_institution(monkeypatch):
     assert not app.exception
     assert app.session_state.result.venue.id == "uos"
     assert any("서울시립대 안내문 기준" in m.value for m in app.markdown)
+
+
+def test_switch_disabled_in_fake_mode(monkeypatch):
+    """예시 모드는 미리 만든 결과라 기관 전환을 막고 그 이유를 적는다 (9차 리뷰)."""
+    from agent import api
+    monkeypatch.setattr(api, "FAKE", True)
+    app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py")).run(timeout=30)
+    app.button(key="sample_sample2_pseudo").click().run(timeout=30)
+    next(b for b in app.button if b.label == "사실 추출 시작").click().run(timeout=30)
+    next(b for b in app.button if b.label == "사실 확정하고 판정").click().run(timeout=30)
+    assert not app.exception and app.selectbox[0].disabled
+    assert any("예시 모드(FAKE=1)" in c.value for c in app.caption)
