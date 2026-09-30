@@ -6,9 +6,6 @@ import streamlit as st
 from agent import api
 
 YELLOW = "#FFE066"
-# "다른 기관에 낸다면": 기관 프로필(data/institutions/profiles.yaml)이 있는 곳. 값은 ⑤ 기관 대조에 넣을 이름
-OTHER_VENUES = {"서울시립대학교": "서울시립대학교", "서울성모병원": "가톨릭대학교 서울성모병원", "질병관리청": "질병관리청",
-                "소속 없음 → 공용위원회": "없음"}
 
 
 def _card(s) -> None:
@@ -96,11 +93,14 @@ def render() -> None:
             st.session_state.step = 0
             st.rerun()
     st.markdown("#### 다른 기관에 낸다면")
+    # 기관 프로필이 있는 곳(비교표의 열). 값은 ⑤ 기관 대조에 넣을 이름이고, 공용위원회는 '소속 없음'으로 간다
+    names = [c for c in (result.compare[0] if result.compare else {}) if c not in ("구분", "표준 항목")]
+    venues = {("소속 없음 → 공용위원회" if n == "공용위원회" else n): ("없음" if n == "공용위원회" else n) for n in names}
     left, right = st.columns([3, 1])
-    choice = left.selectbox("기관", list(OTHER_VENUES), index=None, placeholder="기관을 고르면 그 기관 기준으로 다시 판정합니다",
+    choice = left.selectbox("기관", list(venues), index=None, placeholder="기관을 고르면 그 기관 기준으로 다시 판정합니다",
                             label_visibility="collapsed")
     if right.button("이 기관 기준으로 다시 판정", disabled=choice is None):
-        st.session_state.result = api.rejudge(result.run_id, {"institution_name": OTHER_VENUES[choice], "irb_exists": None,
+        st.session_state.result = api.rejudge(result.run_id, {"institution_name": venues[choice], "irb_exists": None,
                                                               "contract": None})
         st.rerun()
     with st.expander("기관별 서식 비교 (서식 표준화: 표준 항목 한 줄에 기관마다 다른 서식 이름)"):

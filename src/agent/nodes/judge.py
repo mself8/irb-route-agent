@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[3]
 RULES_PATH = ROOT / "data" / "rules" / "rules.yaml"
 LISTS_DIR = ROOT / "data" / "lists"
 PUBLIC_SCHEDULE = ROOT / "data" / "schedules" / "public_irb_2026.csv"
-INSTITUTIONS = ROOT / "data" / "institutions" / "profiles.yaml"
+INSTITUTIONS = ROOT / "data" / "institutions"
 UNAFFILIATED = {"없음", "소속 없음", "개인"}
 IRB_NAME = {"own": "소속 기관 IRB", "public": "공용기관생명윤리위원회",
             "contract": "공용위원회 또는 인증받은 다른 기관 IRB (위탁 협약 필요)",
@@ -58,8 +58,10 @@ def rules() -> dict[str, dict]:
 
 @lru_cache(maxsize=1)
 def institutions() -> dict:
-    """기관 층 정본: 표준 서류·계획서 항목과 기관 프로필(제출 창구·서류·기관 규칙·일정)."""
-    return yaml.safe_load(INSTITUTIONS.read_text(encoding="utf-8"))
+    """기관 층 정본: 표준 목록(standard.yaml)과 기관 프로필(profiles/<id>.yaml, 공용위원회를 맨 앞에)."""
+    std = yaml.safe_load((INSTITUTIONS / "standard.yaml").read_text(encoding="utf-8"))
+    found = [yaml.safe_load(p.read_text(encoding="utf-8")) for p in sorted((INSTITUTIONS / "profiles").glob("*.yaml"))]
+    return {**std, "profiles": sorted(found, key=lambda p: p["id"] != "public")}
 
 
 def _profile(name: str | None) -> dict | None:

@@ -18,7 +18,7 @@ def test_switch_institution(monkeypatch):
     app.button(key="sample_sample2_pseudo").click().run(timeout=30)
     next(b for b in app.button if b.label == "사실 추출 시작").click().run(timeout=60)
     next(b for b in app.button if b.label == "사실 확정하고 판정").click().run(timeout=60)
-    app.selectbox[0].select("서울시립대학교").run(timeout=30)
+    app.selectbox[0].select("서울시립대").run(timeout=30)
     next(b for b in app.button if b.label == "이 기관 기준으로 다시 판정").click().run(timeout=60)
     assert not app.exception
     assert app.session_state.result.venue.id == "uos"
