@@ -32,6 +32,12 @@ rules:                         # 이 기관만의 요구. when: always | drb | e
     told: [(선택) 이 낱말이 계획서에 있으면 이미 적은 것으로 보고 경고하지 않음]
     source: 근거 문서 이름·조항
 schedule: {kind: none, note: "공개 여부와 규칙 요약"}
+forms:                         # (선택) 기관이 공개한 서식 목록 — 자료실·체크리스트에서 확인한 것만
+  - {name: 연구계획서(인간대상연구), number: 별지 제2-1호, version: ver.3.8, doc: 계획서, url: 내려받는 페이지 주소}
+# 규칙에 check를 붙이면 엔진이 계획서 글을 검사해 판정표의 "기관 기준" 행(충족/미충족)으로 낸다. 쓸 수 있는 이름:
+#   past_tense(연구 행위를 과거형으로 서술) · mixed_style(계획서에 경어체 혼용) · age_without_man(만 나이 아닌 나이 표기)
+#   sample_size_rationale(대상자 수 산출근거 없음) · period_before_review(연구 시작이 심의 결과보다 이름)
+#   recruit_doc(포스터·SNS 모집인데 모집 문건 없음) · crf_identifiers(CRF·분석 자료에 식별자 기록) · english_title(영문 제목 없음)
 # 2026 정규회의 날짜와 접수 마감이 공개돼 있으면:
 # schedule: {kind: csv, path: data/schedules/<id>_irb_2026.csv, result_days: 결과 통보 일수, cycle_days: 보완 한 번에 당길 최소 일수, note: "…"}
 # CSV 열: 위원회,회의일,접수마감,출처,확인일,구분,차수 (구분=정규)

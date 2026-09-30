@@ -40,6 +40,11 @@ def test_profile_shape(path):
     for v in p.get("variants", []):                                     # 연구 유형·면제별 서식 변형
         assert ok_when(v["when"]) and set(v.get("docs", {})) <= set(STD["docs"]) and set(v.get("plan", {})) <= set(STD["plan"])
     assert p.get("drb_order", "drb_first") in ("drb_first", "irb_first", "unknown")
+    for f in p.get("forms", []):                                        # 서식 목록: 이름은 필수, doc은 표준 서류 키
+        assert f.get("name") and (f.get("doc") is None or f["doc"] in STD["docs"]), f
+    checks = {"past_tense", "mixed_style", "age_without_man", "sample_size_rationale", "period_before_review",
+              "recruit_doc", "crf_identifiers", "english_title"}
+    assert all(r.get("check") in (None, *checks) for r in p.get("rules", [])), p["id"]
     s = p["schedule"]
     assert s["kind"] in ("public", "csv", "none")
     if s["kind"] == "csv":
