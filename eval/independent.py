@@ -53,17 +53,26 @@ def topic(c: dict) -> str:
 def pick() -> tuple[list[dict], list[dict]]:
     rng = random.Random(SEED)
     traps = [c for c in json.loads((ROOT / "eval/traps/traps300.json").read_text(encoding="utf-8"))["cases"] if c["kind"] == "trap"]
-    synth = json.loads((ROOT / "eval/synth/synth300.json").read_text(encoding="utf-8"))["cases"]
-    return rng.sample(traps, 20), rng.sample(synth, 20)
+    picked = rng.sample(traps, 20)  # 함정을 먼저 뽑아 합성이 늦게 생겨도 함정 표본은 같다
+    path = ROOT / "eval/synth/synth300.json"
+    synth = json.loads(path.read_text(encoding="utf-8"))["cases"] if path.exists() else []
+    return picked, (rng.sample(synth, 20) if synth else [])
 
 
 def blind() -> None:
     traps, synth = pick()
-    items = [{"id": c["id"], "set": "trap", "institution": c["institution"], "plan": c["plan"], "topic": topic(c)} for c in traps]
-    items += [{"id": c["id"], "set": "synth", "institution": c["institution"], "target_start_date": c.get("target_start_date"),
-               "plan": c["plan"]} for c in synth]
+    # 번호는 익명으로 (원래 id에 규칙·변형 이름이 들어 있어 힌트가 된다)
+    items = [{"id": f"T{i:02d}", "set": "trap", "institution": c["institution"], "plan": c["plan"], "topic": topic(c)}
+             for i, c in enumerate(traps, 1)]
+    items += [{"id": f"S{i:02d}", "set": "synth", "institution": c["institution"], "target_start_date": c.get("target_start_date"),
+               "plan": c["plan"]} for i, c in enumerate(synth, 1)]
     (RES / "independent_blind.json").write_text(json.dumps({"items": items}, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"문제지 {len(items)}건 → eval/results/independent_blind.json")
+
+
+# 독립 채점자는 규칙 이름을 모르고 중립 말로 답한다 → 우리 상태 이름으로 바꿔 비교
+LABEL = {"위반": "미충족", "해당": "충족", "물어야 함": "판단불가(나)", "위원회 판단": "판단불가(①)",
+         "평가·보유기관 판단": "판단불가(②)", "기관 재량·합의": "판단불가(③)", "문제 없음": "없음"}
 
 
 def score() -> None:
@@ -71,15 +80,16 @@ def score() -> None:
     labels = {x["id"]: x for x in json.loads((RES / "independent_labels.json").read_text(encoding="utf-8"))["items"]}
     same = lambda a, b: a == b or {a, b} <= {"미충족", "경고"}  # noqa: E731
     rows = []
-    for c in traps:
-        x = labels.get(c["id"], {})
+    for i, c in enumerate(traps, 1):
+        x = labels.get(f"T{i:02d}", {})
         ours = c["expect"][c["rule"]]
-        rows.append({"id": c["id"], "set": "trap", "rule": c["rule"], "ours": ours, "theirs": x.get("state"),
-                     "agree": same(ours, x.get("state")), "route_ours": c["route_expected"], "route_theirs": x.get("route"),
+        theirs = LABEL.get(x.get("state"), x.get("state"))
+        rows.append({"id": c["id"], "set": "trap", "rule": c["rule"], "ours": ours, "theirs": theirs,
+                     "agree": same(ours, theirs), "route_ours": c["route_expected"], "route_theirs": x.get("route"),
                      "agree_route": c["route_expected"] == x.get("route"), "basis_ours": c["source"], "basis_theirs": x.get("basis"),
                      "summary": x.get("summary", ""), "plan": c["plan"]})
-    for c in synth:
-        x = labels.get(c["id"], {})
+    for i, c in enumerate(synth, 1):
+        x = labels.get(f"S{i:02d}", {})
         rows.append({"id": c["id"], "set": "synth", "route_ours": c["route_expected"], "route_theirs": x.get("route"),
                      "agree_route": c["route_expected"] == x.get("route"), "committee_ours": c.get("committee_expected"),
                      "committee_theirs": x.get("committee"), "agree_committee": c.get("committee_expected") == x.get("committee"),

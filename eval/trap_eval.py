@@ -316,7 +316,7 @@ def sample(cases: list[dict], which: str, n: int = 100) -> list[dict]:
     if which == "traps":
         return (round_robin([c for c in cases if c["kind"] == "trap"], lambda c: c["rule"], 75)
                 + round_robin([c for c in cases if c["kind"] == "control"], lambda c: c["base"].split("-")[0] + (c["variant"] or ""), 25))
-    return round_robin(cases, lambda c: (c.get("strata", {}).get("origin", ""), c.get("strata", {}).get("type", "")), n)
+    return round_robin(cases, lambda c: (c.get("strata", {}).get("origin", ""), c.get("strata", {}).get("연구 유형", "")), n)
 
 
 def sealed_alarm() -> dict[str, set]:
