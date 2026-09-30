@@ -1,0 +1,605 @@
+{
+ "annotator": "claude",
+ "items": [
+  {
+   "id": "S101",
+   "route": "C",
+   "committee": "own",
+   "basis": "IRB 있는 기관(가상대학교병원 목록), 임상시험 아닌 중재·서면동의 → 소속 IRB(생명윤리법 제15조①)"
+  },
+  {
+   "id": "S102",
+   "route": "C",
+   "committee": "own",
+   "basis": "모발 인체유래물연구, 익명화 자료라 가명정보 아님 → 소속 IRB(법 제36조①)"
+  },
+  {
+   "id": "S103",
+   "route": "C",
+   "committee": "own",
+   "basis": "행동관찰 인간대상연구(시행규칙 제2조①2호), 면제 여부도 소속 IRB가 판단(시행규칙 제13조)"
+  },
+  {
+   "id": "S104",
+   "route": "C",
+   "committee": "own",
+   "basis": "다기관 전향적 관찰, 식별정보 이용·가명처리 아님 → 소속 IRB(법 제15조①, 제12조②)"
+  },
+  {
+   "id": "S105",
+   "route": "C",
+   "committee": "own",
+   "basis": "임상시험 아닌 앱 중재, 가명정보 아님 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S106",
+   "route": "C",
+   "committee": "own",
+   "basis": "EMR 식별 원자료 직접 이용(가명처리 아님), 동의면제는 소속 IRB 승인(법 제16조③)"
+  },
+  {
+   "id": "S107",
+   "route": "C",
+   "committee": "own",
+   "basis": "면담 연구, 가톨릭대 IRB 있음(조사기록 cuk) → 소속 IRB(법 제15조①); 과거형 서술은 경로와 무관"
+  },
+  {
+   "id": "S108",
+   "route": "C",
+   "committee": "own",
+   "basis": "소속 간호사 대상 중재연구 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S109",
+   "route": "C",
+   "committee": "own",
+   "basis": "미숙아 전향적 관찰 → 소속 IRB(법 제15조①, 대리인 동의 제16조②)"
+  },
+  {
+   "id": "S110",
+   "route": "C",
+   "committee": "own",
+   "basis": "전향적 관찰·서면동의, 가명정보 아님 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S111",
+   "route": "B",
+   "committee": "public",
+   "basis": "소속 없는 연구자 → 공용위원회(법 제12조①2호)"
+  },
+  {
+   "id": "S112",
+   "route": "C",
+   "committee": "own",
+   "basis": "무기명 대면 설문, IRB 있는 기관 → 소속 IRB(면제 여부는 IRB 판단, 시행규칙 제13조)"
+  },
+  {
+   "id": "S113",
+   "route": "임상시험",
+   "committee": "trial",
+   "basis": "유전자치료제 2상 = 약사법 제34조 의약품 임상시험(제34조⑤·제34조의2③5호) → 식약처+심사위원회; 애매: 유전자치료로 보아 범위 밖 여지"
+  },
+  {
+   "id": "S114",
+   "route": "C",
+   "committee": "own",
+   "basis": "모발 인체유래물연구, 식별정보 이용·가명 아님 → 소속 IRB(법 제36조①, 동의면제 제37조④)"
+  },
+  {
+   "id": "S115",
+   "route": "C",
+   "committee": "own",
+   "basis": "시판 약 용량 조절 비교 중재, 약사법·의료기기법 임상시험 표시 없음 → 소속 IRB; 애매: 임상시험 해당 여부 미기재"
+  },
+  {
+   "id": "S116",
+   "route": "미정",
+   "committee": "unknown",
+   "basis": "IRB 없는 연구소(목록 IRB_등록 아니오), 위탁 협약 정보 없음 → 관할 미정(법 제10조②)"
+  },
+  {
+   "id": "S117",
+   "route": "B",
+   "committee": "public",
+   "basis": "소속 없는 연구자, 임상시험 표시 없음 → 공용위원회(법 제12조①2호)"
+  },
+  {
+   "id": "S118",
+   "route": "미정",
+   "committee": "own",
+   "basis": "외부 가명처리 자료인데 동의 여부 미기재 → A/C 미정; IRB 자체는 소속 기관(가톨릭대)"
+  },
+  {
+   "id": "S119",
+   "route": "A",
+   "committee": "public",
+   "basis": "가명정보 동의면제(개인정보 보호법 제28조의2) → 서울성모병원 DRB(가이드라인) + 소속 없어 공용위원회(법 제12조①2호)"
+  },
+  {
+   "id": "S120",
+   "route": "C",
+   "committee": "own",
+   "basis": "목포대 IRB 있음(CRIS 목록), 미성년 포함 중재 → 소속 IRB(법 제15조①, 제16조②)"
+  },
+  {
+   "id": "S121",
+   "route": "C",
+   "committee": "own",
+   "basis": "무기명 설문(희귀질환 보호자), 가명정보 아님 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S122",
+   "route": "C",
+   "committee": "own",
+   "basis": "소속 대학 의대생(취약 대상) 온라인 설문 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S123",
+   "route": "C",
+   "committee": "own",
+   "basis": "치은열구액 인체유래물연구 → 소속 IRB(법 제36조①)"
+  },
+  {
+   "id": "S124",
+   "route": "C",
+   "committee": "own",
+   "basis": "타 기관 보관 조직 인체유래물연구, 식별자·대응표 없음 → 소속 IRB(법 제36조①)"
+  },
+  {
+   "id": "S125",
+   "route": "C",
+   "committee": "contract",
+   "basis": "IRB 없는 연구소가 인증 IRB(가상대학교병원)와 위탁 협약 → 법 제10조②, 시행규칙 제5조①②"
+  },
+  {
+   "id": "S126",
+   "route": "C",
+   "committee": "own",
+   "basis": "전향적 관찰·본인 서면동의, 임상시험 아님 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S127",
+   "route": "C",
+   "committee": "own",
+   "basis": "학생 건강검사 식별 원자료(가명처리 아님), 동의면제 → 소속 IRB(법 제16조③)"
+  },
+  {
+   "id": "S128",
+   "route": "C",
+   "committee": "own",
+   "basis": "다기관 면담, 코드화 자료 반출(가명처리 명시 없음) → 소속 IRB(법 제15조①, 제18조)"
+  },
+  {
+   "id": "S129",
+   "route": "A",
+   "committee": "own",
+   "basis": "연구진 자체 가명처리+동의면제 = 보호법 제28조의2 경로 → 병원 DRB(가이드라인) + 소속 IRB"
+  },
+  {
+   "id": "S130",
+   "route": "B",
+   "committee": "public",
+   "basis": "소속 없는 연구자 → 공용위원회(법 제12조①2호)"
+  },
+  {
+   "id": "S131",
+   "route": "C",
+   "committee": "own",
+   "basis": "소속 의료진 무기명 설문 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S132",
+   "route": "범위 밖",
+   "committee": "out",
+   "basis": "약물반응 유전자 다형성 검사 = 유전정보 획득(법 제2조14·15호) → 배아·유전자 범위 밖"
+  },
+  {
+   "id": "S133",
+   "route": "C",
+   "committee": "own",
+   "basis": "비약물 식이교육 중재, 다기관 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S134",
+   "route": "C",
+   "committee": "own",
+   "basis": "EMR 원자료 코드화(가명처리 명시 없음), 동의면제 → 소속 IRB(법 제16조③)"
+  },
+  {
+   "id": "S135",
+   "route": "C",
+   "committee": "own",
+   "basis": "분양 소변 검체, 대응표 분석 전 파기 → 소속 IRB(법 제36조, 시행규칙 제33조①1호가목)"
+  },
+  {
+   "id": "S136",
+   "route": "C",
+   "committee": "own",
+   "basis": "분양 혈청 익명 → 소속 IRB(법 제36조, 시행규칙 제33조①1호가목)"
+  },
+  {
+   "id": "S137",
+   "route": "C",
+   "committee": "own",
+   "basis": "학생 건강검사 식별 원자료, 가명처리 아님 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S138",
+   "route": "C",
+   "committee": "own",
+   "basis": "온라인 설문·서면동의, 대응표 파기 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S139",
+   "route": "임상시험",
+   "committee": "trial",
+   "basis": "식약처 승인 대상 의약품 3상 → 약사법 제34조①, 실시기관 심사위원회(제34조의2③5호)"
+  },
+  {
+   "id": "S140",
+   "route": "C",
+   "committee": "own",
+   "basis": "모유 인체유래물연구·기증자 서면동의 → 소속 IRB(질병관리청, 법 제36조①)"
+  },
+  {
+   "id": "S141",
+   "route": "B",
+   "committee": "public",
+   "basis": "소속 없는 연구자, 분양 검체 인체유래물연구 → 공용위원회(법 제12조①2호)"
+  },
+  {
+   "id": "S142",
+   "route": "C",
+   "committee": "own",
+   "basis": "임상시험 아님 명시·서면동의 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S143",
+   "route": "B",
+   "committee": "public",
+   "basis": "소속 없는 연구자 → 공용위원회(법 제12조①2호)"
+  },
+  {
+   "id": "S144",
+   "route": "C",
+   "committee": "own",
+   "basis": "동덕여대 IRB 있음(CRIS 목록), 아동·소변 검체 → 소속 IRB(법 제15조①·제36조①)"
+  },
+  {
+   "id": "S145",
+   "route": "C",
+   "committee": "own",
+   "basis": "앱·디스펜서 사용성 중재, 임상시험 표시 없음 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S146",
+   "route": "C",
+   "committee": "own",
+   "basis": "타 기관 보관 조직 익명 → 소속 IRB(법 제36조①)"
+  },
+  {
+   "id": "S147",
+   "route": "C",
+   "committee": "own",
+   "basis": "면담(낙태 정보), 식별자 없음·가명 아님 → 소속 IRB(법 제15조①, 동의면제 제16조③)"
+  },
+  {
+   "id": "S148",
+   "route": "C",
+   "committee": "own",
+   "basis": "EMR 원자료 코드화(가명처리 명시 없음), 동의면제 → 소속 IRB(길병원, 법 제16조③)"
+  },
+  {
+   "id": "S149",
+   "route": "B",
+   "committee": "public",
+   "basis": "소속 없는 연구자 → 공용위원회(법 제12조①2호)"
+  },
+  {
+   "id": "S150",
+   "route": "C",
+   "committee": "own",
+   "basis": "식별 원자료·서면동의(가명 아님) → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S151",
+   "route": "C",
+   "committee": "own",
+   "basis": "비약물 음악 중재·서면동의 → 소속 IRB(법 제15조①, 치매 대상 대리인 동의 제16조②)"
+  },
+  {
+   "id": "S152",
+   "route": "C",
+   "committee": "own",
+   "basis": "약물·기기 아닌 식이 코칭 중재, 다기관 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S153",
+   "route": "C",
+   "committee": "own",
+   "basis": "분양 혈청 익명 → 소속 IRB(법 제36조, 시행규칙 제33조①1호가목)"
+  },
+  {
+   "id": "S154",
+   "route": "C",
+   "committee": "own",
+   "basis": "모발 인체유래물·기증자 동의 → 소속 IRB(법 제36조①·제37조①)"
+  },
+  {
+   "id": "S155",
+   "route": "C",
+   "committee": "own",
+   "basis": "식별 설문(성매개감염병), 가명 아님 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S156",
+   "route": "미정",
+   "committee": "own",
+   "basis": "연구진 자체 가명처리인데 동의 여부 미기재 → A/C 미정; IRB 자체는 소속 기관"
+  },
+  {
+   "id": "S157",
+   "route": "C",
+   "committee": "own",
+   "basis": "전향적 관찰+혈액 검체, 임상시험 아님 → 소속 IRB(법 제15조①·제36조①)"
+  },
+  {
+   "id": "S158",
+   "route": "C",
+   "committee": "own",
+   "basis": "전향적 관찰·서면동의, 임상시험 아님 → 소속 IRB(서울성모병원, 법 제15조①)"
+  },
+  {
+   "id": "S159",
+   "route": "C",
+   "committee": "own",
+   "basis": "익명화 자료(대응표 없음), 가명정보 아님 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S160",
+   "route": "C",
+   "committee": "own",
+   "basis": "EMR 원자료 코드화(가명처리 명시 없음) → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S161",
+   "route": "C",
+   "committee": "own",
+   "basis": "VR 재활 중재·서면동의, 기기 임상시험 표시 없음 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S162",
+   "route": "임상시험",
+   "committee": "trial",
+   "basis": "연속혈당측정기 확증 임상시험 → 의료기기법 제10조① 식약처 승인 + 임상시험기관 심사위원회"
+  },
+  {
+   "id": "S163",
+   "route": "C",
+   "committee": "own",
+   "basis": "전향적 관찰, 다기관 → 소속 IRB(가톨릭대, 법 제15조①)"
+  },
+  {
+   "id": "S164",
+   "route": "C",
+   "committee": "own",
+   "basis": "익명화 제공 자료(가명 아님), 동의면제 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S165",
+   "route": "미정",
+   "committee": "unknown",
+   "basis": "IRB 없고 협약도 없음 명시 → 법 제10조②·제12조①상 관할 없음; 애매: 공용위원회 안내(개인연구자 나·다목)상 B 여지"
+  },
+  {
+   "id": "S166",
+   "route": "C",
+   "committee": "own",
+   "basis": "소변 대사체 인체유래물연구(유전 아님) → 소속 IRB(법 제36조①)"
+  },
+  {
+   "id": "S167",
+   "route": "C",
+   "committee": "own",
+   "basis": "다기관 전향적 관찰 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S168",
+   "route": "C",
+   "committee": "own",
+   "basis": "식이 코칭 중재, 코드화 자료 반출(가명처리 명시 없음) → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S169",
+   "route": "C",
+   "committee": "own",
+   "basis": "잔여 검체 검사법 평가 = 인체유래물연구 → 소속 IRB(법 제36조, 시행규칙 제33조①1호나목)"
+  },
+  {
+   "id": "S170",
+   "route": "C",
+   "committee": "own",
+   "basis": "약물·기기 시험 아님 명시 → 소속 IRB(목포대, 법 제15조①)"
+  },
+  {
+   "id": "S171",
+   "route": "C",
+   "committee": "own",
+   "basis": "타액 인체유래물연구(유전 분석 없음) → 소속 IRB(법 제36조①)"
+  },
+  {
+   "id": "S172",
+   "route": "B",
+   "committee": "public",
+   "basis": "소속 없는 연구자 → 공용위원회(법 제12조①2호)"
+  },
+  {
+   "id": "S173",
+   "route": "C",
+   "committee": "own",
+   "basis": "학생 건강검사 식별 원자료, 동의면제 → 소속 IRB(법 제16조③)"
+  },
+  {
+   "id": "S174",
+   "route": "C",
+   "committee": "own",
+   "basis": "미수정 난자는 배아 아님(법 제2조3호)·인체유래물(제11호) → 소속 IRB; 애매: 난자 연구를 배아 범주(범위 밖)로 볼 여지"
+  },
+  {
+   "id": "S175",
+   "route": "B",
+   "committee": "public",
+   "basis": "IRB 없는 연구소가 공용위원회와 위탁 협약 → 법 제10조②·제12조①1호"
+  },
+  {
+   "id": "S176",
+   "route": "C",
+   "committee": "own",
+   "basis": "의약품·의료기기 임상시험 아님 명시·서면동의 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S177",
+   "route": "C",
+   "committee": "own",
+   "basis": "무기명 온라인 설문·서면동의 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S178",
+   "route": "C",
+   "committee": "own",
+   "basis": "분양 소변 익명 → 소속 IRB(법 제36조, 시행규칙 제33조①1호가목)"
+  },
+  {
+   "id": "S179",
+   "route": "A",
+   "committee": "own",
+   "basis": "연구진 자체 가명처리+동의면제 = 보호법 제28조의2 경로 → 병원 DRB(가이드라인) + 소속 IRB"
+  },
+  {
+   "id": "S180",
+   "route": "C",
+   "committee": "own",
+   "basis": "전향적 관찰 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S181",
+   "route": "미정",
+   "committee": "own",
+   "basis": "신고 원자료를 연구책임자가 가명처리, 동의 여부 미기재 → A/C 미정; IRB는 질병관리청; 애매: 법정 신고자료라 사실상 무동의(A) 여지"
+  },
+  {
+   "id": "S182",
+   "route": "임상시험",
+   "committee": "trial",
+   "basis": "시험약 3상 → 약사법 제34조① 식약처 승인 + 실시기관 심사위원회(제34조의2③5호)"
+  },
+  {
+   "id": "S183",
+   "route": "C",
+   "committee": "own",
+   "basis": "삼육대 IRB 있음(CRIS 목록), 미성년 포함 설문 → 소속 IRB(법 제15조①, 제16조②)"
+  },
+  {
+   "id": "S184",
+   "route": "B",
+   "committee": "public",
+   "basis": "소속 없는 연구자 → 공용위원회(법 제12조①2호)"
+  },
+  {
+   "id": "S185",
+   "route": "C",
+   "committee": "own",
+   "basis": "응급실 식별 원자료(가명 아님)·법정대리인 동의 → 소속 IRB(법 제15조①·제16조②)"
+  },
+  {
+   "id": "S186",
+   "route": "A",
+   "committee": "own",
+   "basis": "가명 자료를 결합전문기관 거쳐 건보공단 자료와 결합(보호법 제28조의3) = 무동의 가명정보 경로 → DRB+소속 IRB; 애매: 동의 문구 없음(미정 여지)"
+  },
+  {
+   "id": "S187",
+   "route": "C",
+   "committee": "own",
+   "basis": "전향적 관찰, 식별정보 이용 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S188",
+   "route": "B",
+   "committee": "public",
+   "basis": "소속 없는 연구자 → 공용위원회(법 제12조①2호)"
+  },
+  {
+   "id": "S189",
+   "route": "C",
+   "committee": "own",
+   "basis": "임상시험 아님 명시·서면동의 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S190",
+   "route": "C",
+   "committee": "own",
+   "basis": "시판 약 용량 조절 중재+혈액, 임상시험 표시 없음 → 소속 IRB; 애매: 약사법 임상시험 해당 여부 미기재"
+  },
+  {
+   "id": "S191",
+   "route": "C",
+   "committee": "own",
+   "basis": "임상시험 아님 명시·서면동의 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S192",
+   "route": "C",
+   "committee": "own",
+   "basis": "전향적 레지스트리·서면동의 → 소속 IRB(길병원, 법 제15조①)"
+  },
+  {
+   "id": "S193",
+   "route": "C",
+   "committee": "own",
+   "basis": "설문·본인 서면동의 → 소속 IRB(삼육대, 법 제15조①)"
+  },
+  {
+   "id": "S194",
+   "route": "C",
+   "committee": "own",
+   "basis": "질병관리청 제공 익명 자료(대응표 없음), 가명 아님 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S195",
+   "route": "미정",
+   "committee": "unknown",
+   "basis": "IRB 없는 연구소(목록 IRB_등록 아니오), 위탁 협약 정보 없음 → 관할 미정(법 제10조②)"
+  },
+  {
+   "id": "S196",
+   "route": "C",
+   "committee": "own",
+   "basis": "소속 직원 식별 설문, 동의면제 → 소속 IRB(법 제16조③)"
+  },
+  {
+   "id": "S197",
+   "route": "C",
+   "committee": "own",
+   "basis": "소속 의대생(취약 대상) 설문, 동의면제 → 소속 IRB(법 제15조①·제16조③)"
+  },
+  {
+   "id": "S198",
+   "route": "C",
+   "committee": "own",
+   "basis": "보관 조직+식별 EMR(가명 아님) → 소속 IRB(법 제36조①·제15조①)"
+  },
+  {
+   "id": "S199",
+   "route": "C",
+   "committee": "own",
+   "basis": "온라인 패널 설문 → 소속 IRB(법 제15조①)"
+  },
+  {
+   "id": "S200",
+   "route": "C",
+   "committee": "own",
+   "basis": "면담 연구, 청주대 IRB 있음(CRIS 목록) → 소속 IRB(법 제15조①)"
+  }
+ ]
+}

@@ -1,0 +1,605 @@
+{
+ "annotator": "claude",
+ "items": [
+  {
+   "id": "S201",
+   "route": "C",
+   "committee": "own",
+   "basis": "동의 받아 가명자료 이용 → 제28조의2 처리 아님(보건의료데이터 가이드라인 FAQ Q15), 서울성모병원 IRB 등록"
+  },
+  {
+   "id": "S202",
+   "route": "C",
+   "committee": "own",
+   "basis": "전향적 관찰연구(생명윤리법 제15조①), 가톨릭대 IRB 운영(cuk 노트)"
+  },
+  {
+   "id": "S203",
+   "route": "A",
+   "committee": "own",
+   "basis": "가명정보를 서면동의 면제로 이용(개인정보보호법 제28조의2) → 보유기관 DRB+가상대학교 IRB"
+  },
+  {
+   "id": "S204",
+   "route": "C",
+   "committee": "own",
+   "basis": "대면 설문 인간대상연구(시행규칙 제2조①2호), 가상대학교 IRB 등록"
+  },
+  {
+   "id": "S205",
+   "route": "C",
+   "committee": "own",
+   "basis": "행동관찰 인간대상연구(시행규칙 제2조①2호), 삼성서울병원 IRB"
+  },
+  {
+   "id": "S206",
+   "route": "C",
+   "committee": "own",
+   "basis": "설문 인간대상연구, 삼육대 IRB 등록(CRIS 명단)"
+  },
+  {
+   "id": "S207",
+   "route": "C",
+   "committee": "own",
+   "basis": "식이교육 중재연구로 의약품·의료기기 임상시험 아님, 가상대학교병원 IRB 등록"
+  },
+  {
+   "id": "S208",
+   "route": "미정",
+   "committee": "own",
+   "basis": "가명정보 이용인데 동의 여부 기재 없음 → A/C 미정(개인정보보호법 제28조의2). 애매: 경로는 미정이나 심의 IRB는 소속 가상대학교라 own으로 둠(unknown 여지)"
+  },
+  {
+   "id": "S209",
+   "route": "C",
+   "committee": "own",
+   "basis": "다기관 면담연구, 주관기관 소속 IRB(생명윤리법 제10조①·제12조②)"
+  },
+  {
+   "id": "S210",
+   "route": "C",
+   "committee": "own",
+   "basis": "재활훈련 중재연구, 의료기기 임상시험 표시 없음 → 삼성서울병원 IRB"
+  },
+  {
+   "id": "S211",
+   "route": "C",
+   "committee": "own",
+   "basis": "잔여검체 검사법 평가 인체유래물연구(생명윤리법 제36조, 시행규칙 제33조①1호나목), 경희대병원 IRB"
+  },
+  {
+   "id": "S212",
+   "route": "C",
+   "committee": "own",
+   "basis": "인체유래물연구(생명윤리법 제36조①), 가상대학교 IRB 등록"
+  },
+  {
+   "id": "S213",
+   "route": "C",
+   "committee": "own",
+   "basis": "연구진이 식별 원자료를 직접 조회 → 가명정보 특례 아닌 식별정보 이용 연구(시행규칙 제2조①3호)+동의면제 심의. 애매: 연구진 자체 가명처리를 A로 볼 여지"
+  },
+  {
+   "id": "S214",
+   "route": "C",
+   "committee": "own",
+   "basis": "익명화 데이터셋만 사용·대응표 없음 → 가명정보 아님(개인정보보호법 제58조의2), 서울성모병원 IRB"
+  },
+  {
+   "id": "S215",
+   "route": "C",
+   "committee": "own",
+   "basis": "원자료 기록 이용 연구, 가명정보 아님 → 경희대병원 IRB"
+  },
+  {
+   "id": "S216",
+   "route": "C",
+   "committee": "own",
+   "basis": "전향적 관찰 코호트, 임상시험 아님 → 주관기관 고려대 안암병원 IRB"
+  },
+  {
+   "id": "S217",
+   "route": "C",
+   "committee": "own",
+   "basis": "행동관찰 인간대상연구(시행규칙 제2조①2호), 삼성서울병원 IRB"
+  },
+  {
+   "id": "S218",
+   "route": "C",
+   "committee": "own",
+   "basis": "원자료 기록 이용 연구(가명정보 아님), 고려대 안암병원 IRB"
+  },
+  {
+   "id": "S219",
+   "route": "B",
+   "committee": "public",
+   "basis": "소속 없는 연구자 → 공용위원회(생명윤리법 제12조①2호)"
+  },
+  {
+   "id": "S220",
+   "route": "C",
+   "committee": "own",
+   "basis": "식별 원자료 기록 연구+동의면제 요청(생명윤리법 제16조③), 경희대병원 IRB"
+  },
+  {
+   "id": "S221",
+   "route": "C",
+   "committee": "own",
+   "basis": "비약물 교육 중재연구(임상시험 아님), 가톨릭대 IRB"
+  },
+  {
+   "id": "S222",
+   "route": "범위 밖",
+   "committee": "out",
+   "basis": "잔여배아 배양 연구 → 배아 연구(생명윤리법 제2조4호), 범위 밖"
+  },
+  {
+   "id": "S223",
+   "route": "C",
+   "committee": "own",
+   "basis": "타액 검체 인체유래물연구(생명윤리법 제36조①), 질병관리청 IRB 운영"
+  },
+  {
+   "id": "S224",
+   "route": "미정",
+   "committee": "unknown",
+   "basis": "가상생활연구소 IRB 미등록, 협약 정보 없음(생명윤리법 제10조②)"
+  },
+  {
+   "id": "S225",
+   "route": "C",
+   "committee": "own",
+   "basis": "책임자가 원자료 직접 추출한 기록 연구(가명정보 아님)+동의면제 신청, 서울대병원 IRB"
+  },
+  {
+   "id": "S226",
+   "route": "C",
+   "committee": "own",
+   "basis": "전향적 관찰 인간대상연구, 고려대 안암병원 IRB"
+  },
+  {
+   "id": "S227",
+   "route": "C",
+   "committee": "own",
+   "basis": "행동관찰 인간대상연구, 주관기관 세브란스병원 IRB"
+  },
+  {
+   "id": "S228",
+   "route": "범위 밖",
+   "committee": "out",
+   "basis": "혈액 유전자 다형성 검사 → 유전자검사(생명윤리법 제2조15호), 범위 밖"
+  },
+  {
+   "id": "S229",
+   "route": "C",
+   "committee": "own",
+   "basis": "보관 조직 면역조직화학 인체유래물연구(유전자 분석 아님), 고려대 안암병원 IRB"
+  },
+  {
+   "id": "S230",
+   "route": "C",
+   "committee": "own",
+   "basis": "타액 인체유래물연구(생명윤리법 제36조①), 가상대학교 IRB"
+  },
+  {
+   "id": "S231",
+   "route": "C",
+   "committee": "own",
+   "basis": "설문 인간대상연구(가명정보 아님), 가상대학교 IRB"
+  },
+  {
+   "id": "S232",
+   "route": "C",
+   "committee": "own",
+   "basis": "공개 익명 원시자료 이용 → 가명정보 아님(시행규칙 제13조① 공개정보), 서울시립대 IRB"
+  },
+  {
+   "id": "S233",
+   "route": "C",
+   "committee": "own",
+   "basis": "감시방법 중재연구, 임상시험 아님 명시 → 주관기관 서울아산병원 IRB"
+  },
+  {
+   "id": "S234",
+   "route": "C",
+   "committee": "own",
+   "basis": "모유 검체 인체유래물연구(생명윤리법 제36조①), 가상대학교병원 IRB"
+  },
+  {
+   "id": "S235",
+   "route": "C",
+   "committee": "own",
+   "basis": "전향적 관찰 인간대상연구, 주관기관 질병관리청 IRB"
+  },
+  {
+   "id": "S236",
+   "route": "C",
+   "committee": "own",
+   "basis": "아동 대상 관찰연구(대리인 동의), 동덕여대 IRB 등록(CRIS 명단)"
+  },
+  {
+   "id": "S237",
+   "route": "C",
+   "committee": "own",
+   "basis": "자료 이용 서면동의 → 제28조의2 처리 아님(가이드라인 FAQ Q15), 가상대학교병원 IRB. 애매: 건보공단 자료 가명결합(제28조의3)은 동의 없는 처리라 A 여지"
+  },
+  {
+   "id": "S238",
+   "route": "C",
+   "committee": "own",
+   "basis": "인체유래물은행 분양 검체 분석(유전자 분석 없음, 시행규칙 제33조①1호가목), 삼성서울병원 IRB"
+  },
+  {
+   "id": "S239",
+   "route": "임상시험",
+   "committee": "trial",
+   "basis": "의료기기 임상시험 → 식약처 승인+임상시험기관 심사위원회(의료기기법 제10조)"
+  },
+  {
+   "id": "S240",
+   "route": "C",
+   "committee": "own",
+   "basis": "소변 대사체 인체유래물연구(유전자 아님), 세브란스병원 IRB"
+  },
+  {
+   "id": "S241",
+   "route": "C",
+   "committee": "own",
+   "basis": "전향적 관찰연구(동의 받음), 주관기관 세브란스병원 IRB"
+  },
+  {
+   "id": "S242",
+   "route": "C",
+   "committee": "own",
+   "basis": "대면 설문 인간대상연구, 주관기관 질병관리청 IRB"
+  },
+  {
+   "id": "S243",
+   "route": "C",
+   "committee": "own",
+   "basis": "치은열구액 인체유래물연구, 서울성모병원 IRB"
+  },
+  {
+   "id": "S244",
+   "route": "C",
+   "committee": "contract",
+   "basis": "IRB 없는 기관이 인증 IRB(가상대학교병원)와 위탁 협약(생명윤리법 제10조②, 시행규칙 제5조②)"
+  },
+  {
+   "id": "S245",
+   "route": "C",
+   "committee": "own",
+   "basis": "무기명 설문 인간대상연구, 주관기관 가상대학교 IRB"
+  },
+  {
+   "id": "S246",
+   "route": "B",
+   "committee": "public",
+   "basis": "소속 없는 연구자 → 공용위원회(생명윤리법 제12조①2호)"
+  },
+  {
+   "id": "S247",
+   "route": "C",
+   "committee": "own",
+   "basis": "은행 분양 혈청 인체유래물연구(유전자 아님), 가상대학교 IRB"
+  },
+  {
+   "id": "S248",
+   "route": "B",
+   "committee": "public",
+   "basis": "IRB 없는 기관이 공용위원회와 위탁 협약(생명윤리법 제10조②·제12조①1호), 의료기기 임상시험 표시 없음"
+  },
+  {
+   "id": "S249",
+   "route": "C",
+   "committee": "own",
+   "basis": "모발 검체 인체유래물연구, 서울시립대 IRB"
+  },
+  {
+   "id": "S250",
+   "route": "범위 밖",
+   "committee": "out",
+   "basis": "BRCA1/2 유전자검사(생명윤리법 제2조15호) → 범위 밖"
+  },
+  {
+   "id": "S251",
+   "route": "A",
+   "committee": "own",
+   "basis": "가명정보를 서면동의 면제로 이용(개인정보보호법 제28조의2) → DRB+서울성모병원 IRB"
+  },
+  {
+   "id": "S252",
+   "route": "C",
+   "committee": "contract",
+   "basis": "IRB 없는 연구소가 인증 IRB(가상대학교병원)와 위탁 협약(생명윤리법 제10조②), 원자료라 가명정보 아님"
+  },
+  {
+   "id": "S253",
+   "route": "C",
+   "committee": "own",
+   "basis": "행동관찰 인간대상연구, 서울아산병원 IRB"
+  },
+  {
+   "id": "S254",
+   "route": "C",
+   "committee": "own",
+   "basis": "조직 유래 오가노이드 인체유래물연구(유전자 분석 없음), 세브란스병원 IRB"
+  },
+  {
+   "id": "S255",
+   "route": "C",
+   "committee": "own",
+   "basis": "전향적 관찰+채혈 인간대상·인체유래물연구, 서울아산병원 IRB"
+  },
+  {
+   "id": "S256",
+   "route": "C",
+   "committee": "own",
+   "basis": "모발 인체유래물연구(동의 받음), 질병관리청 IRB"
+  },
+  {
+   "id": "S257",
+   "route": "C",
+   "committee": "own",
+   "basis": "공개 익명 원시자료 → 가명정보 아님(시행규칙 제13조①), 경희대병원 IRB"
+  },
+  {
+   "id": "S258",
+   "route": "C",
+   "committee": "own",
+   "basis": "익명화 자료만 제공·코드 없음 → 가명정보 아님(개인정보보호법 제58조의2), 가상대학교 IRB"
+  },
+  {
+   "id": "S259",
+   "route": "C",
+   "committee": "own",
+   "basis": "비약물 신체활동 중재연구(대리인 동의), 경희대병원 IRB"
+  },
+  {
+   "id": "S260",
+   "route": "C",
+   "committee": "own",
+   "basis": "익명화 자료 제공 기록연구 → 가명정보 아님, 주관기관 서울시립대 IRB"
+  },
+  {
+   "id": "S261",
+   "route": "B",
+   "committee": "public",
+   "basis": "소속 없는 연구자 → 공용위원회(생명윤리법 제12조①2호)"
+  },
+  {
+   "id": "S262",
+   "route": "C",
+   "committee": "own",
+   "basis": "전향적 관찰 인간대상연구, 경희대병원 IRB"
+  },
+  {
+   "id": "S263",
+   "route": "A",
+   "committee": "public",
+   "basis": "길병원 가명정보를 동의 면제로 이용(제28조의2) → 보유기관 DRB + 소속 없는 연구자라 공용위원회(제12조①2호)"
+  },
+  {
+   "id": "S264",
+   "route": "A",
+   "committee": "own",
+   "basis": "심평원 가명정보를 동의 면제로 이용·반출(제28조의2) → 보유기관 DRB+서울대병원 IRB"
+  },
+  {
+   "id": "S265",
+   "route": "미정",
+   "committee": "unknown",
+   "basis": "가상생활연구소 IRB 미등록, 협약 정보 없음(생명윤리법 제10조②)"
+  },
+  {
+   "id": "S266",
+   "route": "C",
+   "committee": "own",
+   "basis": "잔여검체 검사법 평가 인체유래물연구(시행규칙 제33조①1호나목), 삼성서울병원 IRB"
+  },
+  {
+   "id": "S267",
+   "route": "C",
+   "committee": "own",
+   "basis": "앱 사용성 중재연구, 약물·의료기기 시험 아님 명시 → 서울시립대 IRB"
+  },
+  {
+   "id": "S268",
+   "route": "C",
+   "committee": "own",
+   "basis": "면담 인간대상연구(가명정보 아님), 세브란스병원 IRB"
+  },
+  {
+   "id": "S269",
+   "route": "C",
+   "committee": "contract",
+   "basis": "IRB 없는 연구소가 인증 IRB(가상대학교)와 위탁 협약(생명윤리법 제10조②, 시행규칙 제5조②)"
+  },
+  {
+   "id": "S270",
+   "route": "C",
+   "committee": "own",
+   "basis": "소변 대사체 인체유래물연구(유전자 아님), 경희대병원 IRB"
+  },
+  {
+   "id": "S271",
+   "route": "C",
+   "committee": "own",
+   "basis": "요가 중재연구(임상시험 아님), 질병관리청 IRB"
+  },
+  {
+   "id": "S272",
+   "route": "C",
+   "committee": "own",
+   "basis": "전향적 관찰연구(동의 받음), 서울성모병원 IRB"
+  },
+  {
+   "id": "S273",
+   "route": "C",
+   "committee": "own",
+   "basis": "익명 자료+서면동의 → 가명정보 특례 아님, 가톨릭대 IRB"
+  },
+  {
+   "id": "S274",
+   "route": "A",
+   "committee": "public",
+   "basis": "가명정보를 동의 면제로 이용(제28조의2) → DRB + 협약 맺은 공용위원회(생명윤리법 제10조②)"
+  },
+  {
+   "id": "S275",
+   "route": "C",
+   "committee": "own",
+   "basis": "면담 인간대상연구(동의 받음), 서울아산병원 IRB"
+  },
+  {
+   "id": "S276",
+   "route": "C",
+   "committee": "own",
+   "basis": "학생 건강검사 원자료 기록연구(교육실무 아님, 시행규칙 제2조①3호), 서울시립대 IRB"
+  },
+  {
+   "id": "S277",
+   "route": "B",
+   "committee": "public",
+   "basis": "IRB 없는 연구소가 공용위원회와 위탁 협약(생명윤리법 제10조②·제12조①1호)"
+  },
+  {
+   "id": "S278",
+   "route": "C",
+   "committee": "own",
+   "basis": "책임자가 식별 원자료 직접 이용·대응표 보유 → 가명정보 특례 아닌 식별정보 연구(시행규칙 제2조①3호). 애매: 자체 가명처리+동의 미기재를 A/미정으로 볼 여지"
+  },
+  {
+   "id": "S279",
+   "route": "임상시험",
+   "committee": "trial",
+   "basis": "의약품 제2상 임상시험 → 식약처 승인+실시기관 심사위원회(약사법 제34조·제34조의2)"
+  },
+  {
+   "id": "S280",
+   "route": "C",
+   "committee": "own",
+   "basis": "비약물 신체활동 중재연구(대리인 동의), 서울대병원 IRB"
+  },
+  {
+   "id": "S281",
+   "route": "C",
+   "committee": "own",
+   "basis": "조직 오가노이드 인체유래물연구(유전자 아님), 주관기관 가상대학교 IRB"
+  },
+  {
+   "id": "S282",
+   "route": "C",
+   "committee": "own",
+   "basis": "조직 오가노이드 인체유래물연구, 가상대학교병원 IRB"
+  },
+  {
+   "id": "S283",
+   "route": "C",
+   "committee": "own",
+   "basis": "조직 오가노이드 인체유래물연구, 주관기관 질병관리청 IRB"
+  },
+  {
+   "id": "S284",
+   "route": "B",
+   "committee": "public",
+   "basis": "소속 없는 인체유래물연구자 → 공용위원회(생명윤리법 제12조①2호)"
+  },
+  {
+   "id": "S285",
+   "route": "C",
+   "committee": "own",
+   "basis": "명상 프로그램 중재연구(의약품·의료기기 아님), 경희대병원 IRB"
+  },
+  {
+   "id": "S286",
+   "route": "C",
+   "committee": "own",
+   "basis": "치은열구액 인체유래물연구, 가톨릭대 IRB"
+  },
+  {
+   "id": "S287",
+   "route": "C",
+   "committee": "own",
+   "basis": "앱 사용성 평가 중재연구, 목포대 IRB 등록(CRIS 명단)"
+  },
+  {
+   "id": "S288",
+   "route": "C",
+   "committee": "own",
+   "basis": "면담 인간대상연구, 주관기관 가상대학교병원 IRB"
+  },
+  {
+   "id": "S289",
+   "route": "임상시험",
+   "committee": "trial",
+   "basis": "AI 판독 소프트웨어 확증 의료기기 임상시험 → 식약처 승인+임상시험기관 심사위원회(의료기기법 제10조)"
+  },
+  {
+   "id": "S290",
+   "route": "임상시험",
+   "committee": "trial",
+   "basis": "통각 감시 장비 성능 확인 의료기기 임상시험(의료기기법 제10조)"
+  },
+  {
+   "id": "S291",
+   "route": "C",
+   "committee": "own",
+   "basis": "전향적 등록 관찰연구(동의 받음), 주관기관 삼성서울병원 IRB"
+  },
+  {
+   "id": "S292",
+   "route": "C",
+   "committee": "own",
+   "basis": "대면 설문 인간대상연구, 서울대병원 IRB"
+  },
+  {
+   "id": "S293",
+   "route": "C",
+   "committee": "own",
+   "basis": "학생 건강검사 원자료 기록연구(가명정보 아님), 가톨릭대 IRB"
+  },
+  {
+   "id": "S294",
+   "route": "C",
+   "committee": "own",
+   "basis": "설문 인간대상연구(동의 받음), 서울시립대 IRB"
+  },
+  {
+   "id": "S295",
+   "route": "C",
+   "committee": "own",
+   "basis": "아동 관찰연구(대리인 동의), 동덕여대 IRB 등록"
+  },
+  {
+   "id": "S296",
+   "route": "C",
+   "committee": "own",
+   "basis": "행동관찰 인간대상연구(보호자 동의), 서울시립대 IRB"
+  },
+  {
+   "id": "S297",
+   "route": "C",
+   "committee": "own",
+   "basis": "익명화 데이터셋만 사용 → 가명정보 아님(개인정보보호법 제58조의2), 주관기관 세브란스병원 IRB"
+  },
+  {
+   "id": "S298",
+   "route": "C",
+   "committee": "own",
+   "basis": "전향적 관찰 코호트, 주관기관 세브란스병원 IRB"
+  },
+  {
+   "id": "S299",
+   "route": "C",
+   "committee": "own",
+   "basis": "전향적 관찰 인간대상연구(동의 받음), 질병관리청 IRB"
+  },
+  {
+   "id": "S300",
+   "route": "C",
+   "committee": "own",
+   "basis": "설문 인간대상연구, 가톨릭대 IRB"
+  }
+ ]
+}

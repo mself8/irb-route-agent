@@ -1,0 +1,605 @@
+{
+  "annotator": "gpt",
+  "items": [
+    {
+      "id": "S201",
+      "route": "C",
+      "committee": "own",
+      "basis": "보건의료데이터 활용 가이드라인(2025.12) FAQ Q15, 생명윤리법 제10조①·제15조①; 동의받은 가명정보 이용은 제28조의2 특례 경로가 아니므로 서울성모병원 IRB 관할; sources/notes/cmc.md"
+    },
+    {
+      "id": "S202",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 가톨릭대학교 소속 인간대상연구는 소속 기관 IRB에 신청; sources/notes/cuk.md"
+    },
+    {
+      "id": "S203",
+      "route": "A",
+      "committee": "own",
+      "basis": "개인정보 보호법 제28조의2①, 보건의료데이터 활용 가이드라인(2025.12) DRB 정의·적정성 검토, 생명윤리법 제10조①·제15조①; 동의 면제를 전제로 한 가명정보 이용으로 A 우선, 가상대학교병원 DRB 검토(권고)와 가상대학교 IRB"
+    },
+    {
+      "id": "S204",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 가상대학교 소속 인간대상연구는 소속 기관 IRB에 신청; sources/lists/test_institutions.csv(IRB_등록=예)"
+    },
+    {
+      "id": "S205",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 삼성서울병원 소속 인간대상연구는 소속 기관 IRB에 신청; sources/notes/smc.md"
+    },
+    {
+      "id": "S206",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 삼육대학교 소속 인간대상연구는 소속 기관 IRB에 신청; sources/lists/cris_institutions.csv(IRB_등록=예)"
+    },
+    {
+      "id": "S207",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 사람에게 개입하는 중재연구로 가상대학교병원 IRB 관할; sources/lists/demo_institutions.csv(IRB_등록=예)"
+    },
+    {
+      "id": "S208",
+      "route": "미정",
+      "committee": "own",
+      "basis": "개인정보 보호법 제28조의2①, 보건의료데이터 활용 가이드라인 FAQ Q15, 생명윤리법 제10조①; 가명정보 이용의 동의 여부가 없어 A/C 미정; 소속 가상대학교 IRB는 등록 확인(test_institutions.csv)"
+    },
+    {
+      "id": "S209",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①·제12조②; 다기관 참여만으로 공용 관할이 되지 않으며 연구자 소속 고려대학교 안암병원 IRB에 신청; sources/notes/kumc.md"
+    },
+    {
+      "id": "S210",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 사람에게 개입하는 중재연구로 삼성서울병원 IRB 관할; sources/notes/smc.md"
+    },
+    {
+      "id": "S211",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①2호·제36조①; 경희대병원 소속 인체유래물연구는 소속 기관 IRB에 신청; sources/notes/khmc.md"
+    },
+    {
+      "id": "S212",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①2호·제36조①; 가상대학교 소속 인체유래물연구는 소속 기관 IRB에 신청; sources/lists/test_institutions.csv(IRB_등록=예)"
+    },
+    {
+      "id": "S213",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①·제15조①; 삼성서울병원 IRB 관할; 애매: 자체 가명처리도 서술했으나 식별 원자료를 연구진이 직접 열람·이용한다고 명시한 점을 기준으로 C 판단; sources/notes/smc.md"
+    },
+    {
+      "id": "S214",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조②, 시행규칙 제13조①3호; 익명·공개 기존자료 이용 연구의 면제 여부는 서울성모병원 IRB에 확인; sources/notes/cmc.md"
+    },
+    {
+      "id": "S215",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 식별 원자료를 직접 열람·이용하는 기록 연구로 경희대병원 IRB 관할; sources/notes/khmc.md"
+    },
+    {
+      "id": "S216",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①·제12조②; 다기관 참여만으로 공용 관할이 되지 않으며 연구자 소속 고려대학교 안암병원 IRB에 신청; sources/notes/kumc.md"
+    },
+    {
+      "id": "S217",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 삼성서울병원 소속 인간대상연구는 소속 기관 IRB에 신청; sources/notes/smc.md"
+    },
+    {
+      "id": "S218",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 식별 원자료를 직접 열람·이용하는 기록 연구로 고려대학교 안암병원 IRB 관할; sources/notes/kumc.md"
+    },
+    {
+      "id": "S219",
+      "route": "B",
+      "committee": "public",
+      "basis": "생명윤리법 제12조①2호; 소속 기관 없는 인간대상·인체유래물 연구자는 공용기관생명윤리위원회에 신청"
+    },
+    {
+      "id": "S220",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 식별 원자료를 직접 열람·이용하는 기록 연구로 경희대병원 IRB 관할; sources/notes/khmc.md"
+    },
+    {
+      "id": "S221",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 사람에게 개입하는 중재연구로 가톨릭대학교 IRB 관할; sources/notes/cuk.md"
+    },
+    {
+      "id": "S222",
+      "route": "범위 밖",
+      "committee": "out",
+      "basis": "생명윤리법 제2조3호, INSTRUCTIONS.md 경로 정의; 잔여배아 배양·발달 연구는 배아 연구로 이 평가의 범위 밖"
+    },
+    {
+      "id": "S223",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①2호·제36조①; 질병관리청 소속 인체유래물연구는 소속 기관 IRB에 신청; sources/notes/kdca.md"
+    },
+    {
+      "id": "S224",
+      "route": "미정",
+      "committee": "unknown",
+      "basis": "생명윤리법 제10조②·제12조①1호, sources/lists/test_institutions.csv(IRB_등록=아니오); 가상생활연구소의 공용위원회 또는 다른 인증 IRB와의 위탁 협약 여부가 없어 관할 미정"
+    },
+    {
+      "id": "S225",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 식별 원자료를 직접 열람·이용하는 기록 연구로 서울대병원 IRB 관할; sources/notes/snuh.md"
+    },
+    {
+      "id": "S226",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 고려대학교 안암병원 소속 인간대상연구는 소속 기관 IRB에 신청; sources/notes/kumc.md"
+    },
+    {
+      "id": "S227",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①·제12조②; 다기관 참여만으로 공용 관할이 되지 않으며 연구자 소속 세브란스병원 IRB에 신청; sources/notes/yuhs.md"
+    },
+    {
+      "id": "S228",
+      "route": "범위 밖",
+      "committee": "out",
+      "basis": "생명윤리법 제2조15호, INSTRUCTIONS.md 경로 정의; 약물 반응 관련 유전자 다형성 검사는 유전자검사에 해당하여 이 평가의 범위 밖"
+    },
+    {
+      "id": "S229",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①2호·제36조①; 고려대학교 안암병원 소속 인체유래물연구는 소속 기관 IRB에 신청; sources/notes/kumc.md"
+    },
+    {
+      "id": "S230",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①2호·제36조①; 가상대학교 소속 인체유래물연구는 소속 기관 IRB에 신청; sources/lists/test_institutions.csv(IRB_등록=예)"
+    },
+    {
+      "id": "S231",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 가상대학교 소속 인간대상연구는 소속 기관 IRB에 신청; sources/lists/test_institutions.csv(IRB_등록=예)"
+    },
+    {
+      "id": "S232",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조②, 시행규칙 제13조①3호; 익명·공개 기존자료 이용 연구의 면제 여부는 서울시립대학교 IRB에 확인; sources/notes/uos.md"
+    },
+    {
+      "id": "S233",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제2조1호·제10조①·제15조①·제12조②; 감시 방법별 약물 용량 조절 중재연구이며 의약품·의료기기 임상시험은 아니라고 명시, 소속 서울아산병원 IRB 관할; sources/notes/amc.md"
+    },
+    {
+      "id": "S234",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①2호·제36조①; 가상대학교병원 소속 인체유래물연구는 소속 기관 IRB에 신청; sources/lists/demo_institutions.csv(IRB_등록=예)"
+    },
+    {
+      "id": "S235",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①·제12조②; 다기관 참여만으로 공용 관할이 되지 않으며 연구자 소속 질병관리청 IRB에 신청; sources/notes/kdca.md"
+    },
+    {
+      "id": "S236",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 동덕여자대학교 소속 인간대상연구는 소속 기관 IRB에 신청; sources/lists/cris_institutions.csv(IRB_등록=예)"
+    },
+    {
+      "id": "S237",
+      "route": "C",
+      "committee": "own",
+      "basis": "보건의료데이터 활용 가이드라인(2025.12) FAQ Q15, 생명윤리법 제10조①·제15조①; 동의받은 가명정보 이용은 제28조의2 특례 경로가 아니므로 가상대학교병원 IRB 관할; sources/lists/demo_institutions.csv(IRB_등록=예); 다른 기관 자료 결합 계획이 있어도 동의 없는 가명정보 이용 요건이 없어 A로 변경하지 않음"
+    },
+    {
+      "id": "S238",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①2호·제36조①; 삼성서울병원 소속 인체유래물연구는 소속 기관 IRB에 신청; sources/notes/smc.md"
+    },
+    {
+      "id": "S239",
+      "route": "임상시험",
+      "committee": "trial",
+      "basis": "의료기기법 제10조①·④1호, 시행규칙 제21조②3호·별표3 제6호; 심전도 패치 SY-D3 의료기기 임상시험은 식약처 승인과 실시기관 심사위원회 심사 경로"
+    },
+    {
+      "id": "S240",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①2호·제36조①; 세브란스병원 소속 인체유래물연구는 소속 기관 IRB에 신청; sources/notes/yuhs.md"
+    },
+    {
+      "id": "S241",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①·제12조②; 다기관 참여만으로 공용 관할이 되지 않으며 연구자 소속 세브란스병원 IRB에 신청; sources/notes/yuhs.md"
+    },
+    {
+      "id": "S242",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①·제12조②; 다기관 참여만으로 공용 관할이 되지 않으며 연구자 소속 질병관리청 IRB에 신청; sources/notes/kdca.md"
+    },
+    {
+      "id": "S243",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①2호·제36조①; 서울성모병원 소속 인체유래물연구는 소속 기관 IRB에 신청; sources/notes/cmc.md"
+    },
+    {
+      "id": "S244",
+      "route": "C",
+      "committee": "contract",
+      "basis": "생명윤리법 제10조②, 시행규칙 제5조②·③; 가상생활연구소가 인증받은 가상대학교병원 IRB와 체결한 심의 위탁 협약에 따라 해당 IRB에 신청"
+    },
+    {
+      "id": "S245",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①·제12조②; 다기관 참여만으로 공용 관할이 되지 않으며 연구자 소속 가상대학교 IRB에 신청; sources/lists/test_institutions.csv(IRB_등록=예)"
+    },
+    {
+      "id": "S246",
+      "route": "B",
+      "committee": "public",
+      "basis": "생명윤리법 제12조①2호; 소속 기관 없는 인간대상·인체유래물 연구자는 공용기관생명윤리위원회에 신청"
+    },
+    {
+      "id": "S247",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①2호·제36조①; 가상대학교 소속 인체유래물연구는 소속 기관 IRB에 신청; sources/lists/test_institutions.csv(IRB_등록=예)"
+    },
+    {
+      "id": "S248",
+      "route": "B",
+      "committee": "public",
+      "basis": "생명윤리법 제10조②·제12조①1호; 자체 IRB 없는 가상생활연구소가 공용위원회와 위탁 협약을 체결했으므로 공용위원회에 신청"
+    },
+    {
+      "id": "S249",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①2호·제36조①; 서울시립대학교 소속 인체유래물연구는 소속 기관 IRB에 신청; sources/notes/uos.md"
+    },
+    {
+      "id": "S250",
+      "route": "범위 밖",
+      "committee": "out",
+      "basis": "생명윤리법 제2조15호, INSTRUCTIONS.md 경로 정의; 혈액 검체로 BRCA1/2 유전자검사를 수행하므로 이 평가의 범위 밖"
+    },
+    {
+      "id": "S251",
+      "route": "A",
+      "committee": "own",
+      "basis": "개인정보 보호법 제28조의2①, 보건의료데이터 활용 가이드라인(2025.12) DRB 정의·적정성 검토, 생명윤리법 제10조①·제15조①; 동의 면제를 전제로 한 가명정보 이용으로 A 우선, 서울성모병원 DRB 검토(권고)와 서울성모병원 IRB"
+    },
+    {
+      "id": "S252",
+      "route": "C",
+      "committee": "contract",
+      "basis": "생명윤리법 제10조②, 시행규칙 제5조②·③; 가상생활연구소가 인증받은 가상대학교병원 IRB와 체결한 심의 위탁 협약에 따라 해당 IRB에 신청"
+    },
+    {
+      "id": "S253",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 서울아산병원 소속 인간대상연구는 소속 기관 IRB에 신청; sources/notes/amc.md"
+    },
+    {
+      "id": "S254",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①2호·제36조①; 세브란스병원 소속 인체유래물연구는 소속 기관 IRB에 신청; sources/notes/yuhs.md"
+    },
+    {
+      "id": "S255",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·2호·제15조①·제36조①; 전향적 관찰 및 혈액채취 연구로 서울아산병원 IRB 관할; sources/notes/amc.md"
+    },
+    {
+      "id": "S256",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①2호·제36조①; 질병관리청 소속 인체유래물연구는 소속 기관 IRB에 신청; sources/notes/kdca.md"
+    },
+    {
+      "id": "S257",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조②, 시행규칙 제13조①3호; 익명·공개 기존자료 이용 연구의 면제 여부는 경희대병원 IRB에 확인; sources/notes/khmc.md"
+    },
+    {
+      "id": "S258",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조②, 시행규칙 제13조①3호; 익명·공개 기존자료 이용 연구의 면제 여부는 가상대학교 IRB에 확인; sources/lists/test_institutions.csv(IRB_등록=예)"
+    },
+    {
+      "id": "S259",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 사람에게 개입하는 중재연구로 경희대병원 IRB 관할; sources/notes/khmc.md"
+    },
+    {
+      "id": "S260",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조②, 시행규칙 제13조①3호; 익명·공개 기존자료 이용 연구의 면제 여부는 서울시립대학교 IRB에 확인; sources/notes/uos.md"
+    },
+    {
+      "id": "S261",
+      "route": "B",
+      "committee": "public",
+      "basis": "생명윤리법 제12조①2호; 소속 기관 없는 인간대상·인체유래물 연구자는 공용기관생명윤리위원회에 신청"
+    },
+    {
+      "id": "S262",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 경희대병원 소속 인간대상연구는 소속 기관 IRB에 신청; sources/notes/khmc.md"
+    },
+    {
+      "id": "S263",
+      "route": "A",
+      "committee": "public",
+      "basis": "개인정보 보호법 제28조의2①, 보건의료데이터 활용 가이드라인(2025.12) DRB 정의·적정성 검토, 생명윤리법 제12조①2호; 동의 면제를 전제로 한 가명정보 이용으로 A 우선, 길병원 DRB 검토(권고)와 공용기관생명윤리위원회"
+    },
+    {
+      "id": "S264",
+      "route": "A",
+      "committee": "own",
+      "basis": "개인정보 보호법 제28조의2①, 보건의료데이터 활용 가이드라인(2025.12) DRB 정의·적정성 검토, 생명윤리법 제10조①·제15조①; 동의 면제를 전제로 한 가명정보 이용으로 A 우선, 건강보험심사평가원 DRB 검토(권고)와 서울대병원 IRB"
+    },
+    {
+      "id": "S265",
+      "route": "미정",
+      "committee": "unknown",
+      "basis": "생명윤리법 제10조②·제12조①1호, sources/lists/test_institutions.csv(IRB_등록=아니오); 가상생활연구소의 공용위원회 또는 다른 인증 IRB와의 위탁 협약 여부가 없어 관할 미정"
+    },
+    {
+      "id": "S266",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①2호·제36조①; 삼성서울병원 소속 인체유래물연구는 소속 기관 IRB에 신청; sources/notes/smc.md"
+    },
+    {
+      "id": "S267",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 사람에게 개입하는 중재연구로 서울시립대학교 IRB 관할; sources/notes/uos.md"
+    },
+    {
+      "id": "S268",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 세브란스병원 소속 인간대상연구는 소속 기관 IRB에 신청; sources/notes/yuhs.md"
+    },
+    {
+      "id": "S269",
+      "route": "C",
+      "committee": "contract",
+      "basis": "생명윤리법 제10조②, 시행규칙 제5조②·③; 가상생활연구소가 인증받은 가상대학교 IRB와 체결한 심의 위탁 협약에 따라 해당 IRB에 신청"
+    },
+    {
+      "id": "S270",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①2호·제36조①; 경희대병원 소속 인체유래물연구는 소속 기관 IRB에 신청; sources/notes/khmc.md"
+    },
+    {
+      "id": "S271",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 질병관리청 소속 인간대상연구는 소속 기관 IRB에 신청; sources/notes/kdca.md"
+    },
+    {
+      "id": "S272",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 서울성모병원 소속 인간대상연구는 소속 기관 IRB에 신청; sources/notes/cmc.md"
+    },
+    {
+      "id": "S273",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조②, 시행규칙 제13조①3호; 익명·공개 기존자료 이용 연구의 면제 여부는 가톨릭대학교 IRB에 확인; sources/notes/cuk.md"
+    },
+    {
+      "id": "S274",
+      "route": "A",
+      "committee": "public",
+      "basis": "개인정보 보호법 제28조의2①, 보건의료데이터 활용 가이드라인(2025.12) DRB 정의·적정성 검토, 생명윤리법 제10조②·제12조①1호; 동의 면제를 전제로 한 가명정보 이용으로 A 우선, 데이터 보유기관 DRB 검토(권고)와 협약한 공용기관생명윤리위원회"
+    },
+    {
+      "id": "S275",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 서울아산병원 소속 인간대상연구는 소속 기관 IRB에 신청; sources/notes/amc.md"
+    },
+    {
+      "id": "S276",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 식별 원자료를 직접 열람·이용하는 기록 연구로 서울시립대학교 IRB 관할; sources/notes/uos.md"
+    },
+    {
+      "id": "S277",
+      "route": "B",
+      "committee": "public",
+      "basis": "생명윤리법 제10조②·제12조①1호; 자체 IRB 없는 가상생활연구소가 공용위원회와 위탁 협약을 체결했으므로 공용위원회에 신청"
+    },
+    {
+      "id": "S278",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①·제15조①; 가톨릭대학교 IRB 관할; 애매: 자체 가명처리도 서술했으나 식별 원자료를 연구진이 직접 열람·이용한다고 명시한 점을 기준으로 C 판단; sources/notes/cuk.md"
+    },
+    {
+      "id": "S279",
+      "route": "임상시험",
+      "committee": "trial",
+      "basis": "약사법 제2조15호·제34조①·제34조의2③5호; 시험약 SY-201 제2상 임상시험은 식약처 승인과 실시기관 임상시험심사위원회 심사 경로"
+    },
+    {
+      "id": "S280",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 사람에게 개입하는 중재연구로 서울대병원 IRB 관할; sources/notes/snuh.md"
+    },
+    {
+      "id": "S281",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①2호·제36조①; 가상대학교 소속 인체유래물연구는 소속 기관 IRB에 신청; sources/lists/test_institutions.csv(IRB_등록=예)"
+    },
+    {
+      "id": "S282",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①2호·제36조①; 가상대학교병원 소속 인체유래물연구는 소속 기관 IRB에 신청; sources/lists/demo_institutions.csv(IRB_등록=예)"
+    },
+    {
+      "id": "S283",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①2호·제36조①; 질병관리청 소속 인체유래물연구는 소속 기관 IRB에 신청; sources/notes/kdca.md"
+    },
+    {
+      "id": "S284",
+      "route": "B",
+      "committee": "public",
+      "basis": "생명윤리법 제12조①2호; 소속 기관 없는 인간대상·인체유래물 연구자는 공용기관생명윤리위원회에 신청"
+    },
+    {
+      "id": "S285",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 사람에게 개입하는 중재연구로 경희대병원 IRB 관할; sources/notes/khmc.md"
+    },
+    {
+      "id": "S286",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①2호·제36조①·제38조; 검체 반출·분석 연구의 소속 가톨릭대학교 IRB 관할, 검체 제공 심의는 별도 검토; sources/notes/cuk.md"
+    },
+    {
+      "id": "S287",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 사람에게 개입하는 중재연구로 목포대학교 IRB 관할; sources/lists/cris_institutions.csv(IRB_등록=예)"
+    },
+    {
+      "id": "S288",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 가상대학교병원 소속 인간대상연구는 소속 기관 IRB에 신청; sources/lists/demo_institutions.csv(IRB_등록=예)"
+    },
+    {
+      "id": "S289",
+      "route": "임상시험",
+      "committee": "trial",
+      "basis": "의료기기법 제10조①·④1호, 시행규칙 제21조②3호·별표3 제6호; X선 판독 보조 소프트웨어 SY-D2 의료기기 임상시험은 식약처 승인과 실시기관 심사위원회 심사 경로"
+    },
+    {
+      "id": "S290",
+      "route": "임상시험",
+      "committee": "trial",
+      "basis": "의료기기법 제10조①·④1호, 시행규칙 제21조②3호·별표3 제6호; 통각 감시 장비 SY-D9 의료기기 임상시험은 식약처 승인과 실시기관 심사위원회 심사 경로"
+    },
+    {
+      "id": "S291",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①·제12조②; 다기관 참여만으로 공용 관할이 되지 않으며 연구자 소속 삼성서울병원 IRB에 신청; sources/notes/smc.md"
+    },
+    {
+      "id": "S292",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 서울대병원 소속 인간대상연구는 소속 기관 IRB에 신청; sources/notes/snuh.md"
+    },
+    {
+      "id": "S293",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 식별 원자료를 직접 열람·이용하는 기록 연구로 가톨릭대학교 IRB 관할; sources/notes/cuk.md"
+    },
+    {
+      "id": "S294",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 서울시립대학교 소속 인간대상연구는 소속 기관 IRB에 신청; sources/notes/uos.md"
+    },
+    {
+      "id": "S295",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 동덕여자대학교 소속 인간대상연구는 소속 기관 IRB에 신청; sources/lists/cris_institutions.csv(IRB_등록=예)"
+    },
+    {
+      "id": "S296",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 서울시립대학교 소속 인간대상연구는 소속 기관 IRB에 신청; sources/notes/uos.md"
+    },
+    {
+      "id": "S297",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조②, 시행규칙 제13조①3호; 익명·공개 기존자료 이용 연구의 면제 여부는 세브란스병원 IRB에 확인; sources/notes/yuhs.md"
+    },
+    {
+      "id": "S298",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①·제12조②; 다기관 참여만으로 공용 관할이 되지 않으며 연구자 소속 세브란스병원 IRB에 신청; sources/notes/yuhs.md"
+    },
+    {
+      "id": "S299",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 질병관리청 소속 인간대상연구는 소속 기관 IRB에 신청; sources/notes/kdca.md"
+    },
+    {
+      "id": "S300",
+      "route": "C",
+      "committee": "own",
+      "basis": "생명윤리법 제10조①1호·제15조①; 가톨릭대학교 소속 인간대상연구는 소속 기관 IRB에 신청; sources/notes/cuk.md"
+    }
+  ]
+}

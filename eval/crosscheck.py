@@ -96,16 +96,20 @@ def score(out: Path) -> None:
             if x is None:
                 row[who] = None
                 continue
-            r = {"route": x.get("route") == c["route_expected"]}
+            r = {"route": x.get("route") == c["route_expected"], "their_route": x.get("route"), "basis": x.get("basis", "")}
             if aid[0] == "T":
                 rule = c["rule"] if c["rule"] in c["expect"] else next(iter(c["expect"]))
                 r["answer"] = same(c["expect"][rule], LABEL.get(x.get("state"), x.get("state")))
+                r["theirs"], r["ours"], r["rule"] = x.get("state"), c["expect"][rule], rule
             elif aid[0] == "K":
                 marks = {y["k"]: y.get("state") for y in x.get("checks", [])}
                 ks = [k for k in key if k.startswith(aid + "-")]
                 r["answer"] = all(marks.get(k) not in (None, "위반") for k in ks) if ks else True
+                r["theirs"] = "위반: " + ", ".join(key[k] for k in ks if marks.get(k) == "위반") if not r["answer"] else "문제 없음"
+                r["ours"], r["rule"] = "지킨 규칙 모두 문제 없음", ""
             else:
                 r["answer"] = x.get("committee") == c.get("committee_expected")
+                r["theirs"], r["ours"], r["rule"] = x.get("committee"), c.get("committee_expected"), ""
             row[who] = r
         rows.append(row)
     who = list(labels)
@@ -135,6 +139,16 @@ def score(out: Path) -> None:
                      + f" | {v['both_disagree_answer']} |")
     lines += ["", "- 정답 일치: 함정은 뒤집은 규칙의 기대 결과, 대조군은 지킨 규칙을 위반으로 보지 않았는가, 합성은 위원회 종류.",
               "- '둘 다 우리와 다름'은 두 채점자가 모두 우리 정답과 다르게 답한 문항이다. 우리 정답이 틀렸을 가능성이 가장 큰 곳이라 사람이 먼저 본다.", ""]
+    both_bad = [r for r in rows if all(r.get(w) for w in who) and not any(r[w]["answer"] for w in who)]
+    lines += [f"## 두 채점자가 모두 우리 정답과 다르게 본 문항 ({len(both_bad)}건) — 사람이 먼저 볼 목록", ""]
+    if both_bad:
+        lines += ["| 문항 | 원래 id | 규칙 | 우리 정답 · 경로 | " + " | ".join(f"{w} 답 · 경로 · 근거" for w in who) + " |",
+                  "|---|---|---|---|" + "---|" * len(who)]
+        for r in both_bad:
+            c = cases[r["id"]]
+            lines.append(f"| {r['aid']} | {r['id']} | {r[who[0]].get('rule', '')} | {r[who[0]].get('ours', '')} · {c['route_expected']} | "
+                         + " | ".join(f"{r[w].get('theirs')} · {r[w].get('their_route')} · {str(r[w].get('basis', ''))[:80]}" for w in who) + " |")
+    lines.append("")
     (RES / "crosscheck.md").write_text("\n".join(lines), encoding="utf-8")
     print("\n".join(lines))
 
