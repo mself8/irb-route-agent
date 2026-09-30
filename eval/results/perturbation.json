@@ -1,0 +1,4113 @@
+{
+  "model": "qwen3.8-27b",
+  "seed": 930,
+  "summary": {
+    "variants": 123,
+    "removed_facts": 353,
+    "detected_not_found": 213,
+    "flagged_conflict": 42,
+    "kept_facts": 804,
+    "false_alarm_not_found": 22,
+    "false_alarm_conflict": 49,
+    "route_match": 108,
+    "asked_match": 51,
+    "both_match": 51,
+    "pii_ok": 72,
+    "pii_total": 84,
+    "seconds": 770
+  },
+  "variants": [
+    {
+      "case": "sample1_crf",
+      "drop": [
+        0
+      ],
+      "removed": [
+        "F01",
+        "F10",
+        "F14"
+      ],
+      "removed_status": {
+        "F10": "found",
+        "F14": "found",
+        "F01": "found"
+      },
+      "removed_value": {
+        "F10": "아니오",
+        "F14": "아니오",
+        "F01": "기록 이용"
+      },
+      "kept_n": 8,
+      "kept_alarm": {
+        "F07": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F01",
+        "F09",
+        "F10",
+        "F14"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "sample1_crf",
+      "drop": [
+        2
+      ],
+      "removed": [
+        "F12"
+      ],
+      "removed_status": {
+        "F12": "not_found"
+      },
+      "removed_value": {
+        "F12": null
+      },
+      "kept_n": 10,
+      "kept_alarm": {
+        "F07": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "sample1_crf",
+      "drop": [
+        3
+      ],
+      "removed": [
+        "F02",
+        "F03",
+        "F07",
+        "F16"
+      ],
+      "removed_status": {
+        "F07": "not_found",
+        "F16": "not_found",
+        "F02": "not_found",
+        "F03": "not_found"
+      },
+      "removed_value": {
+        "F07": null,
+        "F16": null,
+        "F02": null,
+        "F03": null
+      },
+      "kept_n": 7,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F16"
+      ],
+      "asked_actual": [
+        "F16"
+      ]
+    },
+    {
+      "case": "sample1_crf",
+      "drop": [
+        4
+      ],
+      "removed": [
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found"
+      },
+      "removed_value": {
+        "F15": null
+      },
+      "kept_n": 10,
+      "kept_alarm": {
+        "F07": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "sample1_crf",
+      "drop": [
+        5
+      ],
+      "removed": [
+        "F13"
+      ],
+      "removed_status": {
+        "F13": "found"
+      },
+      "removed_value": {
+        "F13": "2020-01-01 ~ 2024-12-31"
+      },
+      "kept_n": 10,
+      "kept_alarm": {
+        "F07": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "sample1_crf",
+      "drop": [
+        6
+      ],
+      "removed": [
+        "F11"
+      ],
+      "removed_status": {
+        "F11": "not_found"
+      },
+      "removed_value": {
+        "F11": null
+      },
+      "kept_n": 10,
+      "kept_alarm": {
+        "F07": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "sample1_crf",
+      "drop": [
+        3,
+        4
+      ],
+      "removed": [
+        "F02",
+        "F03",
+        "F07",
+        "F15",
+        "F16"
+      ],
+      "removed_status": {
+        "F07": "not_found",
+        "F03": "not_found",
+        "F16": "not_found",
+        "F02": "not_found",
+        "F15": "not_found"
+      },
+      "removed_value": {
+        "F07": null,
+        "F03": null,
+        "F16": null,
+        "F02": null,
+        "F15": null
+      },
+      "kept_n": 6,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F16"
+      ],
+      "asked_actual": [
+        "F16"
+      ]
+    },
+    {
+      "case": "sample1_crf",
+      "drop": [
+        4,
+        5,
+        6
+      ],
+      "removed": [
+        "F11",
+        "F13",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F11": "not_found",
+        "F13": "found"
+      },
+      "removed_value": {
+        "F15": null,
+        "F11": null,
+        "F13": "2020-01-01 ~ 2024-12-31"
+      },
+      "kept_n": 8,
+      "kept_alarm": {
+        "F07": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "sample1_crf",
+      "drop": [
+        3,
+        6
+      ],
+      "removed": [
+        "F02",
+        "F03",
+        "F07",
+        "F11",
+        "F16"
+      ],
+      "removed_status": {
+        "F07": "not_found",
+        "F03": "not_found",
+        "F16": "not_found",
+        "F02": "not_found",
+        "F11": "not_found"
+      },
+      "removed_value": {
+        "F07": null,
+        "F03": null,
+        "F16": null,
+        "F02": null,
+        "F11": null
+      },
+      "kept_n": 6,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F16"
+      ],
+      "asked_actual": [
+        "F16"
+      ]
+    },
+    {
+      "case": "sample1_crf",
+      "drop": [
+        2,
+        4,
+        6
+      ],
+      "removed": [
+        "F11",
+        "F12",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F12": "not_found",
+        "F11": "not_found"
+      },
+      "removed_value": {
+        "F15": null,
+        "F12": null,
+        "F11": null
+      },
+      "kept_n": 8,
+      "kept_alarm": {
+        "F07": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "sample1_crf",
+      "drop": [
+        0,
+        3,
+        5
+      ],
+      "removed": [
+        "F01",
+        "F02",
+        "F03",
+        "F07",
+        "F10",
+        "F13",
+        "F14",
+        "F16"
+      ],
+      "removed_status": {
+        "F07": "not_found",
+        "F14": "not_found",
+        "F03": "not_found",
+        "F01": "found",
+        "F13": "not_found",
+        "F16": "not_found",
+        "F02": "not_found",
+        "F10": "found"
+      },
+      "removed_value": {
+        "F07": null,
+        "F14": null,
+        "F03": null,
+        "F01": "기록 이용",
+        "F13": null,
+        "F16": null,
+        "F02": null,
+        "F10": "아니오"
+      },
+      "kept_n": 3,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F01",
+        "F09",
+        "F10",
+        "F14"
+      ],
+      "asked_actual": [
+        "F14",
+        "F16"
+      ]
+    },
+    {
+      "case": "sample2_pseudo",
+      "drop": [
+        0
+      ],
+      "removed": [
+        "F01",
+        "F10",
+        "F14"
+      ],
+      "removed_status": {
+        "F10": "found",
+        "F14": "found",
+        "F01": "found"
+      },
+      "removed_value": {
+        "F10": "아니오",
+        "F14": "아니오",
+        "F01": "기록 이용"
+      },
+      "kept_n": 12,
+      "kept_alarm": {},
+      "route_expected": "A",
+      "route_actual": "A",
+      "asked_expected": [
+        "F01",
+        "F05",
+        "F09",
+        "F10",
+        "F14"
+      ],
+      "asked_actual": [
+        "F05"
+      ]
+    },
+    {
+      "case": "sample2_pseudo",
+      "drop": [
+        2
+      ],
+      "removed": [
+        "F12"
+      ],
+      "removed_status": {
+        "F12": "found"
+      },
+      "removed_value": {
+        "F12": [
+          "가상대학교병원"
+        ]
+      },
+      "kept_n": 14,
+      "kept_alarm": {},
+      "route_expected": "A",
+      "route_actual": "A",
+      "asked_expected": [
+        "F05"
+      ],
+      "asked_actual": [
+        "F05"
+      ]
+    },
+    {
+      "case": "sample2_pseudo",
+      "drop": [
+        3
+      ],
+      "removed": [
+        "F02",
+        "F03",
+        "F04",
+        "F06",
+        "F07",
+        "F16",
+        "F17",
+        "F18"
+      ],
+      "removed_status": {
+        "F07": "not_found",
+        "F17": "not_found",
+        "F06": "not_found",
+        "F03": "not_found",
+        "F16": "not_found",
+        "F02": "not_found",
+        "F04": "not_found",
+        "F18": "not_found"
+      },
+      "removed_value": {
+        "F07": null,
+        "F17": null,
+        "F06": null,
+        "F03": null,
+        "F16": null,
+        "F02": null,
+        "F04": null,
+        "F18": null
+      },
+      "kept_n": 7,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F16"
+      ],
+      "asked_actual": [
+        "F16"
+      ]
+    },
+    {
+      "case": "sample2_pseudo",
+      "drop": [
+        4
+      ],
+      "removed": [
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found"
+      },
+      "removed_value": {
+        "F15": null
+      },
+      "kept_n": 14,
+      "kept_alarm": {},
+      "route_expected": "A",
+      "route_actual": "A",
+      "asked_expected": [
+        "F05"
+      ],
+      "asked_actual": [
+        "F05"
+      ]
+    },
+    {
+      "case": "sample2_pseudo",
+      "drop": [
+        5
+      ],
+      "removed": [
+        "F13"
+      ],
+      "removed_status": {
+        "F13": "found"
+      },
+      "removed_value": {
+        "F13": "2020-01-01 ~ 2024-12-31"
+      },
+      "kept_n": 14,
+      "kept_alarm": {},
+      "route_expected": "A",
+      "route_actual": "A",
+      "asked_expected": [
+        "F05"
+      ],
+      "asked_actual": [
+        "F05"
+      ]
+    },
+    {
+      "case": "sample2_pseudo",
+      "drop": [
+        6
+      ],
+      "removed": [
+        "F11"
+      ],
+      "removed_status": {
+        "F11": "not_found"
+      },
+      "removed_value": {
+        "F11": null
+      },
+      "kept_n": 14,
+      "kept_alarm": {},
+      "route_expected": "미정",
+      "route_actual": "미정",
+      "asked_expected": [
+        "F05",
+        "F11"
+      ],
+      "asked_actual": [
+        "F05",
+        "F11"
+      ]
+    },
+    {
+      "case": "sample2_pseudo",
+      "drop": [
+        3,
+        6
+      ],
+      "removed": [
+        "F02",
+        "F03",
+        "F04",
+        "F06",
+        "F07",
+        "F11",
+        "F16",
+        "F17",
+        "F18"
+      ],
+      "removed_status": {
+        "F07": "not_found",
+        "F17": "not_found",
+        "F06": "not_found",
+        "F03": "not_found",
+        "F16": "not_found",
+        "F02": "not_found",
+        "F04": "not_found",
+        "F11": "not_found",
+        "F18": "not_found"
+      },
+      "removed_value": {
+        "F07": null,
+        "F17": null,
+        "F06": null,
+        "F03": null,
+        "F16": null,
+        "F02": null,
+        "F04": null,
+        "F11": null,
+        "F18": null
+      },
+      "kept_n": 6,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F16"
+      ],
+      "asked_actual": [
+        "F16"
+      ]
+    },
+    {
+      "case": "sample2_pseudo",
+      "drop": [
+        2,
+        3
+      ],
+      "removed": [
+        "F02",
+        "F03",
+        "F04",
+        "F06",
+        "F07",
+        "F12",
+        "F16",
+        "F17",
+        "F18"
+      ],
+      "removed_status": {
+        "F07": "not_found",
+        "F17": "not_found",
+        "F06": "not_found",
+        "F03": "not_found",
+        "F16": "not_found",
+        "F12": "not_found",
+        "F02": "not_found",
+        "F04": "not_found",
+        "F18": "not_found"
+      },
+      "removed_value": {
+        "F07": null,
+        "F17": null,
+        "F06": null,
+        "F03": null,
+        "F16": null,
+        "F12": null,
+        "F02": null,
+        "F04": null,
+        "F18": null
+      },
+      "kept_n": 6,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F16"
+      ],
+      "asked_actual": [
+        "F16"
+      ]
+    },
+    {
+      "case": "sample2_pseudo",
+      "drop": [
+        2,
+        3,
+        6
+      ],
+      "removed": [
+        "F02",
+        "F03",
+        "F04",
+        "F06",
+        "F07",
+        "F11",
+        "F12",
+        "F16",
+        "F17",
+        "F18"
+      ],
+      "removed_status": {
+        "F07": "not_found",
+        "F17": "not_found",
+        "F06": "not_found",
+        "F03": "not_found",
+        "F16": "not_found",
+        "F12": "not_found",
+        "F02": "not_found",
+        "F04": "not_found",
+        "F11": "not_found",
+        "F18": "not_found"
+      },
+      "removed_value": {
+        "F07": null,
+        "F17": null,
+        "F06": null,
+        "F03": null,
+        "F16": null,
+        "F12": null,
+        "F02": null,
+        "F04": null,
+        "F11": null,
+        "F18": null
+      },
+      "kept_n": 5,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F16"
+      ],
+      "asked_actual": [
+        "F16"
+      ]
+    },
+    {
+      "case": "sample2_pseudo",
+      "drop": [
+        2,
+        4,
+        6
+      ],
+      "removed": [
+        "F11",
+        "F12",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F12": "found",
+        "F11": "not_found"
+      },
+      "removed_value": {
+        "F15": null,
+        "F12": [
+          "가상대학교병원"
+        ],
+        "F11": null
+      },
+      "kept_n": 12,
+      "kept_alarm": {},
+      "route_expected": "미정",
+      "route_actual": "미정",
+      "asked_expected": [
+        "F05",
+        "F11"
+      ],
+      "asked_actual": [
+        "F05",
+        "F11"
+      ]
+    },
+    {
+      "case": "sample2_pseudo",
+      "drop": [
+        2,
+        3,
+        6
+      ],
+      "removed": [
+        "F02",
+        "F03",
+        "F04",
+        "F06",
+        "F07",
+        "F11",
+        "F12",
+        "F16",
+        "F17",
+        "F18"
+      ],
+      "removed_status": {
+        "F07": "not_found",
+        "F17": "not_found",
+        "F06": "not_found",
+        "F03": "not_found",
+        "F16": "not_found",
+        "F12": "not_found",
+        "F02": "not_found",
+        "F04": "not_found",
+        "F11": "not_found",
+        "F18": "not_found"
+      },
+      "removed_value": {
+        "F07": null,
+        "F17": null,
+        "F06": null,
+        "F03": null,
+        "F16": null,
+        "F12": null,
+        "F02": null,
+        "F04": null,
+        "F11": null,
+        "F18": null
+      },
+      "kept_n": 5,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F16"
+      ],
+      "asked_actual": [
+        "F16"
+      ]
+    },
+    {
+      "case": "pc1_freelance_researcher",
+      "drop": [
+        0
+      ],
+      "removed": [
+        "F14"
+      ],
+      "removed_status": {
+        "F14": "conflict"
+      },
+      "removed_value": {
+        "F14": "아니오"
+      },
+      "kept_n": 4,
+      "kept_alarm": {},
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F10",
+        "F14"
+      ],
+      "asked_actual": [
+        "F10"
+      ]
+    },
+    {
+      "case": "pc1_freelance_researcher",
+      "drop": [
+        4
+      ],
+      "removed": [
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found"
+      },
+      "removed_value": {
+        "F15": null
+      },
+      "kept_n": 4,
+      "kept_alarm": {
+        "F14": "conflict"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F10"
+      ],
+      "asked_actual": [
+        "F10"
+      ]
+    },
+    {
+      "case": "pc1_freelance_researcher",
+      "drop": [
+        5
+      ],
+      "removed": [
+        "F08"
+      ],
+      "removed_status": {
+        "F08": "not_found"
+      },
+      "removed_value": {
+        "F08": null
+      },
+      "kept_n": 4,
+      "kept_alarm": {
+        "F14": "conflict"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F10"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "pc1_freelance_researcher",
+      "drop": [
+        7
+      ],
+      "removed": [
+        "F01"
+      ],
+      "removed_status": {
+        "F01": "found"
+      },
+      "removed_value": {
+        "F01": "설문·면담"
+      },
+      "kept_n": 4,
+      "kept_alarm": {
+        "F14": "conflict"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F01",
+        "F09",
+        "F10"
+      ],
+      "asked_actual": [
+        "F10"
+      ]
+    },
+    {
+      "case": "pc1_freelance_researcher",
+      "drop": [
+        9
+      ],
+      "removed": [
+        "F16"
+      ],
+      "removed_status": {
+        "F16": "not_found"
+      },
+      "removed_value": {
+        "F16": null
+      },
+      "kept_n": 4,
+      "kept_alarm": {},
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F10",
+        "F16"
+      ],
+      "asked_actual": [
+        "F10",
+        "F16"
+      ]
+    },
+    {
+      "case": "pc1_freelance_researcher",
+      "drop": [
+        0,
+        4
+      ],
+      "removed": [
+        "F14",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F14": "conflict"
+      },
+      "removed_value": {
+        "F15": null,
+        "F14": "아니오"
+      },
+      "kept_n": 3,
+      "kept_alarm": {},
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F10",
+        "F14"
+      ],
+      "asked_actual": [
+        "F10"
+      ]
+    },
+    {
+      "case": "pc1_freelance_researcher",
+      "drop": [
+        5,
+        7,
+        9
+      ],
+      "removed": [
+        "F01",
+        "F08",
+        "F16"
+      ],
+      "removed_status": {
+        "F08": "not_found",
+        "F16": "not_found",
+        "F01": "found"
+      },
+      "removed_value": {
+        "F08": null,
+        "F16": null,
+        "F01": "설문·면담"
+      },
+      "kept_n": 2,
+      "kept_alarm": {
+        "F14": "conflict"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F01",
+        "F09",
+        "F10"
+      ],
+      "asked_actual": [
+        "F10",
+        "F16"
+      ]
+    },
+    {
+      "case": "pc1_freelance_researcher",
+      "drop": [
+        0,
+        4,
+        7
+      ],
+      "removed": [
+        "F01",
+        "F14",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "found",
+        "F14": "conflict",
+        "F01": "found"
+      },
+      "removed_value": {
+        "F15": 15,
+        "F14": "아니오",
+        "F01": "설문·면담"
+      },
+      "kept_n": 2,
+      "kept_alarm": {},
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F01",
+        "F09",
+        "F10",
+        "F14"
+      ],
+      "asked_actual": [
+        "F10"
+      ]
+    },
+    {
+      "case": "pc1_freelance_researcher",
+      "drop": [
+        0,
+        4
+      ],
+      "removed": [
+        "F14",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F14": "conflict"
+      },
+      "removed_value": {
+        "F15": null,
+        "F14": "아니오"
+      },
+      "kept_n": 3,
+      "kept_alarm": {},
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F10",
+        "F14"
+      ],
+      "asked_actual": [
+        "F10"
+      ]
+    },
+    {
+      "case": "pc1_freelance_researcher",
+      "drop": [
+        0,
+        4,
+        5
+      ],
+      "removed": [
+        "F08",
+        "F14",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F14": "conflict",
+        "F08": "not_found"
+      },
+      "removed_value": {
+        "F15": null,
+        "F14": "아니오",
+        "F08": null
+      },
+      "kept_n": 2,
+      "kept_alarm": {},
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F10",
+        "F14"
+      ],
+      "asked_actual": [
+        "F10"
+      ]
+    },
+    {
+      "case": "pc2_no_irb_company_lab",
+      "drop": [
+        0
+      ],
+      "removed": [
+        "F14"
+      ],
+      "removed_status": {
+        "F14": "found"
+      },
+      "removed_value": {
+        "F14": "아니오"
+      },
+      "kept_n": 7,
+      "kept_alarm": {
+        "F07": "conflict",
+        "F08": "not_found",
+        "F16": "conflict"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F14",
+        "contract"
+      ],
+      "asked_actual": [
+        "contract"
+      ]
+    },
+    {
+      "case": "pc2_no_irb_company_lab",
+      "drop": [
+        6
+      ],
+      "removed": [
+        "F08",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F08": "not_found"
+      },
+      "removed_value": {
+        "F15": null,
+        "F08": null
+      },
+      "kept_n": 6,
+      "kept_alarm": {
+        "F07": "conflict",
+        "F16": "conflict"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "contract"
+      ],
+      "asked_actual": [
+        "contract"
+      ]
+    },
+    {
+      "case": "pc2_no_irb_company_lab",
+      "drop": [
+        7
+      ],
+      "removed": [
+        "F01"
+      ],
+      "removed_status": {
+        "F01": "conflict"
+      },
+      "removed_value": {
+        "F01": "관찰"
+      },
+      "kept_n": 7,
+      "kept_alarm": {
+        "F07": "conflict",
+        "F08": "not_found",
+        "F16": "conflict"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F01",
+        "F09",
+        "contract"
+      ],
+      "asked_actual": [
+        "contract"
+      ]
+    },
+    {
+      "case": "pc2_no_irb_company_lab",
+      "drop": [
+        8
+      ],
+      "removed": [
+        "F07"
+      ],
+      "removed_status": {
+        "F07": "found"
+      },
+      "removed_value": {
+        "F07": []
+      },
+      "kept_n": 7,
+      "kept_alarm": {
+        "F08": "not_found"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "contract"
+      ],
+      "asked_actual": [
+        "contract"
+      ]
+    },
+    {
+      "case": "pc2_no_irb_company_lab",
+      "drop": [
+        9
+      ],
+      "removed": [
+        "F16",
+        "F17"
+      ],
+      "removed_status": {
+        "F17": "not_found",
+        "F16": "not_found"
+      },
+      "removed_value": {
+        "F17": null,
+        "F16": null
+      },
+      "kept_n": 6,
+      "kept_alarm": {
+        "F07": "not_found",
+        "F08": "not_found"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F16",
+        "contract"
+      ],
+      "asked_actual": [
+        "F09",
+        "contract"
+      ]
+    },
+    {
+      "case": "pc2_no_irb_company_lab",
+      "drop": [
+        10
+      ],
+      "removed": [
+        "F10"
+      ],
+      "removed_status": {
+        "F10": "conflict"
+      },
+      "removed_value": {
+        "F10": "아니오"
+      },
+      "kept_n": 7,
+      "kept_alarm": {
+        "F07": "conflict",
+        "F08": "not_found",
+        "F16": "conflict"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F10",
+        "contract"
+      ],
+      "asked_actual": [
+        "contract"
+      ]
+    },
+    {
+      "case": "pc2_no_irb_company_lab",
+      "drop": [
+        6,
+        7,
+        8
+      ],
+      "removed": [
+        "F01",
+        "F07",
+        "F08",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F07": "not_found",
+        "F08": "not_found",
+        "F01": "conflict"
+      },
+      "removed_value": {
+        "F15": null,
+        "F07": null,
+        "F08": null,
+        "F01": "관찰"
+      },
+      "kept_n": 4,
+      "kept_alarm": {},
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F01",
+        "F09",
+        "contract"
+      ],
+      "asked_actual": [
+        "F09",
+        "contract"
+      ]
+    },
+    {
+      "case": "pc2_no_irb_company_lab",
+      "drop": [
+        6,
+        10
+      ],
+      "removed": [
+        "F08",
+        "F10",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F10": "conflict",
+        "F08": "not_found"
+      },
+      "removed_value": {
+        "F15": null,
+        "F10": "아니오",
+        "F08": null
+      },
+      "kept_n": 5,
+      "kept_alarm": {
+        "F07": "conflict",
+        "F16": "conflict"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F10",
+        "contract"
+      ],
+      "asked_actual": [
+        "contract"
+      ]
+    },
+    {
+      "case": "pc2_no_irb_company_lab",
+      "drop": [
+        7,
+        8,
+        9
+      ],
+      "removed": [
+        "F01",
+        "F07",
+        "F16",
+        "F17"
+      ],
+      "removed_status": {
+        "F07": "not_found",
+        "F17": "not_found",
+        "F16": "not_found",
+        "F01": "conflict"
+      },
+      "removed_value": {
+        "F07": null,
+        "F17": null,
+        "F16": null,
+        "F01": "관찰"
+      },
+      "kept_n": 4,
+      "kept_alarm": {
+        "F08": "not_found"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F01",
+        "F09",
+        "contract"
+      ],
+      "asked_actual": [
+        "F09",
+        "contract"
+      ]
+    },
+    {
+      "case": "pc2_no_irb_company_lab",
+      "drop": [
+        8,
+        9,
+        10
+      ],
+      "removed": [
+        "F07",
+        "F10",
+        "F16",
+        "F17"
+      ],
+      "removed_status": {
+        "F07": "not_found",
+        "F10": "not_found",
+        "F17": "not_found",
+        "F16": "not_found"
+      },
+      "removed_value": {
+        "F07": null,
+        "F10": null,
+        "F17": null,
+        "F16": null
+      },
+      "kept_n": 4,
+      "kept_alarm": {
+        "F08": "not_found",
+        "F14": "conflict"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F10",
+        "F16",
+        "contract"
+      ],
+      "asked_actual": [
+        "F09",
+        "F10",
+        "contract"
+      ]
+    },
+    {
+      "case": "pc2_no_irb_company_lab",
+      "drop": [
+        0,
+        9
+      ],
+      "removed": [
+        "F14",
+        "F16",
+        "F17"
+      ],
+      "removed_status": {
+        "F14": "found",
+        "F17": "not_found",
+        "F16": "not_found"
+      },
+      "removed_value": {
+        "F14": "아니오",
+        "F17": null,
+        "F16": null
+      },
+      "kept_n": 5,
+      "kept_alarm": {
+        "F07": "not_found",
+        "F08": "not_found"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F14",
+        "F16",
+        "contract"
+      ],
+      "asked_actual": [
+        "F09",
+        "contract"
+      ]
+    },
+    {
+      "case": "pc3_multicenter",
+      "drop": [
+        0
+      ],
+      "removed": [
+        "F14"
+      ],
+      "removed_status": {
+        "F14": "found"
+      },
+      "removed_value": {
+        "F14": "아니오"
+      },
+      "kept_n": 6,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F09",
+        "F14"
+      ],
+      "asked_actual": [
+        "F09"
+      ]
+    },
+    {
+      "case": "pc3_multicenter",
+      "drop": [
+        4
+      ],
+      "removed": [
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found"
+      },
+      "removed_value": {
+        "F15": null
+      },
+      "kept_n": 6,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F09"
+      ],
+      "asked_actual": [
+        "F09"
+      ]
+    },
+    {
+      "case": "pc3_multicenter",
+      "drop": [
+        5
+      ],
+      "removed": [
+        "F08"
+      ],
+      "removed_status": {
+        "F08": "conflict"
+      },
+      "removed_value": {
+        "F08": [
+          "고령자"
+        ]
+      },
+      "kept_n": 6,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F09"
+      ],
+      "asked_actual": [
+        "F09"
+      ]
+    },
+    {
+      "case": "pc3_multicenter",
+      "drop": [
+        6
+      ],
+      "removed": [
+        "F01"
+      ],
+      "removed_status": {
+        "F01": "found"
+      },
+      "removed_value": {
+        "F01": "관찰"
+      },
+      "kept_n": 6,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F01",
+        "F09"
+      ],
+      "asked_actual": [
+        "F09"
+      ]
+    },
+    {
+      "case": "pc3_multicenter",
+      "drop": [
+        7
+      ],
+      "removed": [
+        "F10"
+      ],
+      "removed_status": {
+        "F10": "found"
+      },
+      "removed_value": {
+        "F10": "아니오"
+      },
+      "kept_n": 6,
+      "kept_alarm": {
+        "F01": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F09",
+        "F10"
+      ],
+      "asked_actual": [
+        "F09"
+      ]
+    },
+    {
+      "case": "pc3_multicenter",
+      "drop": [
+        9
+      ],
+      "removed": [
+        "F17"
+      ],
+      "removed_status": {
+        "F17": "found"
+      },
+      "removed_value": {
+        "F17": "예"
+      },
+      "kept_n": 6,
+      "kept_alarm": {
+        "F01": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F09"
+      ],
+      "asked_actual": [
+        "F09"
+      ]
+    },
+    {
+      "case": "pc3_multicenter",
+      "drop": [
+        11
+      ],
+      "removed": [
+        "F12"
+      ],
+      "removed_status": {
+        "F12": "found"
+      },
+      "removed_value": {
+        "F12": [
+          "서울시립대학교",
+          "가톨릭대학교 서울성모병원"
+        ]
+      },
+      "kept_n": 6,
+      "kept_alarm": {
+        "F01": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F09"
+      ],
+      "asked_actual": [
+        "F09"
+      ]
+    },
+    {
+      "case": "pc3_multicenter",
+      "drop": [
+        4,
+        6
+      ],
+      "removed": [
+        "F01",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F01": "conflict"
+      },
+      "removed_value": {
+        "F15": null,
+        "F01": "관찰"
+      },
+      "kept_n": 5,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F01",
+        "F09"
+      ],
+      "asked_actual": [
+        "F09"
+      ]
+    },
+    {
+      "case": "pc3_multicenter",
+      "drop": [
+        5,
+        6,
+        11
+      ],
+      "removed": [
+        "F01",
+        "F08",
+        "F12"
+      ],
+      "removed_status": {
+        "F12": "found",
+        "F08": "conflict",
+        "F01": "conflict"
+      },
+      "removed_value": {
+        "F12": [
+          "서울시립대학교",
+          "가톨릭대학교 서울성모병원"
+        ],
+        "F08": [
+          "미성년자"
+        ],
+        "F01": "관찰"
+      },
+      "kept_n": 4,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F01",
+        "F09"
+      ],
+      "asked_actual": [
+        "F09"
+      ]
+    },
+    {
+      "case": "pc3_multicenter",
+      "drop": [
+        4,
+        5,
+        9
+      ],
+      "removed": [
+        "F08",
+        "F15",
+        "F17"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F17": "found",
+        "F08": "found"
+      },
+      "removed_value": {
+        "F15": null,
+        "F17": "예",
+        "F08": [
+          "미성년자"
+        ]
+      },
+      "kept_n": 4,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "A",
+      "asked_expected": [
+        "F09"
+      ],
+      "asked_actual": [
+        "F07",
+        "F09"
+      ]
+    },
+    {
+      "case": "pc3_multicenter",
+      "drop": [
+        5,
+        6
+      ],
+      "removed": [
+        "F01",
+        "F08"
+      ],
+      "removed_status": {
+        "F08": "found",
+        "F01": "found"
+      },
+      "removed_value": {
+        "F08": [
+          "미성년자"
+        ],
+        "F01": "관찰"
+      },
+      "kept_n": 5,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F01",
+        "F09"
+      ],
+      "asked_actual": [
+        "F09"
+      ]
+    },
+    {
+      "case": "pc3_multicenter",
+      "drop": [
+        0,
+        5,
+        6
+      ],
+      "removed": [
+        "F01",
+        "F08",
+        "F14"
+      ],
+      "removed_status": {
+        "F14": "found",
+        "F08": "conflict",
+        "F01": "conflict"
+      },
+      "removed_value": {
+        "F14": "아니오",
+        "F08": [
+          "만 65세 이상"
+        ],
+        "F01": "관찰"
+      },
+      "kept_n": 4,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F01",
+        "F09",
+        "F14"
+      ],
+      "asked_actual": [
+        "F09"
+      ]
+    },
+    {
+      "case": "pc4_multisite_trial",
+      "drop": [
+        0
+      ],
+      "removed": [
+        "F10"
+      ],
+      "removed_status": {
+        "F10": "found"
+      },
+      "removed_value": {
+        "F10": "예"
+      },
+      "kept_n": 3,
+      "kept_alarm": {
+        "F08": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "임상시험",
+      "asked_expected": [
+        "F09",
+        "F10",
+        "F14"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "pc4_multisite_trial",
+      "drop": [
+        5
+      ],
+      "removed": [
+        "F01",
+        "F08",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F08": "not_found",
+        "F01": "found"
+      },
+      "removed_value": {
+        "F15": null,
+        "F08": null,
+        "F01": "중재"
+      },
+      "kept_n": 1,
+      "kept_alarm": {},
+      "route_expected": "임상시험",
+      "route_actual": "임상시험",
+      "asked_expected": [
+        "F14"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "pc5_linkage_export",
+      "drop": [
+        2
+      ],
+      "removed": [
+        "F01",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F01": "found"
+      },
+      "removed_value": {
+        "F15": null,
+        "F01": "기록 이용"
+      },
+      "kept_n": 5,
+      "kept_alarm": {},
+      "route_expected": "A",
+      "route_actual": "A",
+      "asked_expected": [
+        "F01",
+        "F05",
+        "F07",
+        "F09",
+        "F10",
+        "F14"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "pc5_linkage_export",
+      "drop": [
+        3
+      ],
+      "removed": [
+        "F03",
+        "F04",
+        "F11"
+      ],
+      "removed_status": {
+        "F04": "not_found",
+        "F11": "not_found",
+        "F03": "found"
+      },
+      "removed_value": {
+        "F04": null,
+        "F11": null,
+        "F03": "가명처리"
+      },
+      "kept_n": 4,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "미정",
+      "asked_expected": [
+        "F10",
+        "F14",
+        "F17"
+      ],
+      "asked_actual": [
+        "F11"
+      ]
+    },
+    {
+      "case": "pc5_linkage_export",
+      "drop": [
+        5
+      ],
+      "removed": [
+        "F06"
+      ],
+      "removed_status": {
+        "F06": "found"
+      },
+      "removed_value": {
+        "F06": "예"
+      },
+      "kept_n": 6,
+      "kept_alarm": {},
+      "route_expected": "A",
+      "route_actual": "A",
+      "asked_expected": [
+        "F05",
+        "F06",
+        "F07",
+        "F10",
+        "F14",
+        "F17"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "pc5_linkage_export",
+      "drop": [
+        8
+      ],
+      "removed": [
+        "F16"
+      ],
+      "removed_status": {
+        "F16": "found"
+      },
+      "removed_value": {
+        "F16": []
+      },
+      "kept_n": 6,
+      "kept_alarm": {},
+      "route_expected": "A",
+      "route_actual": "A",
+      "asked_expected": [
+        "F05",
+        "F07",
+        "F10",
+        "F14",
+        "F16"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "pc5_linkage_export",
+      "drop": [
+        2,
+        3,
+        5
+      ],
+      "removed": [
+        "F01",
+        "F03",
+        "F04",
+        "F06",
+        "F11",
+        "F15"
+      ],
+      "removed_status": {
+        "F03": "found",
+        "F06": "found",
+        "F01": "found",
+        "F15": "not_found",
+        "F04": "not_found",
+        "F11": "not_found"
+      },
+      "removed_value": {
+        "F03": "가명처리",
+        "F06": "예",
+        "F01": "기록 이용",
+        "F15": null,
+        "F04": null,
+        "F11": null
+      },
+      "kept_n": 1,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "미정",
+      "asked_expected": [
+        "F01",
+        "F09",
+        "F10",
+        "F14"
+      ],
+      "asked_actual": [
+        "F11",
+        "F18"
+      ]
+    },
+    {
+      "case": "pc5_linkage_export",
+      "drop": [
+        2,
+        3,
+        5
+      ],
+      "removed": [
+        "F01",
+        "F03",
+        "F04",
+        "F06",
+        "F11",
+        "F15"
+      ],
+      "removed_status": {
+        "F03": "found",
+        "F06": "found",
+        "F01": "found",
+        "F15": "not_found",
+        "F04": "not_found",
+        "F11": "not_found"
+      },
+      "removed_value": {
+        "F03": "가명처리",
+        "F06": "예",
+        "F01": "기록 이용",
+        "F15": null,
+        "F04": null,
+        "F11": null
+      },
+      "kept_n": 1,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "미정",
+      "asked_expected": [
+        "F01",
+        "F09",
+        "F10",
+        "F14"
+      ],
+      "asked_actual": [
+        "F11",
+        "F18"
+      ]
+    },
+    {
+      "case": "pc5_linkage_export",
+      "drop": [
+        2,
+        3,
+        5
+      ],
+      "removed": [
+        "F01",
+        "F03",
+        "F04",
+        "F06",
+        "F11",
+        "F15"
+      ],
+      "removed_status": {
+        "F03": "found",
+        "F06": "found",
+        "F01": "found",
+        "F15": "not_found",
+        "F04": "not_found",
+        "F11": "not_found"
+      },
+      "removed_value": {
+        "F03": "가명처리",
+        "F06": "예",
+        "F01": "기록 이용",
+        "F15": null,
+        "F04": null,
+        "F11": null
+      },
+      "kept_n": 1,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "미정",
+      "asked_expected": [
+        "F01",
+        "F09",
+        "F10",
+        "F14"
+      ],
+      "asked_actual": [
+        "F11",
+        "F18"
+      ]
+    },
+    {
+      "case": "pc5_linkage_export",
+      "drop": [
+        2,
+        3,
+        5
+      ],
+      "removed": [
+        "F01",
+        "F03",
+        "F04",
+        "F06",
+        "F11",
+        "F15"
+      ],
+      "removed_status": {
+        "F03": "found",
+        "F06": "found",
+        "F01": "found",
+        "F15": "not_found",
+        "F04": "not_found",
+        "F11": "not_found"
+      },
+      "removed_value": {
+        "F03": "가명처리",
+        "F06": "예",
+        "F01": "기록 이용",
+        "F15": null,
+        "F04": null,
+        "F11": null
+      },
+      "kept_n": 1,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "미정",
+      "asked_expected": [
+        "F01",
+        "F09",
+        "F10",
+        "F14"
+      ],
+      "asked_actual": [
+        "F11",
+        "F18"
+      ]
+    },
+    {
+      "case": "pc5_linkage_export",
+      "drop": [
+        3,
+        5,
+        8
+      ],
+      "removed": [
+        "F03",
+        "F04",
+        "F06",
+        "F11",
+        "F16"
+      ],
+      "removed_status": {
+        "F06": "found",
+        "F03": "found",
+        "F16": "conflict",
+        "F04": "not_found",
+        "F11": "not_found"
+      },
+      "removed_value": {
+        "F06": "예",
+        "F03": "가명처리",
+        "F16": [],
+        "F04": null,
+        "F11": null
+      },
+      "kept_n": 2,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "미정",
+      "asked_expected": [
+        "F10",
+        "F14",
+        "F16"
+      ],
+      "asked_actual": [
+        "F11",
+        "F18"
+      ]
+    },
+    {
+      "case": "tc01_small_institute_survey",
+      "drop": [
+        0
+      ],
+      "removed": [
+        "F10",
+        "F14"
+      ],
+      "removed_status": {
+        "F10": "found",
+        "F14": "found"
+      },
+      "removed_value": {
+        "F10": "아니오",
+        "F14": "아니오"
+      },
+      "kept_n": 8,
+      "kept_alarm": {
+        "F08": "conflict"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F10",
+        "F14",
+        "contract"
+      ],
+      "asked_actual": [
+        "contract"
+      ]
+    },
+    {
+      "case": "tc01_small_institute_survey",
+      "drop": [
+        2
+      ],
+      "removed": [
+        "F12"
+      ],
+      "removed_status": {
+        "F12": "found"
+      },
+      "removed_value": {
+        "F12": [
+          "가상생활연구소"
+        ]
+      },
+      "kept_n": 9,
+      "kept_alarm": {
+        "F08": "not_found"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "contract"
+      ],
+      "asked_actual": [
+        "F08",
+        "contract"
+      ]
+    },
+    {
+      "case": "tc01_small_institute_survey",
+      "drop": [
+        4
+      ],
+      "removed": [
+        "F08",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F08": "conflict"
+      },
+      "removed_value": {
+        "F15": null,
+        "F08": [
+          "미성년자"
+        ]
+      },
+      "kept_n": 8,
+      "kept_alarm": {},
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F08",
+        "contract"
+      ],
+      "asked_actual": [
+        "contract"
+      ]
+    },
+    {
+      "case": "tc01_small_institute_survey",
+      "drop": [
+        5
+      ],
+      "removed": [
+        "F01",
+        "F07",
+        "F11"
+      ],
+      "removed_status": {
+        "F07": "not_found",
+        "F11": "not_found",
+        "F01": "found"
+      },
+      "removed_value": {
+        "F07": null,
+        "F11": null,
+        "F01": "설문·면담"
+      },
+      "kept_n": 7,
+      "kept_alarm": {
+        "F08": "not_found",
+        "F10": "conflict"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F01",
+        "F09",
+        "contract"
+      ],
+      "asked_actual": [
+        "F08",
+        "contract"
+      ]
+    },
+    {
+      "case": "tc01_small_institute_survey",
+      "drop": [
+        6
+      ],
+      "removed": [
+        "F16"
+      ],
+      "removed_status": {
+        "F16": "not_found"
+      },
+      "removed_value": {
+        "F16": null
+      },
+      "kept_n": 9,
+      "kept_alarm": {
+        "F07": "not_found",
+        "F08": "not_found",
+        "F10": "not_found",
+        "F14": "conflict"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F16",
+        "contract"
+      ],
+      "asked_actual": [
+        "F10",
+        "F16",
+        "contract"
+      ]
+    },
+    {
+      "case": "tc01_small_institute_survey",
+      "drop": [
+        7
+      ],
+      "removed": [
+        "F13"
+      ],
+      "removed_status": {
+        "F13": "not_found"
+      },
+      "removed_value": {
+        "F13": null
+      },
+      "kept_n": 9,
+      "kept_alarm": {
+        "F08": "conflict"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "contract"
+      ],
+      "asked_actual": [
+        "contract"
+      ]
+    },
+    {
+      "case": "tc01_small_institute_survey",
+      "drop": [
+        0,
+        4,
+        5
+      ],
+      "removed": [
+        "F01",
+        "F07",
+        "F08",
+        "F10",
+        "F11",
+        "F14",
+        "F15"
+      ],
+      "removed_status": {
+        "F07": "not_found",
+        "F14": "not_found",
+        "F01": "conflict",
+        "F08": "not_found",
+        "F15": "not_found",
+        "F11": "not_found",
+        "F10": "not_found"
+      },
+      "removed_value": {
+        "F07": null,
+        "F14": null,
+        "F01": "설문·면담",
+        "F08": null,
+        "F15": null,
+        "F11": null,
+        "F10": null
+      },
+      "kept_n": 3,
+      "kept_alarm": {},
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F01",
+        "F09",
+        "F10",
+        "F14",
+        "contract"
+      ],
+      "asked_actual": [
+        "F08",
+        "F10",
+        "F14",
+        "contract"
+      ]
+    },
+    {
+      "case": "tc01_small_institute_survey",
+      "drop": [
+        0,
+        4
+      ],
+      "removed": [
+        "F08",
+        "F10",
+        "F14",
+        "F15"
+      ],
+      "removed_status": {
+        "F14": "found",
+        "F10": "conflict",
+        "F15": "not_found",
+        "F08": "not_found"
+      },
+      "removed_value": {
+        "F14": "아니오",
+        "F10": "아니오",
+        "F15": null,
+        "F08": null
+      },
+      "kept_n": 6,
+      "kept_alarm": {},
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F08",
+        "F10",
+        "F14",
+        "contract"
+      ],
+      "asked_actual": [
+        "F08",
+        "contract"
+      ]
+    },
+    {
+      "case": "tc01_small_institute_survey",
+      "drop": [
+        6,
+        7
+      ],
+      "removed": [
+        "F13",
+        "F16"
+      ],
+      "removed_status": {
+        "F13": "not_found",
+        "F16": "not_found"
+      },
+      "removed_value": {
+        "F13": null,
+        "F16": null
+      },
+      "kept_n": 8,
+      "kept_alarm": {
+        "F07": "not_found",
+        "F08": "not_found",
+        "F10": "not_found",
+        "F14": "conflict"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F16",
+        "contract"
+      ],
+      "asked_actual": [
+        "F10",
+        "F16",
+        "contract"
+      ]
+    },
+    {
+      "case": "tc01_small_institute_survey",
+      "drop": [
+        5,
+        6
+      ],
+      "removed": [
+        "F01",
+        "F07",
+        "F11",
+        "F16"
+      ],
+      "removed_status": {
+        "F07": "not_found",
+        "F11": "not_found",
+        "F16": "not_found",
+        "F01": "found"
+      },
+      "removed_value": {
+        "F07": null,
+        "F11": null,
+        "F16": null,
+        "F01": "설문·면담"
+      },
+      "kept_n": 6,
+      "kept_alarm": {
+        "F08": "not_found",
+        "F10": "not_found",
+        "F14": "conflict"
+      },
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F01",
+        "F09",
+        "contract"
+      ],
+      "asked_actual": [
+        "F10",
+        "F16",
+        "contract"
+      ]
+    },
+    {
+      "case": "tc01_small_institute_survey",
+      "drop": [
+        2,
+        4,
+        7
+      ],
+      "removed": [
+        "F08",
+        "F12",
+        "F13",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F12": "found",
+        "F13": "not_found",
+        "F08": "conflict"
+      },
+      "removed_value": {
+        "F15": null,
+        "F12": [
+          "가상생활연구소"
+        ],
+        "F13": null,
+        "F08": [
+          "미성년자"
+        ]
+      },
+      "kept_n": 6,
+      "kept_alarm": {},
+      "route_expected": "B",
+      "route_actual": "B",
+      "asked_expected": [
+        "F08",
+        "contract"
+      ],
+      "asked_actual": [
+        "contract"
+      ]
+    },
+    {
+      "case": "tc02_drug_trial",
+      "drop": [
+        0
+      ],
+      "removed": [
+        "F10",
+        "F14"
+      ],
+      "removed_status": {
+        "F10": "found",
+        "F14": "found"
+      },
+      "removed_value": {
+        "F10": "예",
+        "F14": "아니오"
+      },
+      "kept_n": 6,
+      "kept_alarm": {
+        "F08": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "임상시험",
+      "asked_expected": [
+        "F09",
+        "F10",
+        "F14"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "tc02_drug_trial",
+      "drop": [
+        2
+      ],
+      "removed": [
+        "F12"
+      ],
+      "removed_status": {
+        "F12": "found"
+      },
+      "removed_value": {
+        "F12": [
+          "가상의료원"
+        ]
+      },
+      "kept_n": 7,
+      "kept_alarm": {
+        "F08": "conflict"
+      },
+      "route_expected": "임상시험",
+      "route_actual": "임상시험",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "tc02_drug_trial",
+      "drop": [
+        3
+      ],
+      "removed": [
+        "F01",
+        "F08",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F08": "not_found",
+        "F01": "found"
+      },
+      "removed_value": {
+        "F15": null,
+        "F08": null,
+        "F01": "중재"
+      },
+      "kept_n": 5,
+      "kept_alarm": {},
+      "route_expected": "임상시험",
+      "route_actual": "임상시험",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "tc02_drug_trial",
+      "drop": [
+        5
+      ],
+      "removed": [
+        "F11"
+      ],
+      "removed_status": {
+        "F11": "not_found"
+      },
+      "removed_value": {
+        "F11": null
+      },
+      "kept_n": 7,
+      "kept_alarm": {
+        "F08": "not_found"
+      },
+      "route_expected": "임상시험",
+      "route_actual": "임상시험",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "tc02_drug_trial",
+      "drop": [
+        6
+      ],
+      "removed": [
+        "F13"
+      ],
+      "removed_status": {
+        "F13": "not_found"
+      },
+      "removed_value": {
+        "F13": null
+      },
+      "kept_n": 7,
+      "kept_alarm": {
+        "F08": "conflict"
+      },
+      "route_expected": "임상시험",
+      "route_actual": "임상시험",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "tc02_drug_trial",
+      "drop": [
+        0,
+        5
+      ],
+      "removed": [
+        "F10",
+        "F11",
+        "F14"
+      ],
+      "removed_status": {
+        "F11": "not_found",
+        "F10": "found",
+        "F14": "found"
+      },
+      "removed_value": {
+        "F11": null,
+        "F10": "예",
+        "F14": "아니오"
+      },
+      "kept_n": 5,
+      "kept_alarm": {
+        "F08": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "임상시험",
+      "asked_expected": [
+        "F09",
+        "F10",
+        "F14"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "tc02_drug_trial",
+      "drop": [
+        3,
+        6
+      ],
+      "removed": [
+        "F01",
+        "F08",
+        "F13",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F13": "not_found",
+        "F08": "not_found",
+        "F01": "found"
+      },
+      "removed_value": {
+        "F15": null,
+        "F13": null,
+        "F08": null,
+        "F01": "중재"
+      },
+      "kept_n": 4,
+      "kept_alarm": {},
+      "route_expected": "임상시험",
+      "route_actual": "임상시험",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "tc02_drug_trial",
+      "drop": [
+        0,
+        3
+      ],
+      "removed": [
+        "F01",
+        "F08",
+        "F10",
+        "F14",
+        "F15"
+      ],
+      "removed_status": {
+        "F14": "not_found",
+        "F01": "found",
+        "F08": "not_found",
+        "F15": "not_found",
+        "F10": "conflict"
+      },
+      "removed_value": {
+        "F14": null,
+        "F01": "중재",
+        "F08": null,
+        "F15": null,
+        "F10": "예"
+      },
+      "kept_n": 3,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "임상시험",
+      "asked_expected": [
+        "F01",
+        "F09",
+        "F10",
+        "F14"
+      ],
+      "asked_actual": [
+        "F14"
+      ]
+    },
+    {
+      "case": "tc02_drug_trial",
+      "drop": [
+        0,
+        3,
+        5
+      ],
+      "removed": [
+        "F01",
+        "F08",
+        "F10",
+        "F11",
+        "F14",
+        "F15"
+      ],
+      "removed_status": {
+        "F14": "not_found",
+        "F01": "found",
+        "F08": "not_found",
+        "F15": "not_found",
+        "F11": "not_found",
+        "F10": "conflict"
+      },
+      "removed_value": {
+        "F14": null,
+        "F01": "중재",
+        "F08": null,
+        "F15": null,
+        "F11": null,
+        "F10": "예"
+      },
+      "kept_n": 2,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "임상시험",
+      "asked_expected": [
+        "F01",
+        "F09",
+        "F10",
+        "F14"
+      ],
+      "asked_actual": [
+        "F14"
+      ]
+    },
+    {
+      "case": "tc02_drug_trial",
+      "drop": [
+        0,
+        6
+      ],
+      "removed": [
+        "F10",
+        "F13",
+        "F14"
+      ],
+      "removed_status": {
+        "F13": "not_found",
+        "F10": "found",
+        "F14": "found"
+      },
+      "removed_value": {
+        "F13": null,
+        "F10": "예",
+        "F14": "아니오"
+      },
+      "kept_n": 5,
+      "kept_alarm": {
+        "F08": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "임상시험",
+      "asked_expected": [
+        "F09",
+        "F10",
+        "F14"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "tc03_minor_interview",
+      "drop": [
+        0
+      ],
+      "removed": [
+        "F10",
+        "F14"
+      ],
+      "removed_status": {
+        "F10": "found",
+        "F14": "found"
+      },
+      "removed_value": {
+        "F10": "아니오",
+        "F14": "아니오"
+      },
+      "kept_n": 8,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F10",
+        "F14"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "tc03_minor_interview",
+      "drop": [
+        2
+      ],
+      "removed": [
+        "F12"
+      ],
+      "removed_status": {
+        "F12": "found"
+      },
+      "removed_value": {
+        "F12": [
+          "가상대학교"
+        ]
+      },
+      "kept_n": 9,
+      "kept_alarm": {
+        "F07": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "tc03_minor_interview",
+      "drop": [
+        3
+      ],
+      "removed": [
+        "F08",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F08": "found"
+      },
+      "removed_value": {
+        "F15": null,
+        "F08": [
+          "미성년자"
+        ]
+      },
+      "kept_n": 8,
+      "kept_alarm": {
+        "F07": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F08"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "tc03_minor_interview",
+      "drop": [
+        4
+      ],
+      "removed": [
+        "F01"
+      ],
+      "removed_status": {
+        "F01": "found"
+      },
+      "removed_value": {
+        "F01": "설문·면담"
+      },
+      "kept_n": 9,
+      "kept_alarm": {
+        "F07": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F01",
+        "F09"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "tc03_minor_interview",
+      "drop": [
+        5
+      ],
+      "removed": [
+        "F07"
+      ],
+      "removed_status": {
+        "F07": "not_found"
+      },
+      "removed_value": {
+        "F07": null
+      },
+      "kept_n": 9,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "tc03_minor_interview",
+      "drop": [
+        6
+      ],
+      "removed": [
+        "F16"
+      ],
+      "removed_status": {
+        "F16": "not_found"
+      },
+      "removed_value": {
+        "F16": null
+      },
+      "kept_n": 9,
+      "kept_alarm": {
+        "F07": "conflict",
+        "F10": "not_found"
+      },
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F16"
+      ],
+      "asked_actual": [
+        "F10",
+        "F16"
+      ]
+    },
+    {
+      "case": "tc03_minor_interview",
+      "drop": [
+        8
+      ],
+      "removed": [
+        "F11"
+      ],
+      "removed_status": {
+        "F11": "not_found"
+      },
+      "removed_value": {
+        "F11": null
+      },
+      "kept_n": 9,
+      "kept_alarm": {
+        "F07": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "tc03_minor_interview",
+      "drop": [
+        9
+      ],
+      "removed": [
+        "F13"
+      ],
+      "removed_status": {
+        "F13": "not_found"
+      },
+      "removed_value": {
+        "F13": null
+      },
+      "kept_n": 9,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "tc03_minor_interview",
+      "drop": [
+        3,
+        4
+      ],
+      "removed": [
+        "F01",
+        "F08",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F08": "found",
+        "F01": "found"
+      },
+      "removed_value": {
+        "F15": null,
+        "F08": [
+          "미성년자"
+        ],
+        "F01": "설문·면담"
+      },
+      "kept_n": 7,
+      "kept_alarm": {
+        "F07": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F01",
+        "F09"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "tc03_minor_interview",
+      "drop": [
+        3,
+        4
+      ],
+      "removed": [
+        "F01",
+        "F08",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F08": "found",
+        "F01": "found"
+      },
+      "removed_value": {
+        "F15": null,
+        "F08": [
+          "미성년자"
+        ],
+        "F01": "설문·면담"
+      },
+      "kept_n": 7,
+      "kept_alarm": {
+        "F07": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F01",
+        "F09"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "tc03_minor_interview",
+      "drop": [
+        4,
+        6
+      ],
+      "removed": [
+        "F01",
+        "F16"
+      ],
+      "removed_status": {
+        "F16": "not_found",
+        "F01": "found"
+      },
+      "removed_value": {
+        "F16": null,
+        "F01": "설문·면담"
+      },
+      "kept_n": 8,
+      "kept_alarm": {
+        "F07": "conflict",
+        "F10": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F01",
+        "F09"
+      ],
+      "asked_actual": [
+        "F16"
+      ]
+    },
+    {
+      "case": "tc03_minor_interview",
+      "drop": [
+        0,
+        2,
+        8
+      ],
+      "removed": [
+        "F10",
+        "F11",
+        "F12",
+        "F14"
+      ],
+      "removed_status": {
+        "F12": "found",
+        "F11": "not_found",
+        "F10": "found",
+        "F14": "found"
+      },
+      "removed_value": {
+        "F12": [
+          "가상대학교"
+        ],
+        "F11": null,
+        "F10": "아니오",
+        "F14": "아니오"
+      },
+      "kept_n": 6,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F10",
+        "F14"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "tc03_minor_interview",
+      "drop": [
+        3,
+        4,
+        9
+      ],
+      "removed": [
+        "F01",
+        "F08",
+        "F13",
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found",
+        "F13": "not_found",
+        "F08": "found",
+        "F01": "found"
+      },
+      "removed_value": {
+        "F15": null,
+        "F13": null,
+        "F08": [
+          "미성년자"
+        ],
+        "F01": "설문·면담"
+      },
+      "kept_n": 6,
+      "kept_alarm": {
+        "F07": "conflict"
+      },
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F01",
+        "F09"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "tc04_rare_disease_pseudo",
+      "drop": [
+        0
+      ],
+      "removed": [
+        "F10",
+        "F14"
+      ],
+      "removed_status": {
+        "F10": "found",
+        "F14": "found"
+      },
+      "removed_value": {
+        "F10": "아니오",
+        "F14": "아니오"
+      },
+      "kept_n": 14,
+      "kept_alarm": {},
+      "route_expected": "A",
+      "route_actual": "A",
+      "asked_expected": [
+        "F10",
+        "F14"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "tc04_rare_disease_pseudo",
+      "drop": [
+        2
+      ],
+      "removed": [
+        "F12"
+      ],
+      "removed_status": {
+        "F12": "found"
+      },
+      "removed_value": {
+        "F12": [
+          "가상대학교병원"
+        ]
+      },
+      "kept_n": 15,
+      "kept_alarm": {},
+      "route_expected": "A",
+      "route_actual": "A",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "tc04_rare_disease_pseudo",
+      "drop": [
+        3
+      ],
+      "removed": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F07",
+        "F16"
+      ],
+      "removed_status": {
+        "F07": "not_found",
+        "F03": "conflict",
+        "F01": "conflict",
+        "F16": "not_found",
+        "F02": "conflict",
+        "F04": "not_found",
+        "F05": "not_found"
+      },
+      "removed_value": {
+        "F07": null,
+        "F03": "가명처리",
+        "F01": "관찰",
+        "F16": null,
+        "F02": "아니오",
+        "F04": null,
+        "F05": null
+      },
+      "kept_n": 9,
+      "kept_alarm": {},
+      "route_expected": "A",
+      "route_actual": "A",
+      "asked_expected": [
+        "F01",
+        "F05",
+        "F07",
+        "F09"
+      ],
+      "asked_actual": [
+        "F05",
+        "F07",
+        "F09"
+      ]
+    },
+    {
+      "case": "tc04_rare_disease_pseudo",
+      "drop": [
+        4
+      ],
+      "removed": [
+        "F06"
+      ],
+      "removed_status": {
+        "F06": "not_found"
+      },
+      "removed_value": {
+        "F06": null
+      },
+      "kept_n": 15,
+      "kept_alarm": {},
+      "route_expected": "A",
+      "route_actual": "A",
+      "asked_expected": [
+        "F06"
+      ],
+      "asked_actual": [
+        "F06"
+      ]
+    },
+    {
+      "case": "tc04_rare_disease_pseudo",
+      "drop": [
+        5
+      ],
+      "removed": [
+        "F17",
+        "F18"
+      ],
+      "removed_status": {
+        "F17": "conflict",
+        "F18": "conflict"
+      },
+      "removed_value": {
+        "F17": "예",
+        "F18": "데이터팀·제3자"
+      },
+      "kept_n": 14,
+      "kept_alarm": {},
+      "route_expected": "A",
+      "route_actual": "A",
+      "asked_expected": [
+        "F17"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "tc04_rare_disease_pseudo",
+      "drop": [
+        6
+      ],
+      "removed": [
+        "F11"
+      ],
+      "removed_status": {
+        "F11": "not_found"
+      },
+      "removed_value": {
+        "F11": null
+      },
+      "kept_n": 15,
+      "kept_alarm": {
+        "F01": "conflict"
+      },
+      "route_expected": "미정",
+      "route_actual": "미정",
+      "asked_expected": [
+        "F11"
+      ],
+      "asked_actual": [
+        "F11"
+      ]
+    },
+    {
+      "case": "tc04_rare_disease_pseudo",
+      "drop": [
+        7
+      ],
+      "removed": [
+        "F15"
+      ],
+      "removed_status": {
+        "F15": "not_found"
+      },
+      "removed_value": {
+        "F15": null
+      },
+      "kept_n": 15,
+      "kept_alarm": {
+        "F01": "conflict"
+      },
+      "route_expected": "A",
+      "route_actual": "A",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "tc04_rare_disease_pseudo",
+      "drop": [
+        8
+      ],
+      "removed": [
+        "F13"
+      ],
+      "removed_status": {
+        "F13": "not_found"
+      },
+      "removed_value": {
+        "F13": null
+      },
+      "kept_n": 15,
+      "kept_alarm": {},
+      "route_expected": "A",
+      "route_actual": "A",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "tc04_rare_disease_pseudo",
+      "drop": [
+        0,
+        3,
+        4
+      ],
+      "removed": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F10",
+        "F14",
+        "F16"
+      ],
+      "removed_status": {
+        "F07": "not_found",
+        "F14": "not_found",
+        "F03": "not_found",
+        "F01": "not_found",
+        "F06": "not_found",
+        "F16": "not_found",
+        "F02": "not_found",
+        "F04": "not_found",
+        "F10": "not_found",
+        "F05": "not_found"
+      },
+      "removed_value": {
+        "F07": null,
+        "F14": null,
+        "F03": null,
+        "F01": null,
+        "F06": null,
+        "F16": null,
+        "F02": null,
+        "F04": null,
+        "F10": null,
+        "F05": null
+      },
+      "kept_n": 6,
+      "kept_alarm": {},
+      "route_expected": "A",
+      "route_actual": "A",
+      "asked_expected": [
+        "F01",
+        "F05",
+        "F06",
+        "F07",
+        "F09",
+        "F10",
+        "F14"
+      ],
+      "asked_actual": [
+        "F01",
+        "F05",
+        "F06",
+        "F07",
+        "F09",
+        "F10",
+        "F14"
+      ]
+    },
+    {
+      "case": "tc04_rare_disease_pseudo",
+      "drop": [
+        2,
+        3,
+        6
+      ],
+      "removed": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F07",
+        "F11",
+        "F12",
+        "F16"
+      ],
+      "removed_status": {
+        "F07": "conflict",
+        "F03": "conflict",
+        "F01": "conflict",
+        "F16": "not_found",
+        "F12": "found",
+        "F02": "conflict",
+        "F04": "not_found",
+        "F11": "not_found",
+        "F05": "not_found"
+      },
+      "removed_value": {
+        "F07": [
+          "희귀질환"
+        ],
+        "F03": "가명처리",
+        "F01": "관찰",
+        "F16": null,
+        "F12": [
+          "가상대학교병원"
+        ],
+        "F02": "아니오",
+        "F04": null,
+        "F11": null,
+        "F05": null
+      },
+      "kept_n": 7,
+      "kept_alarm": {},
+      "route_expected": "미정",
+      "route_actual": "미정",
+      "asked_expected": [
+        "F01",
+        "F05",
+        "F07",
+        "F09",
+        "F11"
+      ],
+      "asked_actual": [
+        "F05",
+        "F09",
+        "F11"
+      ]
+    },
+    {
+      "case": "tc04_rare_disease_pseudo",
+      "drop": [
+        2,
+        5
+      ],
+      "removed": [
+        "F12",
+        "F17",
+        "F18"
+      ],
+      "removed_status": {
+        "F12": "found",
+        "F17": "conflict",
+        "F18": "conflict"
+      },
+      "removed_value": {
+        "F12": [
+          "가상대학교병원"
+        ],
+        "F17": "예",
+        "F18": "데이터팀·제3자"
+      },
+      "kept_n": 13,
+      "kept_alarm": {},
+      "route_expected": "A",
+      "route_actual": "A",
+      "asked_expected": [
+        "F17"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "tc04_rare_disease_pseudo",
+      "drop": [
+        2,
+        3,
+        6
+      ],
+      "removed": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F07",
+        "F11",
+        "F12",
+        "F16"
+      ],
+      "removed_status": {
+        "F07": "conflict",
+        "F03": "conflict",
+        "F01": "conflict",
+        "F16": "not_found",
+        "F12": "found",
+        "F02": "conflict",
+        "F04": "not_found",
+        "F11": "not_found",
+        "F05": "not_found"
+      },
+      "removed_value": {
+        "F07": [
+          "희귀질환"
+        ],
+        "F03": "가명처리",
+        "F01": "관찰",
+        "F16": null,
+        "F12": [
+          "가상대학교병원"
+        ],
+        "F02": "아니오",
+        "F04": null,
+        "F11": null,
+        "F05": null
+      },
+      "kept_n": 7,
+      "kept_alarm": {},
+      "route_expected": "미정",
+      "route_actual": "미정",
+      "asked_expected": [
+        "F01",
+        "F05",
+        "F07",
+        "F09",
+        "F11"
+      ],
+      "asked_actual": [
+        "F05",
+        "F09",
+        "F11"
+      ]
+    },
+    {
+      "case": "tc04_rare_disease_pseudo",
+      "drop": [
+        3,
+        4,
+        8
+      ],
+      "removed": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F13",
+        "F16"
+      ],
+      "removed_status": {
+        "F07": "conflict",
+        "F03": "conflict",
+        "F01": "conflict",
+        "F06": "not_found",
+        "F13": "not_found",
+        "F16": "not_found",
+        "F02": "conflict",
+        "F04": "not_found",
+        "F05": "not_found"
+      },
+      "removed_value": {
+        "F07": [
+          "희귀질환"
+        ],
+        "F03": "가명처리",
+        "F01": "관찰",
+        "F06": null,
+        "F13": null,
+        "F16": null,
+        "F02": "아니오",
+        "F04": null,
+        "F05": null
+      },
+      "kept_n": 7,
+      "kept_alarm": {},
+      "route_expected": "A",
+      "route_actual": "A",
+      "asked_expected": [
+        "F01",
+        "F05",
+        "F06",
+        "F07",
+        "F09"
+      ],
+      "asked_actual": [
+        "F05",
+        "F06",
+        "F09"
+      ]
+    },
+    {
+      "case": "tc05_embryo",
+      "drop": [
+        0
+      ],
+      "removed": [
+        "F14"
+      ],
+      "removed_status": {
+        "F14": "found"
+      },
+      "removed_value": {
+        "F14": "예"
+      },
+      "kept_n": 4,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "범위 밖",
+      "asked_expected": [
+        "F01",
+        "F10",
+        "F14",
+        "F16"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "tc05_embryo",
+      "drop": [
+        2
+      ],
+      "removed": [
+        "F12"
+      ],
+      "removed_status": {
+        "F12": "found"
+      },
+      "removed_value": {
+        "F12": [
+          "가상난임연구소"
+        ]
+      },
+      "kept_n": 4,
+      "kept_alarm": {},
+      "route_expected": "범위 밖",
+      "route_actual": "범위 밖",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "tc05_embryo",
+      "drop": [
+        3
+      ],
+      "removed": [
+        "F09"
+      ],
+      "removed_status": {
+        "F09": "found"
+      },
+      "removed_value": {
+        "F09": "예"
+      },
+      "kept_n": 4,
+      "kept_alarm": {},
+      "route_expected": "범위 밖",
+      "route_actual": "범위 밖",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "tc05_embryo",
+      "drop": [
+        4
+      ],
+      "removed": [
+        "F11"
+      ],
+      "removed_status": {
+        "F11": "not_found"
+      },
+      "removed_value": {
+        "F11": null
+      },
+      "kept_n": 4,
+      "kept_alarm": {},
+      "route_expected": "범위 밖",
+      "route_actual": "범위 밖",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "tc05_embryo",
+      "drop": [
+        5
+      ],
+      "removed": [
+        "F13"
+      ],
+      "removed_status": {
+        "F13": "not_found"
+      },
+      "removed_value": {
+        "F13": null
+      },
+      "kept_n": 4,
+      "kept_alarm": {},
+      "route_expected": "범위 밖",
+      "route_actual": "범위 밖",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "tc05_embryo",
+      "drop": [
+        2,
+        3,
+        4
+      ],
+      "removed": [
+        "F09",
+        "F11",
+        "F12"
+      ],
+      "removed_status": {
+        "F12": "found",
+        "F11": "not_found",
+        "F09": "found"
+      },
+      "removed_value": {
+        "F12": [
+          "가상난임연구소"
+        ],
+        "F11": null,
+        "F09": "예"
+      },
+      "kept_n": 2,
+      "kept_alarm": {},
+      "route_expected": "범위 밖",
+      "route_actual": "범위 밖",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "tc05_embryo",
+      "drop": [
+        0,
+        3
+      ],
+      "removed": [
+        "F09",
+        "F14"
+      ],
+      "removed_status": {
+        "F14": "not_found",
+        "F09": "not_found"
+      },
+      "removed_value": {
+        "F14": null,
+        "F09": null
+      },
+      "kept_n": 3,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "C",
+      "asked_expected": [
+        "F01",
+        "F09",
+        "F10",
+        "F14"
+      ],
+      "asked_actual": [
+        "F01",
+        "F09",
+        "F10",
+        "F14"
+      ]
+    },
+    {
+      "case": "tc05_embryo",
+      "drop": [
+        0,
+        5
+      ],
+      "removed": [
+        "F13",
+        "F14"
+      ],
+      "removed_status": {
+        "F13": "not_found",
+        "F14": "found"
+      },
+      "removed_value": {
+        "F13": null,
+        "F14": "예"
+      },
+      "kept_n": 3,
+      "kept_alarm": {},
+      "route_expected": "C",
+      "route_actual": "범위 밖",
+      "asked_expected": [
+        "F01",
+        "F10",
+        "F14",
+        "F16"
+      ],
+      "asked_actual": []
+    },
+    {
+      "case": "tc05_embryo",
+      "drop": [
+        3,
+        4
+      ],
+      "removed": [
+        "F09",
+        "F11"
+      ],
+      "removed_status": {
+        "F11": "not_found",
+        "F09": "found"
+      },
+      "removed_value": {
+        "F11": null,
+        "F09": "예"
+      },
+      "kept_n": 3,
+      "kept_alarm": {},
+      "route_expected": "범위 밖",
+      "route_actual": "범위 밖",
+      "asked_expected": [],
+      "asked_actual": []
+    },
+    {
+      "case": "tc05_embryo",
+      "drop": [
+        3,
+        5
+      ],
+      "removed": [
+        "F09",
+        "F13"
+      ],
+      "removed_status": {
+        "F13": "not_found",
+        "F09": "found"
+      },
+      "removed_value": {
+        "F13": null,
+        "F09": "예"
+      },
+      "kept_n": 3,
+      "kept_alarm": {},
+      "route_expected": "범위 밖",
+      "route_actual": "범위 밖",
+      "asked_expected": [],
+      "asked_actual": []
+    }
+  ],
+  "pii_leaks": [
+    "sample1_crf: 김민수",
+    "sample2_pseudo: 김민수",
+    "pc1_freelance_researcher: 김민수",
+    "pc2_no_irb_company_lab: 김민수",
+    "pc3_multicenter: 김민수",
+    "pc4_multisite_trial: 김민수",
+    "pc5_linkage_export: 김민수",
+    "tc01_small_institute_survey: 김민수",
+    "tc02_drug_trial: 김민수",
+    "tc03_minor_interview: 김민수",
+    "tc04_rare_disease_pseudo: 김민수",
+    "tc05_embryo: 김민수"
+  ]
+}
