@@ -1,0 +1,38 @@
+id: kumc
+name: 고려대학교 안암병원 IRB (고려대학교병원 의학연구심의위원회)
+short: 고대안암병원
+aliases: [고대안암병원, 고려대학교 안암병원, 고려대 안암병원, 고려안암병원, 안암고대병원, 안암병원, 고려대학교의료원 안암병원, 고려대학교 안암병원 IRB]
+submit: e-IRB(irb.kumc.or.kr, 고려대의료원 3개 병원 공용)에서 책임연구자가 신청 · 안암병원 IRB 문의 02-920-6566
+source: 고려대의료원 임상연구윤리센터 IRB 소개·심사접수료 (https://www.kumc.or.kr/kr/institution/hrpc/IRB.do) · 안암 연구중심병원 IRB 소개·심의 절차도 (https://anamrnd.kumc.or.kr/kr/reserch-support/irb.do) · 임상연구지원실 뉴스레터 26.05 · STEP 2026 생명윤리교육 안내 (확인 2026-09-30)
+plan_form: 임상연구계획서 (서식은 e-IRB 안에 있고 공개된 항목 목록은 없음)
+docs:
+  신청서: e-IRB 신청
+  계획서: 임상연구계획서
+  동의서류: 연구대상자 설명문 및 동의서 (해당 시)
+rules:
+  - id: I-KUMC-1
+    when: always
+    level: 안내
+    warning: 안암병원 IRB는 e-IRB 신청 → 행정점검·접수 → 정기 또는 신속심사 순서로 진행합니다. 신속심사는 승인·시정승인·정기심사 상정 중에서만 결정하므로, 정기심사로 넘어갈 수 있습니다.
+    source: 안암 연구중심병원 IRB 소개 · 의학연구심의위원회 심의 절차도 (https://anamrnd.kumc.or.kr/kr/reserch-support/irb.do)
+  - id: I-KUMC-2
+    when: drb
+    level: 확인 필요
+    warning: 원내 진료기록을 가명처리해 연구에 쓰면 IRB와 별도로 데이터심의위원회(DRB) 절차가 필요하다고 안내합니다. IRB와 DRB 중 어느 쪽을 먼저 내는지는 연구 기획 초기에 원내 순서를 확인해야 합니다.
+    source: 고려대의료원 임상연구지원실 뉴스레터 26.05 3항 (https://www.kumc.or.kr/kr/medsh-newsLetter/view.do?article=270856)
+  - id: I-KUMC-3
+    when: exempt
+    level: 확인 필요
+    warning: 심사면제는 연구자가 정하지 않고 IRB가 타당성을 확인합니다. 면제 신청 서식과 대상 기준은 e-IRB에서 확인해야 합니다.
+    source: 안암 연구중심병원 IRB 소개 (IRB 주요 기능 '심사면제 타당성 확인')
+  - id: I-KUMC-4
+    when: always
+    level: 확인 필요
+    warning: 고려대의료원은 모든 임상연구자를 생명윤리교육 대상으로 안내합니다(의약품 임상시험 종사자는 임상시험 종사자 교육). 교육은 의료원 교육관리시스템 STEP(crlms.kumc.or.kr)에서 들을 수 있고, IRB 제출에 필요한 이수 기준은 사무국에 확인해야 합니다.
+    source: STEP 공지 '2026년도 생명윤리교육(GCP) 교육 안내' (https://crlms.kumc.or.kr/web/center/noticeView.do?boardIdx=14881)
+  - id: I-KUMC-5
+    when: always
+    level: 확인 필요
+    warning: 연구비를 2천만원 이상 지원받는 연구자 주도 연구는 신규심사 접수료가 있습니다(2천만~5천만원 미만 60만원, 5천만원 이상 120만원, 부가세 10% 별도). 국책과제·원내지원과제·연구비 없는 순수 학술 연구는 부과되지 않습니다.
+    source: 고려대의료원 임상연구윤리센터 심사접수료 안내 (https://www.kumc.or.kr/kr/institution/hrpc/payment.do)
+schedule: {kind: none, note: "안암병원 IRB 정기심사 날짜·접수 마감·결과 통보 기간은 공개 페이지에 없음 (e-IRB는 로그인 필요) → 계산 불가 · 절차는 행정점검·접수 → 정기/신속심사"}

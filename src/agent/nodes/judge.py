@@ -588,6 +588,8 @@ def _schedule(state: GraphState) -> dict:
     if d["irb"] in ("public", "contracted_public") and PUBLIC_SCHEDULE.exists():
         return {"scenarios": _public_irb(target_day, today), "default": default,
                 "missing": ["공용위원회 정규 회의만 사용 (특별위원회 관할 비공개)", "결과 통보: 회의일로부터 7일 이내 (SOP 제36조②)"]}
+    if venue and venue["schedule"].get("note"):  # 기관 프로필의 공개 여부 설명이 더 정확하다 (⑧에서 덧붙인다)
+        return _none(default)
     return _none(default, "관할 위원회 회의일·접수 마감: 공개 일정 데이터 없음")
 
 
