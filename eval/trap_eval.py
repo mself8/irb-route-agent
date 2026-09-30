@@ -103,7 +103,7 @@ def score(spec: dict, raw: dict) -> list[dict]:
         hit, in_control = ((f"{rule}:충족" in g, f"{rule}:충족" in c) if expect == "충족" else (flagged(g, rule), flagged(c, rule)))
         alt = set(t.get("alt", []))
         row = {"id": t["id"], "rule": rule, "base": t["base"], "expect": expect,
-               "scope": "지킨 변형" if expect == "없음" else "기관" if rule.startswith("I-") else "과거형" if rule == "PAST" else "법",
+               "scope": "지킨 변형" if expect == "없음" else "기관" if rule.startswith("I-") else "법",
                "detected": hit and not in_control, "in_control": in_control, "alt_detected": sorted(alt & (g - c)),
                "trap_signals": sorted(s for s in g if s.split(":")[0] == rule),
                "unexpected": sorted(s for s in warnings(g - c) - alt if s.split(":")[0] != rule),
@@ -145,7 +145,7 @@ def report(spec: dict, raw: dict, dest: Path, before: Path | None = None) -> Non
     """실행 결과 → 규칙별 표 + 요약. 틀렸는지 사람이 본 것은 VERDICT, 한계는 LIMITS에 적는다."""
     rows = score(spec, raw)
     pct = lambda a, b: f"{a}/{b} ({round(100 * a / b)}%)" if b else "0/0"  # noqa: E731
-    by = {s: [r for r in rows if r["scope"] == s] for s in ("법", "기관", "과거형", "지킨 변형")}
+    by = {s: [r for r in rows if r["scope"] == s] for s in ("법", "기관", "지킨 변형")}
     control_bad = [(k, s) for k, c in raw["controls"].items() for s in c["signals"] if s.endswith(":미충족")]
     unexpected = [(r["id"], s) for r in rows for s in r["unexpected"]]
     tried = [r for r in rows if "cleared" in r]
@@ -154,10 +154,11 @@ def report(spec: dict, raw: dict, dest: Path, before: Path | None = None) -> Non
              "| 지표 | 값 |", "|---|---|",
              f"| 탐지율 · 법 규칙 | {pct(sum(r['detected'] for r in by['법']), len(by['법']))} |",
              f"| 탐지율 · 기관 규칙 | {pct(sum(r['detected'] for r in by['기관']), len(by['기관']))} |",
-             f"| 기관 규칙을 못 잡았지만 법 규칙으로 드러남 | {sum(bool(r['alt_detected']) and not r['detected'] for r in by['기관'])}건 |",
-             f"| 과거형 서술 (검사 없는 기관) | {pct(sum(r['detected'] for r in by['과거형']), len(by['과거형']))} |",
+             f"| 못 잡았지만 다른 신호로 드러남 (연구자 질문·법 규칙) | "
+             f"{sum(bool(r['alt_detected']) and not r['detected'] for r in rows)}건 |",
              f"| 헛경고 · 규칙을 지킨 변형 | {pct(sum(r['detected'] for r in by['지킨 변형']), len(by['지킨 변형']))} |",
-             f"| 대조군 미충족 판정 | {len(control_bad)}건 (아래, 틀렸는지 사람이 확인) |",
+             f"| 대조군 미충족 판정 | {len(control_bad)}건 · 사람 확인: " + " · ".join(
+                 f"{k} {sum(VERDICT.get(x, '확인 전').startswith(k) for x in control_bad)}" for k in ("틀림", "반쯤", "맞음", "확인 전")) + " |",
              f"| 함정의 기대 밖 새 경고 | {len(unexpected)}건 (아래) |",
              f"| 해소율 | {pct(sum(r['cleared'] for r in tried), len(tried))} (보완 문장을 넣고 다시 판정) |",
              f"| 해소 부작용 | 새 경고 {sum(len(r['side_effects']) for r in tried)}건 · 경로가 대조군과 다름 "
@@ -165,17 +166,18 @@ def report(spec: dict, raw: dict, dest: Path, before: Path | None = None) -> Non
     if before:
         old = json.loads(before.read_text(encoding="utf-8"))
         prev = {r["id"]: r for r in score(spec, old)}
-        lines += [f"## 1차({old.get('commit', '?')}) → 2차({raw.get('commit', '?')})", "",
-                  "| 구분 | 1차 | 2차 |", "|---|---|---|"]
-        for s in ("법", "기관", "과거형", "지킨 변형"):
+        lines += [f"## 기관 검사 전({old.get('commit', '?')}) → 이번({raw.get('commit', '?')})", "",
+                  "| 구분 | 전 | 이번 |", "|---|---|---|"]
+        for s in ("법", "기관", "지킨 변형"):
             same = [r for r in by[s] if r["id"] in prev]
             lines.append(f"| {s} {'헛경고' if s == '지킨 변형' else '탐지'} (같은 함정 {len(same)}건) | "
                          f"{sum(prev[r['id']]['detected'] for r in same)} | {sum(r['detected'] for r in same)} |")
         changed = [f"- {r['id']}: {'O' if prev[r['id']]['detected'] else 'X'} → {'O' if r['detected'] else 'X'}"
+                   + (f" — {CHANGE_NOTE[r['id']]}" if r["id"] in CHANGE_NOTE else "")
                    for r in rows if r["id"] in prev and prev[r["id"]]["detected"] != r["detected"]]
         new = [r["id"] for r in rows if r["id"] not in prev]
         lines += ["", *(changed or ["- 결과가 바뀐 함정 없음"])]
-        lines += [f"- 2차에 추가한 함정 {len(new)}건: {', '.join(new)}"] if new else []
+        lines += [f"- 이번에 추가한 함정 {len(new)}건: {', '.join(new)}"] if new else []
         lines.append("")
     lines += ["## 규칙별", "", "| 규칙 | 함정 | 기대 | 함정에서 그 규칙 | 탐지 | 다른 신호 | 경로 대조→함정 | 해소 |",
               "|---|---|---|---|---|---|---|---|"]
@@ -203,21 +205,33 @@ VERDICT: dict[tuple[str, str], str] = {  # (대조군·함정, 신호) → 사�
     ("R11-no-idmgmt", "R-12:미충족"): "맞음: 지운 문장에 대응표 분리 보관도 들어 있었음",
     ("PAST-done", "I-UOS-1:경고"): "추출 흔들림: 연구 유형(F01)을 대조군은 '관찰', 함정은 '기록 이용'으로 뽑아 심의면제 후보 여부가 갈림",
     ("cuk", "I-CUK-14:미충족"): "맞음: 대조군이 상담 비용 보호 조치를 적지 않음 (대조군은 I-CUK-1~6만 지키게 만들었다)",
-    ("cuk", "I-CUK-15:미충족"): "헛경고: 연락처를 받지 않는 익명 설문인데 '즉시 파기' 문구를 요구함 (낱말 검사라 연락처를 받는지 보지 않음)"}
+    ("cuk", "I-CUK-15:미충족"): "틀림(헛경고): 연락처를 받지 않는 익명 설문인데 '즉시 파기' 문구를 요구함 (낱말 검사라 연락처를 받는지 보지 않음)",
+    ("smc", "I-SMC-4:미충족"): ID_NEGATION, ("khmc", "I-KHMC-1:미충족"): ID_NEGATION,
+    ("uos", "I-UOS-6:미충족"): "틀림(헛경고): 받은 데이터를 쓰는 연구라 직접 모집이 없음. 연구 유형(F01)을 '관찰'로 뽑아 모집 연구 규정이 적용됨",
+    ("cmc", "I-CMC-9:미충족"): "반쯤 맞음: 누가 가명처리하는지는 적었지만('데이터팀이 가명처리한') 낱말이 달라 못 알아봄. 운영 방식·기밀 보호는 안 적음",
+    **{(b, f"{r}:미충족"): "맞음: 영문 제목이 없음" for b, r in (("khmc", "I-KHMC-4"), ("cmc", "I-CMC-4"), ("snuh", "I-SNUH-8"), ("uos", "I-UOS-8"))},
+    ("cmc", "I-CMC-5:미충족"): "맞음: 대상자 수 산출 근거가 없음", ("cmc", "I-CMC-8:미충족"): "맞음: 선정기준에 연령이 없음",
+    ("cmc", "I-CMC-10:미충족"): "맞음: 자료 보관·폐기 계획이 없음",
+    ("snuh", "I-SNUH-7:미충족"): "맞음: 연구기간을 날짜로만 적음 (서식은 'IRB 승인일로부터')",
+    ("snuh", "I-SNUH-9:미충족"): "맞음: 재식별을 시도하지 않는다는 서술이 없음",
+    ("snuh", "I-SNUH-10:미충족"): "맞음: 윤리성 확보 방안(개인정보보호법·생명윤리법 준수)이 없음",
+    ("snuh", "I-SNUH-11:미충족"): "맞음: 기록 보관 기간(3년)이 없음"}
+CHANGE_NOTE = {"I-KHMC-1-crf-ids": "c0e07c6부터 낱말 대신 F16으로 판정. 대조군도 F16 부정문 오류로 걸려 가르지 못함",
+               "PAST-done": "c0e07c6에서 서울시립대 과거형 검사(I-UOS-5)가 생김"}
 LIMITS = [
-    "- 가상 계획서를 규칙마다 1~3건씩 한 번만 돌렸다. 비율보다 무엇을 잡고 놓쳤는지가 요점이다.",
+    "- 가상 계획서를 규칙마다 1~4건씩 한 번만 돌렸다. 비율보다 무엇을 잡고 놓쳤는지가 요점이다.",
     "- 추출 오류가 판정을 바꾼다.",
-    "  - 신약을 12주 투여한다고 써도 제목이 '후향적 의무기록 연구'면 임상시험 아님(F10)으로 뽑아 경로 A로 간다 (T1).",
-    "  - '○○ 대신 연구번호를 쓴다'의 ○○를 기록하는 식별자로 뽑아, 규칙을 지킨 계획서가 심의면제 불가(E3)가 된다 (대조군 smc·khmc).",
-    "  - 받은 조사 데이터를 쓰는 연구의 유형이 '관찰'과 '기록 이용' 사이에서 흔들려 심의면제 후보 여부가 갈린다 (uos). "
-    "그래서 I-UOS-2는 전제가 서지 않아 시험하지 못했다.",
-    "- 사실 F06 하나에 결합과 반출이 묶여 있다. 반출만 하는 계획서에도 결합 절차(R-13) 경고가 뜬다 (대조군 cmc·snuh).",
+    "  - 신약을 12주 투여한다고 써도 제목이 '후향적 의무기록 연구'면 임상시험 아님(F10)으로 뽑는다. "
+    "55f6518부터는 연구 유형이 '중재'면 연구자에게 한 번 더 묻는다 (T1 판단불가).",
+    "  - '○○ 대신 연구번호를 쓴다'의 ○○를 기록하는 식별자(F16)로 뽑는다. 규칙을 지킨 대조군이 심의면제 불가(E3)와 "
+    "CRF 식별자 금지 위반(I-SMC-4·I-KHMC-1)으로 나와서, 이 두 기관의 CRF 함정은 대조군과 가르지 못했다. 부정문이 없는 대조군(smc2)에서는 잡았다.",
+    "  - 받은 조사 데이터를 쓰는 연구의 유형이 '관찰'과 '기록 이용' 사이에서 흔들린다 (uos). 심의면제 후보 여부가 갈리고, "
+    "'관찰'이면 직접 모집 연구 규정(I-UOS-6)이 헛걸린다. I-UOS-2는 전제(심의면제 후보)가 서지 않아 시험하지 못했다.",
     "- 기관 규정 검사는 낱말·정규식이다.",
-    "  - 알린 낱말만 있으면 위반해도 충족이 된다 (I-KHMC-1-code-and-name: 연구번호와 함께 이름도 적음).",
-    "  - 정규식에 없는 표현은 놓친다: 피동 과거 '진행되었다', 'ㅂ니다' 경어체 '드립니다'.",
-    "  - 규정을 지킨 표현을 위반으로 잡는다: 선행연구를 과거형으로 소개한 문장, '만 19~24세'의 '24세'. "
-    "연락처를 받지 않는 설문에도 '즉시 파기' 문구를 요구한다 (I-CUK-15).",
-    "- 조건만 맞으면 늘 뜨는 기관 안내(I-SMC-4·I-AMC-1)는 위반 여부를 보지 않아 함정과 대조군을 가르지 못한다. 과거형 검사는 가톨릭대에만 있다.",
+    "  - 과거형 검사는 선행연구 문장을 빼려고 '연구에서'가 든 문장을 건너뛴다. 그래서 '본 연구에서는 ~을 실시하였다'를 놓친다.",
+    "  - 알린 낱말은 뜻을 보지 않는다. 같은 내용을 다른 말로 적으면 못 알아본다 (I-CMC-9).",
+    "- 조건만 맞으면 늘 뜨는 기관 안내(I-AMC-1)는 위반 여부를 보지 않아 함정과 대조군을 가르지 못한다.",
+    "- 대조군의 기관 규정 미충족은 대부분 맞는 지적이다. 대조군이 요약 계획서라 영문 제목·산출 근거·보관 기간 같은 서식 칸을 적지 않았다.",
     "- 해소는 보완 문장을 넣고 다시 돌렸을 때 경고가 풀리는지만 본다. 대부분 낱말 검사라 문장만 넣으면 풀린다. 내용이 맞는지는 사람이 본다."]
 
 
