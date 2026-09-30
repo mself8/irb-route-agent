@@ -3,11 +3,13 @@
 실행: python scripts/make_samples.py   (규칙이나 사실 목록이 바뀌면 다시 돌린다)
 """
 import json
+import os
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
+os.environ.setdefault("LLM", "0")  # 샘플은 모델 없이 틀 문장으로 만든다 (재현 가능하게)
 
 from agent.nodes import judge, write  # noqa: E402
 from agent.state import FACT_LABELS  # noqa: E402

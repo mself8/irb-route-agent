@@ -3,6 +3,7 @@
 지금은 틀 문장이다. TODO: LLM으로 문장을 다듬되, 인용과 근거 검사는 그대로 통과해야 출력한다.
 """
 from ..state import GraphState
+from .read import _impl
 
 # (나) 계획서에 정보가 없을 때 연구자에게 물을 문장과 선택지. 선택지가 없으면 글로 적는다
 ASK = {
@@ -49,8 +50,23 @@ def abstain(state: GraphState) -> dict:
                         f"{asked}의 판단을 요청드립니다. (참고: {r['result_detail']})")
             items.append({"rule_id": r["rule_id"], "kind": "가",
                           "reason": f"{r['abstain_reason']} {REASON[r['abstain_reason']]} · {r['requirement']}",
-                          "question": question, "cites": cites})
-    return {"abstain": items}
+                          "question": question, "cites": cites, "_basis": r["basis"]})
+    return {"abstain": _polish(items, state)}
+
+
+def _polish(items: list[dict], state: GraphState) -> list[dict]:
+    """(가) 질문을 AI로 다듬는다(agent/phrasing.py가 있을 때). 검사를 통과하지 못한 문장은 틀 문장을 그대로 쓴다."""
+    impl = _impl("phrasing")
+    asked = [i for i in items if i["kind"] == "가"]
+    if impl and asked:
+        texts = impl.polish([{**i, "basis": i["_basis"]} for i in asked],
+                            state.get("masked_text", ""), state.get("confirmed_facts", []))
+        for item, text in zip(asked, texts):
+            if text:
+                item["question"] = text
+    for item in items:
+        item.pop("_basis", None)
+    return items
 
 
 def report(state: GraphState) -> dict:

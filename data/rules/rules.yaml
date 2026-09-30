@@ -62,7 +62,7 @@
 - id: R-06
   team_id: R-06
   gate: DRB 사전 체크
-  requirement: 기관 지침에 따른 위험도 조정
+  requirement: 기관 지침에 따라 가명정보 위험도를 조정해야 하는가
   type: 판단불가(③)
   basis: {law: 가명정보 처리 가이드라인 (개인정보보호위원회 2026.03.), article: 인쇄 38쪽 사례별 위험도 조정, text: "개별 사례에 따라 실질적 위험이 다를 수 있으므로 기본 위험도 판단 이후, 다음 요소를 고려해 최종 위험도를 상향･하향 조정할 수 있음", checked_at: "2026-09-30", url: "https://www.pipc.go.kr/np/cop/bbs/selectBoardArticle.do?bbsId=BS217&mCode=G010030000&nttId=11931"}
 
@@ -154,7 +154,7 @@
 - id: R-09
   team_id: R-09
   gate: 심의면제
-  requirement: 심의면제 여부는 관할 기관위원회가 확인한다
+  requirement: 이 연구가 심의면제 대상에 해당하는가 (확인은 관할 기관위원회)
   type: 판단불가(①)
   basis: {law: 생명윤리법, article: 제15조 ②, text: "제1항에도 불구하고 연구대상자 및 공공에 미치는 위험이 미미한 경우로서 국가위원회의 심의를 거쳐 보건복지부령으로 정한 기준에 맞는 연구는 기관위원회의 심의를 면제할 수 있다.", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률/제15조"}
 
