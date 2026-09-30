@@ -29,6 +29,10 @@ EXEMPT_SUFFIX = {"yes": " · 심의면제 신청 후보", "no": " · 심의", "u
 # 가명정보 처리 가이드라인(2026.03.) 인쇄 48쪽 위험도별 적정성 검토 방식
 REVIEW = {"저위험": "담당자 검토", "중위험": "내부 심의(2인 이상)", "고위험": "적정성 검토위원회(3인 이상)"}
 ID_LABEL = {"F16": "식별자", "F17": "연구용 번호", "F18": "대응표 보관"}
+# 연구용 번호·대응표 서술이 계획서에 실제로 있는지 원문에서 본다. 추출 모델이 빈칸을 추정으로 채워도 R-11·R-12가 빠지지 않게 한다
+TOLD = {"F17": ("연구번호", "연구용 번호", "연구 번호", "식별코드", "식별 코드", "번호로 대체", "코드로 대체", "번호를 부여", "코드를 부여",
+                "일련번호"),
+        "F18": ("대응표", "매핑", "매칭", "연결표", "연결 정보", "추가정보", "키 테이블")}
 
 # 사실 값 정리: 화면에서 손으로 고친 값이나 표현이 달라도 규칙이 같은 뜻으로 읽게 한다
 NONE_WORDS = {"", "없음", "아니오", "아니요", "해당 없음", "없다"}
@@ -84,8 +88,10 @@ def _facts(state: GraphState) -> dict:
 
 
 def _written(state: GraphState) -> set[str]:
-    """계획서에 적혀 있던 사실. ③이 뽑은 상태로 본다(연구자가 ④·⑨에서 채운 값은 계획서에는 없다)."""
-    return {x["key"] for x in state.get("facts") or state.get("confirmed_facts", []) if x.get("status") != "not_found"}
+    """계획서에 적혀 있던 사실. ③이 뽑은 상태로 보되(연구자가 ④·⑨에서 채운 값은 계획서에는 없다), 연구용 번호·대응표는 원문 낱말도 확인한다."""
+    text = state.get("masked_text", "")
+    found = {x["key"] for x in state.get("facts") or state.get("confirmed_facts", []) if x.get("status") != "not_found"}
+    return {k for k in found if k not in TOLD or not text or any(w in text for w in TOLD[k])}
 
 
 def _yes(v) -> bool:

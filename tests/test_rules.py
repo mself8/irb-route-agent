@@ -233,6 +233,14 @@ def test_submission_fixes():
     assert "신규심의로 전환할 수 있습니다" in fix["R-11"]["warning"] and told["schedule"]["default"] == 1  # R-12 → 보완 1회
     assert any("R-11" in m for m in told["schedule"]["missing"])
     assert any(h["key"] == "F03" and "R-11" in h["note"] for h in told["highlights"])  # 서술이 없으면 데이터 형태 문장에 표시
+    guessed = samples.load("sample3_nokey")["pending"]           # 추출 모델이 대응표를 추정으로 채워도(원문에 없음) 경고가 뜬다
+    facts = [{**f, **({"value": "예", "status": "conflict"} if f["key"] == "F17" else {}),
+              **({"value": "데이터팀·제3자", "status": "conflict"} if f["key"] == "F18" else {})} for f in guessed["facts"]]
+    state = {"institution_name": "가상대학교병원", "target_start_date": "2026-12-01", "today": "2026-09-30",
+             "masked_text": guessed["masked_text"], "facts": facts, "confirmed_facts": facts, "extra_inputs": {}}
+    for step in (judge.institution, judge.gates):
+        state = {**state, **step(state)}
+    assert {"R-11", "R-12"} <= ids(state, "미충족")
     pi = run({"F18": "연구책임자"})                                  # 가명정보인데 연구자가 대응표 보유 → R-12
     assert "연구책임자" in next(s for s in pi["suggestions"] if s["rule_id"] == "R-12")["warning"]
     assert "R-13" in ids(run({"F06": "예"}), "미충족")               # 결합인데 결합전문기관 서술 없음
