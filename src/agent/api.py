@@ -13,9 +13,9 @@ from functools import lru_cache
 
 from langgraph.types import Command
 
-from . import samples
+from . import samples, submit
 from .nodes.judge import compare_table
-from .state import FACT_LABELS, Pending, Result
+from .state import FACT_LABELS, Pending, Result, Submission
 
 FAKE = os.getenv("FAKE", "1") == "1"
 
@@ -74,10 +74,35 @@ def rejudge(run_id: str, extra_inputs: dict) -> Result:
     # ④가 이 값을 확정한 것으로 기록하고 ⑤부터 다시 돌린다
     _graph().update_state(
         cfg,
-        {"confirmed_facts": facts, "extra_inputs": {**v.get("extra_inputs", {}), **extra_inputs}},
+        {"confirmed_facts": facts, "extra_inputs": {**v.get("extra_inputs", {}), **extra_inputs},
+         "submit_requested": False, "submission": None},  # 다시 판정하면 제출 준비는 처음부터
         as_node="step4_confirm",
     )
     _graph().invoke(None, cfg)
+    return _result(run_id)
+
+
+def request_submission(run_id: str, checklist: dict[str, bool]) -> Result:
+    """⑪ 제출 준비. 조건을 확인하고, 통과하면 모의 e-IRB에 채운 뒤 최종 제출 앞에서 멈춘다(submission.status로 알 수 있다)."""
+    if FAKE:
+        result = confirm(run_id, [])
+        result.submission = Submission(**submit.preview(result.model_dump(), checklist))
+        return result
+    cfg = _cfg(run_id)
+    # 그래프를 처음부터 다시 돌리지 않는다(추출 재호출 없음). ⑩ 다음부터 잇는다
+    _graph().update_state(cfg, {"submit_requested": True, "checklist": checklist, "submission": None},
+                          as_node="step10_report")
+    _graph().invoke(None, cfg)
+    return _result(run_id)
+
+
+def approve_submission(run_id: str, approved: bool) -> Result:
+    """⑪ 사람의 최종 승인. True면 최종 제출을 눌러 접수번호를 받고, False면 취소한다."""
+    if FAKE:
+        result = confirm(run_id, [])
+        result.submission = Submission(**submit.preview(result.model_dump(), {}))
+        return result
+    _graph().invoke(Command(resume={"approved": approved}), _cfg(run_id))
     return _result(run_id)
 
 
@@ -98,4 +123,5 @@ def _result(run_id: str) -> Result:
         masked_text=v.get("masked_text", ""),
         venue=v.get("venue"),
         compare=compare_table(),
+        submission=v.get("submission"),
     )

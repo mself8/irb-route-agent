@@ -6,6 +6,7 @@ from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph import END, START, StateGraph
 from langgraph.types import interrupt
 
+from . import submit
 from .nodes import judge, read, write
 from .state import GraphState
 
@@ -37,5 +38,11 @@ def build_graph():
     g.add_edge(START, names[0])
     for a, b in zip(names, names[1:]):
         g.add_edge(a, b)
-    g.add_edge(names[-1], END)
+    # ⑪ 제출 도우미: 제출 준비를 눌렀을 때만 (api.request_submission). 조건을 못 넘으면 바로 끝, 넘으면 승인에서 멈춘다
+    g.add_node("step11_prepare", submit.prepare)
+    g.add_node("step11_approve", submit.approve)
+    g.add_conditional_edges(names[-1], lambda s: "step11_prepare" if s.get("submit_requested") else END)
+    g.add_conditional_edges("step11_prepare",
+                            lambda s: "step11_approve" if (s.get("submission") or {}).get("status") == "awaiting_approval" else END)
+    g.add_edge("step11_approve", END)
     return g.compile(checkpointer=InMemorySaver())

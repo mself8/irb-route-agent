@@ -171,6 +171,20 @@ class ReportSentence(BaseModel):
     refs: list[str]
 
 
+class Submission(BaseModel):
+    """⑪ 제출 도우미. blocked(조건 미충족) → awaiting_approval(모의 사이트에 채우고 최종 제출 앞에서 멈춤) → submitted/cancelled.
+    preview는 예시 모드(FAKE=1): 게이트와 필드 표만 보여 주고 제출하지 않는다."""
+    status: Literal["blocked", "awaiting_approval", "submitted", "cancelled", "preview"]
+    venue: Optional[str] = None
+    blockers: list[str] = []
+    fields: list[dict] = []                    # [{표준 항목, 기관 칸, 값}]
+    files: list[str] = []
+    screenshot: Optional[str] = None           # /tmp에 둔 캡처 (레포에 넣지 않는다)
+    receipt: Optional[str] = None              # 모의 사이트 접수번호
+    email_draft: Optional[str] = None          # 사무국 메일 초안 (보내지 않고 복사만)
+    message: Optional[str] = None
+
+
 class Result(BaseModel):
     """confirm()·rejudge()가 돌려준다. 결과 화면(S3~S8)은 이것만 읽는다."""
     run_id: str
@@ -187,6 +201,7 @@ class Result(BaseModel):
     masked_text: str = ""                      # 노란색 표시를 그릴 가린 계획서
     venue: Optional[Venue] = None              # 관할 위원회의 기관 층 (제출 창구·기관 규칙·서식 항목)
     compare: list[dict] = []                   # 서식 표준화: 표준 서류·계획서 항목별로 기관마다 다른 서식 이름
+    submission: Optional[Submission] = None    # ⑪ 제출 도우미 (제출 준비를 눌렀을 때만)
     notice: str = NOTICE
 
 
@@ -212,3 +227,6 @@ class GraphState(TypedDict, total=False):
     suggestions: list[dict]
     highlights: list[dict]
     venue: dict
+    submit_requested: bool                     # ⑪ 제출 준비를 눌렀는가 (끝나면 지운다)
+    checklist: dict                            # ⑪ 서류별 준비됨 체크
+    submission: dict
