@@ -56,5 +56,9 @@ pytest                        # 합치기 전에
 
 - AI 코딩 도구: Claude Code (Anthropic, Claude Opus 5.5) — 코드 뼈대 작성 보조
 - 라이브러리: Streamlit 1.64.0 (Apache-2.0), LangGraph 1.2.12 (MIT), Pydantic 2.13.5 (MIT), PyYAML 6.0.3 (MIT), pytest (MIT)
-- LLM: 모델이 정해지면 이름·버전을 적습니다.
-- 데이터: `data/samples/`의 계획서 2건은 팀이 만든 가상 자료입니다. 공공 데이터는 추가하는 대로 URL과 확인일을 적습니다.
+- LLM: Qwen3.8-27B-FP8 (Qwen, Hugging Face `Qwen/Qwen3.8-27B-FP8`, 리비전 017b9c7, Apache-2.0)
+- LLM 서빙: vLLM 0.25.1 (Apache-2.0), 로컬 GPU(RTX A6000 2장). 계획서가 서버 밖으로 나가지 않습니다.
+- 법령 원문 (국가법령정보센터 law.go.kr, 확인일 2026-09-29): 생명윤리 및 안전에 관한 법률·시행규칙, 개인정보 보호법, 약사법
+- 가이드라인: 보건의료데이터 활용 가이드라인 2025.12 (보건복지부·개인정보보호위원회, https://www.mohw.go.kr/boardDownload.es?bid=0003&list_no=1488471&seq=1), 공용기관생명윤리위원회 운영기관 안내 (https://public.irb.or.kr/)
+- 판정 규칙표(`data/rules/rules.yaml`)의 원문은 팀이 본선 전(09-29)에 모은 사전 조사 자료에서 옮겼습니다.
+- 데이터: `data/samples/`의 계획서 2건과 `data/lists/demo_institutions.csv`의 기관은 팀이 만든 가상 자료입니다. 공공 데이터는 추가하는 대로 URL과 확인일을 적습니다.
