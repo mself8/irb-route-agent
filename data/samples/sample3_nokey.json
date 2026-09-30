@@ -435,18 +435,21 @@
       {
         "doc": "DRB 심의 신청서",
         "level": "기관",
-        "source": "기관 DRB 서식 (기관확인)"
+        "source": "기관 DRB 서식 (기관확인)",
+        "to": "DRB"
       },
       {
         "doc": "심의 또는 심의면제 신청서 (위원회 확인 후 결정)",
         "level": "기관",
-        "source": "관할 IRB 서식"
+        "source": "관할 IRB 서식",
+        "to": "IRB"
       },
       {
         "doc": "서면동의 면제 사유서",
         "level": "기관",
         "source": "관할 IRB 서식",
-        "basis": "C3"
+        "basis": "C3",
+        "to": "IRB"
       }
     ],
     "schedule": {

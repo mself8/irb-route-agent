@@ -397,7 +397,13 @@ def _fast(state: GraphState) -> bool:
     d, venue = state["decision"], _venue(state)
     return (d["drb"] is True and d["exempt"] == "yes" and d["irb"] == "own" and not d["pending"]
             and _facts(state).get("F06") == "아니오" and not _joint(state) and not _holder(state)
-            and not (venue and (venue.get("exempt_regular") or venue.get("drb_order") == "irb_first")))
+            and not (venue and (venue.get("exempt_regular") or venue.get("drb_order", "drb_first") != "drb_first")))
+
+
+def _drb_profile(state: GraphState) -> dict | None:
+    """DRB를 둔 기관의 프로필: 데이터를 가진 기관이 따로 있으면 그 기관, 아니면 관할 IRB 기관."""
+    holder = _holder(state)
+    return _profile(holder) if holder else _venue(state)
 
 
 def _holder(state: GraphState) -> str | None:
@@ -487,9 +493,9 @@ def route(state: GraphState) -> dict:
     joint = []
     if _joint(state):  # 공동연구: 기본은 기관마다 심의, 한 곳 선정·공용위원회는 합의 (prep 케이스 3)
         joint, trace = ["공동 수행기관 IRB (기본은 기관마다 · 한 곳 선정은 합의)"], [*trace, "J10"]
-    venue = _venue(state)
-    if drb and venue and venue.get("drb_order") == "irb_first":  # 기관 안내: IRB 승인 → 데이터 수집 → DRB (D7 '순서는 기관마다')
-        steps = [irb, f"{drb[0].split(' (')[0]} (IRB 승인·데이터 수집 뒤 신청 · {venue['short']} 안내)"]
+    dp = _drb_profile(state) if drb else None
+    if dp and dp.get("drb_order") == "irb_first":  # DRB를 둔 기관의 안내: IRB 승인 → DRB (D7 '순서는 기관마다')
+        steps = [irb, f"{drb[0].split(' (')[0]} (IRB 승인 뒤 신청 · {dp['short']} 안내)"]
     else:
         steps = [*drb, irb]
     order = [*range(1, len(steps) + 1), *[steps.index(irb) + 1] * len(joint)]  # 공동 수행기관 IRB는 소속 IRB와 같은 차례에 따로 낸다
@@ -503,36 +509,41 @@ def docs_schedule(state: GraphState) -> dict:
     fired = {r["rule_id"] for r in state["judgments"] if r["result"] != "미충족"}
     docs, venue = [], _venue(state)
     if route_["route"] == "임상시험":
-        docs.append({"doc": "임상시험계획 승인 신청서 (식약처)", "level": "법정", "basis": "T1"})
+        docs.append({"doc": "임상시험계획 승인 신청서 (식약처)", "level": "법정", "basis": "T1", "to": "식약처"})
     if d["drb"] is True:
         holder = _holder(state)
         docs.append({"doc": "DRB 심의 신청서" + (f" ({holder})" if holder else ""), "level": "기관",
-                     "source": f"{holder or '기관'} DRB 서식 (기관확인)"})
+                     "source": f"{holder or '기관'} DRB 서식 (기관확인)", "to": "DRB"})
     if route_["route"] in ("A", "B", "C") and venue:  # 기관 프로필이 있으면 그 기관의 서식 이름으로 낸다
         needed = {"데이터승인": d["drb"] is True or _holds(state, "received_data"), "면제점검": d["exempt"] == "yes",
                   "모집문서": _facts(state).get("F01") not in ("기록 이용", None)}
         std = institutions()["docs"]
-        docs += [{"doc": _doc_name(v), "level": "기관", "source": f"{venue['short']} 서식 · 표준 서류: {std[k]}"}
+        dp = _drb_profile(state)
+        later = dp is not None and dp.get("drb_order") == "irb_first"  # DRB가 IRB 뒤인 기관은 DRB 승인서를 나중에 낸다
+        docs += [{"doc": _doc_name(v), "level": "기관", "source": f"{venue['short']} 서식 · 표준 서류: {std[k]}",
+                  "to": "IRB 이후" if k == "데이터승인" and later else "IRB"}
                  for k, v in venue["docs"].items()
                  if (_holds(state, v["when"]) if isinstance(v, dict) else needed.get(k, True))]
         if _fast(state) and "데이터승인" not in venue["docs"]:  # 빠른 길은 DRB 승인서를 붙여 면제를 신청한다
-            docs.append({"doc": "DRB 승인서 (IRB 심의면제 신청에 첨부)", "level": "기관", "source": "가이드라인 2025.12 표준절차", "basis": "D7"})
+            docs.append({"doc": "DRB 승인서 (IRB 심의면제 신청에 첨부)", "level": "기관", "source": "가이드라인 2025.12 표준절차",
+                         "basis": "D7", "to": "IRB"})
     elif route_["route"] in ("A", "B", "C"):
         attach = " (DRB 승인서 첨부)" if d["drb"] is True and not d["pending"] and d["irb"] == "own" else ""
         doc = {"yes": f"심의면제 신청서{attach}", "no": "심의 신청서 · 연구계획서",
                "unknown": "심의 또는 심의면제 신청서 (위원회 확인 후 결정)"}[d["exempt"]]
-        docs.append({"doc": doc, "level": "기관", "source": "관할 IRB 서식"})
+        docs.append({"doc": doc, "level": "기관", "source": "관할 IRB 서식", "to": "IRB"})
     if route_["route"] in ("A", "B", "C"):
         if _joint(state):
             docs.append({"doc": "공동 수행기관 IRB 심의 신청서 (기관마다)", "level": "기관", "source": "각 수행기관 IRB 서식",
-                         "basis": "J10"})
+                         "basis": "J10", "to": "공동 수행기관 IRB"})
     if d["irb"] == "contract":
-        docs.append({"doc": "기관생명윤리위원회 업무위탁 협약서 (시행규칙 별지 제3호서식)", "level": "법정", "basis": "J6"})
+        docs.append({"doc": "기관생명윤리위원회 업무위탁 협약서 (시행규칙 별지 제3호서식)", "level": "법정", "basis": "J6",
+                     "to": "위탁 협약"})
     if "D3" in fired and _yes(_facts(state).get("F06")):
-        docs.append({"doc": "가명정보 결합 신청서 (결합전문기관)", "level": "법정", "basis": "D3"})
-    waiver_in_venue = venue is not None and "면제" in _doc_name(venue["docs"].get("동의서류", ""))
+        docs.append({"doc": "가명정보 결합 신청서 (결합전문기관)", "level": "법정", "basis": "D3", "to": "결합전문기관"})
+    waiver_in_venue = venue is not None and any(w in _doc_name(venue["docs"].get("동의서류", "")) for w in ("면제", "불필요"))
     if "C3" in fired and _facts(state).get("F11") == "동의면제 요청" and not waiver_in_venue:  # 기관 서식에 면제 서류가 있으면 그 칸으로
-        docs.append({"doc": "서면동의 면제 사유서", "level": "기관", "source": "관할 IRB 서식", "basis": "C3"})
+        docs.append({"doc": "서면동의 면제 사유서", "level": "기관", "source": "관할 IRB 서식", "basis": "C3", "to": "IRB"})
     schedule = _schedule(state)
     if _joint(state) and route_["route"] in ("A", "B", "C"):
         schedule["missing"] = [*schedule["missing"], "공동 수행기관 IRB 회의일·접수 마감: 공개 일정 데이터 없음 → 기관마다 확인"]

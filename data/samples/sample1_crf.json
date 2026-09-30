@@ -319,13 +319,15 @@
       {
         "doc": "심의 신청서 · 연구계획서",
         "level": "기관",
-        "source": "관할 IRB 서식"
+        "source": "관할 IRB 서식",
+        "to": "IRB"
       },
       {
         "doc": "서면동의 면제 사유서",
         "level": "기관",
         "source": "관할 IRB 서식",
-        "basis": "C3"
+        "basis": "C3",
+        "to": "IRB"
       }
     ],
     "schedule": {

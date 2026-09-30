@@ -56,4 +56,5 @@ rules:
     level: 안내
     warning: 심의료 납부가 확인돼야 연구계획서를 접수합니다. 연구자 주도 연구는 연구비 2천만원 초과 30만원·이하 10만원이고 심의면제 연구는 면제입니다. 정규회의 안건은 회의 2주 전에 접수를 마감합니다.
     source: HRPP 심의 절차 안내(https://hrpp.snuh.org/hrpp/content.do?key=2608270001) · 2026년도 IRB 정규회의 일정 공지
+drb_order: irb_first   # CDW 가명정보 연구는 IRB 심의 뒤 DRB 추가 심의 (I-SNUH-1)
 schedule: {kind: none, note: "2026 정규회의(위원회 8개, 각 월 1회) 날짜 공개·회의 개최 예정일 2주 전 접수 마감(심의의뢰서 제출·심의료 납부 완료 안건만, 최대 안건 수를 넘으면 다음 회차에 배정될 수 있음) → data/schedules/snuh_irb_2026.csv · 결과 통보 기한은 공개 페이지에서 확인 못 해 보완 일정 계산 불가"}

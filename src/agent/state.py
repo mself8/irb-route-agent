@@ -106,6 +106,7 @@ class DocItem(BaseModel):
     level: Literal["법정", "기관"]
     basis: Optional[str] = None                # 법정 서류의 근거 규칙 ID
     source: Optional[str] = None               # 기관 서류의 출처 (안내문서 쪽수 등)
+    to: Optional[str] = None                   # 어디에 내는가: IRB · DRB · 결합전문기관 · 공동 수행기관 IRB · 위탁 협약 · 식약처 · IRB 이후
 
 
 class ScheduleScenario(BaseModel):

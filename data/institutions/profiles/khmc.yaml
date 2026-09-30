@@ -1,7 +1,7 @@
 id: khmc
 name: 경희대학교병원 임상시험심사위원회(IRB)
 short: 경희대병원
-aliases: [경희대병원, 경희대학교병원, 경희의료원, 경희대학교병원 IRB, 경희대병원 IRB, 경희대학교병원 임상시험심사위원회]
+aliases: [경희대병원, 경희대학교병원, 경희대학교병원 IRB, 경희대병원 IRB, 경희대학교병원 임상시험심사위원회]
 submit: R-BAY e-IRB(r-bay.co.kr, 경희대학교병원 IRB)에 로그인해 '신청보고작성 → 신규계획'으로 신청 (경희의료원 홈페이지 'e-IRB' 링크와 같은 곳)
 source: 경희대병원 IRB 공지(초기심의·심의면제 제출서류 안내, 2026년도 정규심의 일정, SOP Ver.9.5·9.6·9.7 개정 안내, 심사비 안내, 심의 접수 서류 검토 안내) · 경희의료원 임상의학연구소 IRB 소개 (https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09 · https://www.khmc.or.kr/kr/research-education/research-institution/cri_organization1.do, 확인 2026-09-30)
 plan_form: 연구계획서 (요약 포함) — 서식 칸 이름은 공개 페이지에서 확인 못 함
@@ -63,4 +63,5 @@ rules:
     level: 안내
     warning: "의료영상(PACS) 연구 데이터를 비식별화해 받으면 2026-09-01 신청분부터 산정 기준에 따라 비용이 부과됩니다(경희의료원 의료영상정보관리규정)."
     source: 경희대병원 IRB 공지 「연구 데이터 비식별화 비용 산정 안내」(2026-08-28, 첨부 pdf)
+drb_order: unknown   # IRB와 DRB의 순서는 공개 안내 없음
 schedule: {kind: none, note: "2026 정규심의 날짜·마감은 공개(패널 A·B·C 월 3회, 회의 14일 전 마감)이나 결과 통보 기한이 비공개라 역산 안 함 · 신속심의는 정해진 심의일 없이 행정검토 뒤 14일 이내 처리 · 보완 답변서는 처음 심의한 패널의 정규심의 14일 전까지"}

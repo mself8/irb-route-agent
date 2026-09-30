@@ -283,7 +283,8 @@ def test_institution_layer():
     assert "I-UOS-2" not in {s["rule_id"] for s in run(IDENTIFIED, "서울시립대학교")["suggestions"]}  # 허가 공문은 면제 문맥만
     assert run({}, "서울시립대학교", target="2026-12-28")["schedule"]["scenarios"][0]["submit_by"] == "2026-11-23"  # 연말도 계산
     cmc = run({"F12": ["서울성모병원"]}, "서울성모병원")  # 명단에 없는 별칭도 기관 프로필이 있으면 IRB가 있는 기관
-    assert cmc["venue"]["id"] == "cmc" and cmc["institution"]["irb_exists"] is True and cmc["route"]["fast_track"]
+    assert cmc["venue"]["id"] == "cmc" and cmc["institution"]["irb_exists"] is True
+    assert not cmc["route"]["fast_track"]                              # IRB·DRB 순서를 공개하지 않은 기관은 7일 빠른 길을 켜지 않는다
     assert "I-CMC-1" not in {s["rule_id"] for s in cmc["suggestions"]}  # IRB 전 DRB 승인은 반출 연구 항목
     export = run({"F12": ["서울성모병원"], "F06": "예"}, "서울성모병원")
     assert "I-CMC-1" in {s["rule_id"] for s in export["suggestions"]}
@@ -308,8 +309,20 @@ def test_data_holder_differs():
     assert away["route"]["committees"][0].startswith("데이터 보유 기관 DRB · 가상대학교병원")
     assert any(d["doc"] == "DRB 심의 신청서 (가상대학교병원)" for d in away["documents"])
     assert any("데이터를 가진 기관(가상대학교병원)" in s["text"] for s in away["report"])
-    home = run({"F12": ["질병관리청"]}, "질병관리청")            # 같은 기관이면 예전처럼 빠른 길
+    home = run({})                                                # 같은 기관(프로필 없는 가상 기관)이면 가이드라인 표준절차의 빠른 길
     assert home["route"]["fast_track"] and home["route"]["committees"][0].startswith("기관 DRB")
     alone = run({}, "없음")                                       # 소속 없는 연구자도 DRB는 데이터를 가진 기관
     assert alone["route"]["committees"][0].startswith("데이터 보유 기관 DRB · 가상대학교병원")
+
+
+def test_drb_order_follows_data_holder():
+    """DRB 순서는 DRB를 둔 기관(데이터 보유 기관)의 안내를 따른다 (10차 리뷰)."""
+    a = run({"F12": ["서울성모병원"]}, "삼성서울병원")            # 삼성 소속 + 성모 데이터 → 성모 DRB(순서 비공개), DRB 먼저
+    assert a["route"]["committees"][0].startswith("데이터 보유 기관 DRB · 서울성모병원") and "삼성서울병원 안내" not in str(a["route"])
+    b = run({"F12": ["삼성서울병원"]}, "서울성모병원")            # 성모 소속 + 삼성 데이터 → 삼성 안내대로 IRB 먼저
+    assert b["route"]["committees"][0].startswith("소속 기관 IRB") and "삼성서울병원 안내" in b["route"]["committees"][1]
+    smc = run({"F12": ["삼성서울병원"]}, "삼성서울병원")           # DRB가 IRB 뒤인 기관은 DRB 승인서를 IRB 이후에 낸다
+    assert {d["to"] for d in smc["documents"] if "DRB" in d["doc"] and "승인" in d["doc"]} <= {"IRB 이후"}
+    assert all(d.get("to") for d in smc["documents"])                  # 모든 서류에 어디에 내는지가 붙는다
+    assert {d["to"] for d in run({"F06": "예"})["documents"]} >= {"DRB", "IRB", "결합전문기관"}
 

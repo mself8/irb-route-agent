@@ -39,7 +39,7 @@ def test_profile_shape(path):
         assert isinstance(v, str) or (v.get("name") and ok_when(v["when"])), k
     for v in p.get("variants", []):                                     # 연구 유형·면제별 서식 변형
         assert ok_when(v["when"]) and set(v.get("docs", {})) <= set(STD["docs"]) and set(v.get("plan", {})) <= set(STD["plan"])
-    assert p.get("drb_order", "drb_first") in ("drb_first", "irb_first")
+    assert p.get("drb_order", "drb_first") in ("drb_first", "irb_first", "unknown")
     s = p["schedule"]
     assert s["kind"] in ("public", "csv", "none")
     if s["kind"] == "csv":
