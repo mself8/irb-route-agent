@@ -117,7 +117,11 @@ def _written(state: GraphState) -> set[str]:
 def _linked(state: GraphState) -> bool:
     """F06(결합·반출)이 '예'일 때 결합인지. 계획서에 결합 서술이 없으면 반출만 하는 것으로 본다(결합전문기관 절차 아님)."""
     text = state.get("masked_text", "")
-    return not text or any(w in text for w in ("결합", "연계", "링크"))
+    if not text:
+        return True
+    # '결합하지 않는다', '결합 없이'처럼 부정한 부분은 빼고 본다
+    said = re.sub(r"(?:결합|연계|링크)(?:은|을|는)?\s*(?:하지\s*않|없이|안\s*하)", "", text)
+    return any(w in said for w in ("결합", "연계", "링크"))
 
 
 def _yes(v) -> bool:
@@ -496,7 +500,8 @@ def _past_tense(state):
     """연구 행위를 이미 한 것처럼 쓴 문장('모집하였다', '분석했다', '진행되었다'). 선행연구·문헌 서술은 잡지 않는다."""
     text = state.get("masked_text", "")
     found = _sentences(text, rf"(?:{_ACTIONS})(?:하였|했|되었|됐)다")
-    return [(a, b) for a, b in found if not any(w in text[a:b] for w in ("선행", "이전 연구", "기존 연구", "문헌", "보고", "연구에서"))]
+    prior = ("선행", "이전 연구", "기존 연구", "문헌", "보고", "연구에서")  # 남의 연구를 인용한 문장. '본 연구에서'는 자기 연구라 잡는다
+    return [(a, b) for a, b in found if "본 연구" in text[a:b] or not any(w in text[a:b] for w in prior)]
 
 
 def _mixed_style(state):

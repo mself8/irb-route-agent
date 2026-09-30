@@ -385,3 +385,14 @@ def test_trap_findings_fixed():
     assert judge._mixed_style(st)                                      # '드립니다'도 경어체
     cuk = run({"F12": ["가톨릭대"], "F01": "설문·면담"}, "가톨릭대")  # 연락처를 받지 않으면 파기 문구를 요구하지 않는다
     assert "I-CUK-15" not in {r["rule_id"] for r in cuk["judgments"]}
+
+
+def test_trap_round3_fixes():
+    """함정 3차(cd99f5b)의 제안: '본 연구에서 ~하였다'는 과거형, '결합 없이 반출만'은 결합이 아니다."""
+    st = {"masked_text": "본 연구에서는 설문을 실시하였다. 선행 연구에서 불안을 조사하였다."}
+    past = [st["masked_text"][a:b] for a, b in judge._past_tense(st)]
+    assert any("본 연구" in s for s in past) and not any("선행" in s for s in past)
+    assert not judge._linked({"masked_text": "다른 기관 자료와 결합 없이 분석 결과만 외부로 반출한다."})
+    assert not judge._linked({"masked_text": "타 기관 데이터와 결합하지 않고 반출한다."})
+    assert judge._linked({"masked_text": "타 기관 데이터와 결합전문기관에서 결합한다."})
+
