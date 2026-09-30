@@ -13,12 +13,14 @@ LLM·네트워크 없이 몇 초 안에 돈다. 입력 파일이 없으면 그 �
 3. 멀쩡한 계획서 헛경고: 합성 2단계에서 같은 계획서의 1단계에 없던 미충족·경고가 뜬 것
 4. 판정: 2단계 판정 행을 같은 계획서의 1단계 판정 행(정답 사실 = 기준)과 비교. 일치율·기권율·선택적 정확도
 5. 사실 추출: 항목별 정확도(metrics.py의 fact_equal)·범주형 매크로 F1·목록형 집합 F1·있다/없다 판별
+   합성은 출처(시나리오 생성·CRIS 원본 변형)별로도 나눈다. 실제에 가까운 문장이 추출을 얼마나 바꾸는지 보려고
 6. 개인정보 가림: 심어 둔 가상 개인정보(pii_gold)를 지금 코드(agent.pii)로 다시 가려 정밀도·재현율
 결과: eval/results/standard_metrics.md (발표용 한 장), standard_metrics.json (숫자)
 """
 import argparse
 import json
 import math
+import re
 import subprocess
 import sys
 from collections import Counter, defaultdict
@@ -37,7 +39,9 @@ TYPES = ["중재", "관찰", "설문·면담", "기록 이용", "인체유래물
 FACTS = list(FACT_LABELS)
 CATEGORICAL = ["F01", "F02", "F03", "F04", "F05", "F06", "F09", "F10", "F11", "F14", "F17", "F18"]
 LISTS = ["F07", "F08", "F12", "F16"]
-VARIANTS = ["정면", "말바꾸기", "부정문", "경계"]
+VARIANTS = ["정면", "말바꾸기", "부정문", "경계", "기관 맥락"]
+CONTROLS = ["대조군", "지킨 변형"]  # 대조군 = 뼈대 그대로, 지킨 변형 = 규칙을 지키면서 문장만 바꾼 대조군 (variant가 있음)
+ORIGINS = ["시나리오 생성", "CRIS 원본 변형"]
 CHECKS = {"past_tense": "과거형", "mixed_style": "문체 섞임", "age_without_man": "만 나이", "sample_size_rationale": "대상자 수 근거",
           "period_before_review": "심의 전 시작", "recruit_doc": "모집 문건", "crf_identifiers": "CRF 식별자",
           "english_title": "영문 제목", "told": "알린 낱말"}
@@ -59,10 +63,14 @@ def prop(k: int, n: int) -> dict:
 
 
 def show(d: dict | None, count: bool = False) -> str:
-    """87% [81–91]. count면 뒤에 (k/n). n=0이면 —."""
+    """87% [81–91]. count면 뒤에 (k/n). n=0이면 —.
+    0%·100%로 반올림되지만 실제로는 아닌 값은 소수 한 자리(0.4%·99.6%). 구간은 하한 내림·상한 올림 ([100–100]이 되지 않게)."""
     if not d or not d["n"]:
         return "—"
-    s = f"{100 * d['p']:.0f}% [{100 * d['lo']:.0f}–{100 * d['hi']:.0f}]"
+    v = 100 * d["p"]
+    p = f"{v:.0f}"
+    p = f"{min(max(v, 0.1), 99.9):.1f}" if p in ("0", "100") and 0 < d["k"] < d["n"] else p
+    s = f"{p}% [{math.floor(100 * d['lo'] + 1e-9)}–{math.ceil(100 * d['hi'] - 1e-9)}]"
     return f"{s} ({d['k']}/{d['n']})" if count else s
 
 
@@ -104,18 +112,21 @@ def missing(*named) -> list[str]:
 def pairs(run: dict, checks: dict) -> list[dict]:
     """(계획서, 규칙) 쌍. 양성 = 함정이 뒤집은 규칙(expect), 음성 = 계획서가 지킨 규칙(satisfies).
     양성은 기대 상태가 나오면 걸림(미충족과 경고는 같게 센다). 음성은 alarm의 상태가 나오면 헛경고(alarm에 없는 규칙은 미충족·경고).
-    기관 규칙의 검사 종류는 그 규칙 함정의 check를 쓰고, 없으면 알린 낱말(told)로 본다."""
+    기관 규칙의 검사 종류는 그 규칙 함정의 check를 쓰고, 없으면 알린 낱말(told)로 본다.
+    대조군은 변형 이름과 상관없이 대조군(뼈대)과 지킨 변형 두 묶음으로만 나눈다."""
     alarm, out = run.get("alarm") or {}, []
     for c in run["cases"]:
         states = c.get("states") or {}
-        todo = [(r, True, FLAG if s in FLAG else {s}) for r, s in (c.get("expect") or {}).items() if c["kind"] == "trap"]
+        trap = c["kind"] == "trap"
+        todo = [(r, True, FLAG if s in FLAG else {s}) for r, s in (c.get("expect") or {}).items() if trap]
         todo += [(r, False, set(alarm.get(r, FLAG))) for r in c.get("satisfies") or []]
         for rule, positive, hit in todo:
             own = rule == c.get("rule")
             scope = (own and c.get("scope")) or ("기관" if rule.startswith("I-") else "법")
             check = ((own and c.get("check")) or checks.get(rule, "told")) if scope == "기관" else None
+            variant = (c.get("variant") or "기타") if trap else CONTROLS[bool(c.get("variant"))]
             out.append({"case": c["id"], "rule": rule, "positive": positive, "flagged": bool(set(states.get(rule, [])) & hit),
-                        "scope": scope, "check": check, "variant": c.get("variant") or ("기타" if c["kind"] == "trap" else "대조군")})
+                        "scope": scope, "check": check, "variant": variant})
     return out
 
 
@@ -132,7 +143,7 @@ def breakdown(ps: list[dict]) -> dict:
     """전체·법·기관·기관 검사 종류별·변형별."""
     out = {"전체": binary(ps)}
     for attr, known, name in (("scope", ["법", "기관"], str), ("check", list(CHECKS), lambda v: f"기관 · {CHECKS.get(v, v)}"),
-                              ("variant", VARIANTS + ["대조군"], lambda v: v if v == "대조군" else f"변형 · {v}")):
+                              ("variant", VARIANTS + CONTROLS, lambda v: v if v in CONTROLS else f"변형 · {v}")):
         for v in ordered({p[attr] for p in ps}, known):
             out[name(v)] = binary([p for p in ps if p[attr] == v])
     return out
@@ -232,11 +243,12 @@ def committee(run: dict) -> dict | None:
 
 
 def by_type(run: dict) -> dict:
-    """합성 계획서의 연구 유형(strata.type)별 경로 정확도."""
+    """합성 계획서의 연구 유형(strata["연구 유형"], 옛 이름 type)별 경로 정확도."""
     g = defaultdict(list)
     for c in run["cases"]:
         if c.get("route_expected"):
-            g[(c.get("strata") or {}).get("type") or "없음"].append(c.get("route") == c["route_expected"])
+            strata = c.get("strata") or {}
+            g[strata.get("연구 유형") or strata.get("type") or "없음"].append(c.get("route") == c["route_expected"])
     return {t: prop(sum(g[t]), len(g[t])) for t in ordered(g, TYPES)}
 
 
@@ -262,7 +274,11 @@ def route_section(t1, t2, s1, s2, m) -> tuple[list[str], dict, list[str]]:
         lines += [f"| {k} | {v['accuracy']['n']} | {show(v['accuracy'])} | {num(v['macro_f1'])} | {show(v['committee'])} |"
                   for k, v in data.items()]
         lines.append("")
-    synth = [(name, r) for name, r in (("1단계", s1), ("2단계", s2)) if r]
+    if s1:
+        wrong = Counter((a, b) for a, b in route_pairs(s1) if a != b)
+        data["합성 1단계 불일치"] = [[a, b, k] for (a, b), k in wrong.most_common()]
+        lines += ["합성 1단계 경로 불일치 (정답→엔진): " + (" · ".join(f"{a}→{b} {k}" for (a, b), k in wrong.most_common()) or "없음"), ""]
+    synth =[(name, r) for name, r in (("1단계", s1), ("2단계", s2)) if r]
     if synth:
         types = {name: by_type(r) for name, r in synth}
         data["합성 연구 유형별"] = types
@@ -310,7 +326,8 @@ def judgment_section(t1, t2, s1, s2) -> tuple[list[str], dict, list[str]]:
     for name, key in (("일치율", "accuracy"), ("기권율 (2단계 판단불가)", "abstain"), ("기권율 (1단계, 참고)", "abstain_stage1"),
                       ("선택적 정확도 (2단계가 판정한 것만)", "selective")):
         lines.append(f"| {name} | " + " | ".join(show(v[key]) for v in data.values()) + " |")
-    rules = sorted({r for v in data.values() for r in v["per_rule"]})
+    rules = sorted({r for v in data.values() for r in v["per_rule"]},  # I-CMC-3이 I-CMC-10보다 앞에 오게
+                   key=lambda r: [int(x) if x.isdigit() else x for x in re.split(r"(\d+)", r)])
     appendix = ["### 판정 일치율 · 규칙별 (비교 3건 이상)", "", *head("규칙"),
                 *(f"| {r} | " + " | ".join(show(v["per_rule"].get(r), True) for v in data.values()) + " |" for r in rules), ""]
     return lines + [""], data, appendix
@@ -405,7 +422,50 @@ def fact_section(t2, s2, m) -> tuple[list[str], dict, list[str]]:
     return lines, data, appendix + [""]
 
 
-# 개인정보 가림 --------------------------------------------------------------------------------------------------------------
+# 합성 출처별 ------------------------------------------------------------------------------------------------------------
+def origin(c: dict) -> str:
+    return (c.get("strata") or {}).get("origin") or "없음"
+
+
+def origin_section(s1: dict | None, s2: dict | None) -> tuple[list[str], dict]:
+    """합성 계획서를 출처(시나리오 생성·CRIS 원본 변형)별로 나눠 경로·위원회·헛경고·사실 추출을 비교한다."""
+    lines = ["## 합성 계획서 · 출처별", ""] + missing(("합성 1단계", s1), ("합성 2단계", s2))
+    if not (s1 or s2):
+        return lines, {}
+    part = lambda run, o: run and {**run, "cases": [c for c in run["cases"] if origin(c) == o]}  # noqa: E731
+    cols = {o: (part(s1, o), part(s2, o)) for o in ordered({origin(c) for r in (s1, s2) if r for c in r["cases"]}, ORIGINS)}
+    cols["합침"] = (s1, s2)
+    data = {}
+    for name, (r1, r2) in cols.items():
+        d = data[name] = {}
+        for stage, r in (("1단계", r1), ("2단계", r2)):
+            if r:
+                d[f"경로 {stage}"], d[f"위원회 {stage}"] = routes(route_pairs(r))["accuracy"], committee(r)
+        if r2:
+            d["사실"] = facts(stage_facts(r2))
+        if r1 and r2:
+            d["헛경고"] = false_warnings(r1, r2)
+    row = lambda name, f: f"| {name} | " + " | ".join(f(d) for d in data.values()) + " |"  # noqa: E731
+    fact = lambda d, key: (d.get("사실") or {}).get(key)  # noqa: E731
+    lines += ["CRIS 원본 변형은 실제 등록 연구(CRIS) 8건의 요약을 바꿔 만든 계획서라 문장이 실제에 가깝다. 시나리오 생성은 새로 지어낸 계획서다.", "",
+              "| 지표 | " + " | ".join(data) + " |", "|---" * (len(data) + 1) + "|"]
+    for stage in ("1단계", "2단계"):
+        if f"경로 {stage}" in data["합침"]:
+            lines += [row(f"경로 정확도 · {stage}", lambda d, s=stage: show(d.get(f"경로 {s}"), True)),
+                      row(f"위원회 종류 정확도 · {stage}", lambda d, s=stage: show(d.get(f"위원회 {s}"), True))]
+    if "헛경고" in data["합침"]:
+        lines += [row("헛경고가 1건 이상인 계획서 · 2단계", lambda d: show((d.get("헛경고") or {}).get("cases"), True)),
+                  row("계획서당 헛경고 (건) · 2단계", lambda d: num((d.get("헛경고") or {}).get("per_case")))]
+    if "사실" in data["합침"]:
+        lines += [row("사실 항목 정확도 · 2단계", lambda d: show(fact(d, "accuracy"), True)),
+                  row("범주형 매크로 F1 · 2단계", lambda d: num(fact(d, "macro_f1"))),
+                  row("목록형 집합 F1 · 2단계", lambda d: num((fact(d, "set") or {}).get("f1"))),
+                  row("있다/없다 정밀도 · 2단계", lambda d: show(fact(d, "found_precision"))),
+                  row("있다/없다 재현율 · 2단계", lambda d: show(fact(d, "found_recall")))]
+    return lines + [""], data
+
+
+# 개인정보 가림--------------------------------------------------------------------------------------------------------------
 def masking(cases: list[dict]) -> dict:
     """심어 둔 가상 개인정보(pii_gold)를 지금 코드로 다시 가린다. 정답 항목이 가린 글에서 사라지면 맞힘, 남으면 놓침.
     헛가림 = 계획서마다 그 종류로 가린 수 − 정답 항목이 사라진 자리 수 (0 아래는 0). 같은 이름을 두 번 가려도 헛가림이 아니다."""
@@ -469,7 +529,12 @@ def limits(ind: dict | None, m: dict | None, t2: dict | None, s2: dict | None) -
     lines += [f"- 가상 계획서다. 2단계는 층화해 뽑은 일부({part})이고 1회 실행이다.",
               "- 기존 함정 32건·대조군 10건은 개발 중 규칙을 고치는 데 쓴 '개발용'이라 이 표에서 뺐다. "
               "600건은 기능 동결 뒤 코드로 한 번만 쟀고, 결과를 보고 규칙을 고치지 않았다.",
-              "- 신뢰구간은 건을 서로 독립으로 보고 계산했다. 한 계획서의 여러 규칙, 같은 계획서의 반복 실행이 묶여 있어 실제보다 좁을 수 있다."]
+              "- 신뢰구간은 건을 서로 독립으로 보고 계산했다. 한 계획서의 여러 규칙, 같은 계획서의 반복 실행이 묶여 있어 실제보다 좁을 수 있다.",
+              "- 독립 확인 함정 불일치 3건 중 2건(E4·R-13)은 말뜻 차이다. 독립 쪽이 '해당'으로 답했지만 내용은 우리 정답과 같다. "
+              "1건(C3 '구두 동의만')은 우리 정답이 틀렸을 수 있다. 경로 불일치 1건(S7 부정문)은 함정 문장에 가명처리 줄이 남아 생긴 모순이다. "
+              "독립 채점자의 문맥에 프로젝트 CLAUDE.md(경로 규칙 요약 몇 줄)가 자동으로 들어갔다.",
+              "- 두 정답표의 해석이 다른 곳이 있다. 가명 자료에 동의가 적혀 있지 않으면 합성은 A(동의 없음으로 봄), 함정은 미정(연구자에게 물음)으로 적었다. "
+              "IRB 없는 기관에 협약 정보가 없으면 둘 다 미정인데, 엔진은 B로 낸다."]
     return lines
 
 
@@ -488,15 +553,17 @@ def main(a: argparse.Namespace) -> None:
     warn_lines, warn = warning_section(s1, s2)
     judge_lines, judge, judge_app = judgment_section(t1, t2, s1, s2)
     fact_lines, fact, fact_app = fact_section(t2, s2, m)
+    origin_lines, by_origin = origin_section(s1, s2)
     mask_lines, mask = masking_section([t1, t2, s1, s2], pert)
-    lines += [*route_lines, *trap_lines, *warn_lines, *judge_lines, *fact_lines, *mask_lines, "## 한계", "", *limits(ind, m, t2, s2), ""]
+    lines += [*route_lines, *trap_lines, *warn_lines, *judge_lines, *fact_lines, *origin_lines, *mask_lines,
+              "## 한계", "", *limits(ind, m, t2, s2), ""]
     appendix = ([*(["### 경로 혼동행렬 (행 = 정답, 열 = 에이전트)", ""] if route_app else []), *route_app]
                 + judge_app + fact_app)
     lines += ["## 부록", "", *appendix] if appendix else []
     a.out.mkdir(parents=True, exist_ok=True)
     (a.out / "standard_metrics.md").write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
     data = {"commits": commits, "routes": route, "traps": trap, "false_warnings": warn, "judgments": judge, "facts": fact,
-            "masking": mask, "independent": ind}
+            "synth_by_origin": by_origin, "masking": mask, "independent": ind}
     (a.out / "standard_metrics.json").write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
     print("\n".join(lines))
 
