@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>정답 확인 40건</title>
+<style>
+/* 검수지: 위에 이름·진행률·결과 받기, 아래에 문항 카드. 인터넷 없이 파일로 열어도 되게 글꼴은 시스템 글꼴만 쓴다 */
+:root { --bg: #F4F6FA; --panel: #FFFFFF; --ink: #1F2A44; --muted: #586379; --line: #DCE1EA; --soft: #EEF1F6;
+  --mark: #FFE9A8; --mark-ink: #4D3600; --del: #A33A3A; --ok: #1B7A4B; --bad: #B42318; --unk: #8A6D00; --accent: #B85C00; }
+@media (prefers-color-scheme: dark) { :root { --bg: #111623; --panel: #192031; --ink: #E4E9F2; --muted: #9AA4B8; --line: #2B3448;
+  --soft: #20283A; --mark: #5A4608; --mark-ink: #FFE9A8; --del: #F29B9B; --ok: #5FCF96; --bad: #FF8C82; --unk: #E8C766; --accent: #F2A55A; color-scheme: dark } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui, sans-serif; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 20px 16px 60px; }
+h1 { font-size: 22px; margin: 0 0 6px; }
+.how { margin: 0 0 14px; }
+.how li { margin: 2px 0; }
+.bar { position: sticky; top: 0; z-index: 3; background: var(--bg); border-bottom: 1px solid var(--line); padding: 10px 0; display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+input#who { font: inherit; padding: 5px 9px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--ink); width: 11em; }
+.count { font-variant-numeric: tabular-nums; }
+button { font: inherit; cursor: pointer; border-radius: 6px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); padding: 5px 12px; }
+button.main { background: var(--ink); color: var(--bg); border-color: var(--ink); font-weight: 600; }
+button:focus-visible, input:focus-visible, textarea:focus-visible, label:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+#list { display: grid; gap: 14px; margin-top: 14px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: grid; gap: 10px; }
+.card.done { border-color: var(--ok); }
+.head { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; }
+.no { font-weight: 700; font-variant-numeric: tabular-nums; }
+.chip { font-size: 12px; border: 1px solid var(--line); border-radius: 999px; padding: 0 8px; color: var(--muted); }
+.plan { background: var(--soft); border-radius: 6px; padding: 8px 10px; font-size: 14px; overflow-wrap: anywhere; }
+.plan div { padding: 1px 0; }
+.plan .i { background: var(--mark); color: var(--mark-ink); border-radius: 3px; padding: 0 3px; font-weight: 600; }
+.plan .d { color: var(--del); text-decoration: line-through; }
+.ans { display: grid; gap: 3px; border-left: 3px solid var(--accent); padding-left: 10px; }
+.ans b { color: var(--accent); }
+.basis { font-size: 13px; color: var(--muted); }
+.pick { display: flex; flex-wrap: wrap; gap: 8px; }
+.pick label { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+.pick input { accent-color: var(--ink); }
+.pick label.o:has(input:checked) { border-color: var(--ok); color: var(--ok); font-weight: 700; }
+.pick label.x:has(input:checked) { border-color: var(--bad); color: var(--bad); font-weight: 700; }
+.pick label.u:has(input:checked) { border-color: var(--unk); color: var(--unk); font-weight: 700; }
+textarea { font: inherit; font-size: 14px; width: 100%; min-height: 2.4em; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--ink); }
+#out { width: 100%; min-height: 8em; font-family: ui-monospace, Menlo, monospace; font-size: 12px; }
+.notice { font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>정답 확인 40건</h1>
+  <ol class="how">
+    <li>이름을 적고, 문항마다 우리 정답이 맞는지 <b>맞음 · 틀림 · 모르겠음</b> 중 하나를 누르세요. 틀림이면 이유를 한 줄 적어 주세요.</li>
+    <li>노란 줄은 규칙을 지킨 계획서에서 함정으로 넣거나 바꾼 곳, 줄 그은 글은 뺀 곳입니다.</li>
+    <li>다 하면 <b>결과 파일 받기</b>를 눌러 내려받은 파일을 송윤 님께 보내 주세요. 표시한 내용은 이 브라우저에 자동 저장됩니다.</li>
+  </ol>
+  <div class="bar">
+    <label>이름 <input id="who" autocomplete="name"></label>
+    <span class="count" id="count"></span>
+    <button class="main" id="save" type="button">결과 파일 받기</button>
+    <button id="copy" type="button">결과 복사</button>
+    <span class="notice" id="msg" role="status"></span>
+  </div>
+  <div id="list"></div>
+  <p class="notice">파일 받기가 안 되면 <b>결과 복사</b>를 누르거나 아래 글을 전부 선택해 메시지로 보내 주세요.</p>
+  <textarea id="out" readonly aria-label="결과 JSON"></textarea>
+</div>
+<script>
+const ITEMS = /*DATA*/[];
+const KEY = "human_check40";
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+let state = {who: "", v: {}, memo: {}};
+try { state = Object.assign(state, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch (e) {}
+const keep = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+document.getElementById("who").value = state.who || "";
+document.getElementById("who").addEventListener("input", e => { state.who = e.target.value.trim(); keep(); refresh(); });
+document.getElementById("list").innerHTML = ITEMS.map((d, i) => `
+  <article class="card" id="c${i}">
+    <div class="head"><span class="no">${i + 1}</span><span class="chip">${esc(d.kind)}</span><span class="chip">${esc(d.inst)}</span></div>
+    <div class="plan">${d.lines.map(([k, t]) => `<div class="${k}">${esc(t) || "&nbsp;"}</div>`).join("")}</div>
+    <div class="ans"><span>${esc(d.question)}</span><span><b>우리 정답</b> ${esc(d.answer)}</span><span><b>경로</b> ${esc(d.route)}</span>
+      <span class="basis">근거: ${esc(d.basis)}</span></div>
+    <div class="pick" role="radiogroup" aria-label="${i + 1}번 판정">
+      ${[["O", "맞음", "o"], ["X", "틀림", "x"], ["?", "모르겠음", "u"]].map(([v, t, c]) =>
+        `<label class="${c}"><input type="radio" name="v${i}" value="${v}" ${state.v[i] === v ? "checked" : ""}>${t}</label>`).join("")}
+    </div>
+    <textarea id="m${i}" placeholder="틀림이면 이유 (예: 이 계획서는 동의를 받으므로 A가 아니라 C)">${esc(state.memo[i] || "")}</textarea>
+  </article>`).join("");
+ITEMS.forEach((d, i) => {
+  document.querySelectorAll(`input[name=v${i}]`).forEach(r => r.addEventListener("change", e => { state.v[i] = e.target.value; keep(); refresh(); }));
+  document.getElementById(`m${i}`).addEventListener("input", e => { state.memo[i] = e.target.value; keep(); refresh(); });
+});
+function result() {
+  return {checker: state.who || "(이름 없음)", date: "{{DATE}}", items: ITEMS.map((d, i) => ({no: i + 1, id: d.id, kind: d.kind,
+    verdict: state.v[i] || null, memo: state.memo[i] || ""}))};
+}
+function refresh() {
+  const n = Object.keys(state.v).length, x = Object.values(state.v).filter(v => v === "X").length;
+  document.getElementById("count").textContent = `표시 ${n}/${ITEMS.length} · 틀림 ${x}`;
+  ITEMS.forEach((d, i) => document.getElementById(`c${i}`).classList.toggle("done", !!state.v[i]));
+  document.getElementById("out").value = JSON.stringify(result(), null, 1);
+}
+document.getElementById("save").addEventListener("click", () => {
+  const blob = new Blob([JSON.stringify(result(), null, 1)], {type: "application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `정답확인_${(state.who || "이름없음").replace(/\s+/g, "")}_{{DATE}}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  document.getElementById("msg").textContent = "내려받았습니다. 파일을 송윤 님께 보내 주세요.";
+});
+document.getElementById("copy").addEventListener("click", async () => {
+  const out = document.getElementById("out");
+  try { await navigator.clipboard.writeText(out.value); document.getElementById("msg").textContent = "복사했습니다. 메시지에 붙여 보내 주세요."; }
+  catch (e) { out.select(); document.getElementById("msg").textContent = "아래 글을 선택했습니다. 복사(Ctrl+C)해 보내 주세요."; }
+});
+refresh();
+</script>
+</body>
+</html>
