@@ -1,8 +1,8 @@
 """함정 데이터 평가: 규칙을 정반대로 어긴 가상 계획서(eval/traps/traps.yaml)로 탐지·오경보·해소를 잰다.
 
 모델 서버가 떠 있는 곳에서:
-  python eval/trap_eval.py [--before eval/results/traps_v1.json]     # 실측 → traps.json·traps.md
-  python eval/trap_eval.py --report eval/results/traps_v1.json         # 다시 돌리지 않고 표만 (→ traps_v1.md)
+  python eval/trap_eval.py [--before 이전_실행.json]                  # 실측 → traps.json·traps.md
+  python eval/trap_eval.py --report eval/results/traps.json            # 다시 돌리지 않고 표만 (→ traps.md)
 - 실제 모드(FAKE=0, LLM=1). 사람 확인 없이 ③ 추출값을 그대로 확정해 판정한다.
 - 신호: 판정 행 "규칙:결과"(충족·미충족·판단불가), 보완 제안 "규칙:경고"(보완 필요·확인 필요), 경로 "경로:X".
   걸림 = 그 규칙의 미충족 또는 경고.

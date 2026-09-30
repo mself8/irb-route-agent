@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="700" viewBox="0 0 1800 700" font-family="Noto Sans CJK KR, Noto Sans KR, Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1F2A44"/></marker><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#D9822B"/></marker></defs>
+<rect width="1800" height="700" fill="#FFFFFF"/>
+<rect x="0" y="30" width="1800" height="158" fill="#FDF1E4" opacity="0.35"/>
+<rect x="0" y="30" width="8" height="158" fill="#D9822B"/>
+<text x="26" y="117.0" font-size="22" font-weight="700" fill="#7A4312">사람</text>
+<rect x="0" y="188" width="1800" height="158" fill="#E9F1FD" opacity="0.35"/>
+<rect x="0" y="188" width="8" height="158" fill="#2F6FD1"/>
+<text x="26" y="267.0" font-size="22" font-weight="700" fill="#163C7A">AI</text>
+<text x="26" y="293.0" font-size="17" fill="#163C7A" opacity="0.85">Qwen3.8</text>
+<line x1="0" y1="188" x2="1800" y2="188" stroke="#D5DAE3" stroke-width="1.5"/>
+<rect x="0" y="346" width="1800" height="158" fill="#E7F5EE" opacity="0.35"/>
+<rect x="0" y="346" width="8" height="158" fill="#1E8A5A"/>
+<text x="26" y="433.0" font-size="22" font-weight="700" fill="#0F4D32">규칙 엔진</text>
+<line x1="0" y1="346" x2="1800" y2="346" stroke="#D5DAE3" stroke-width="1.5"/>
+<rect x="0" y="504" width="1800" height="158" fill="#F1F3F6" opacity="0.35"/>
+<rect x="0" y="504" width="8" height="158" fill="#7A8494"/>
+<text x="26" y="591.0" font-size="22" font-weight="700" fill="#3A4250">공공 데이터</text>
+<line x1="0" y1="504" x2="1800" y2="504" stroke="#D5DAE3" stroke-width="1.5"/>
+<line x1="150" y1="30" x2="150" y2="662" stroke="#D5DAE3" stroke-width="1.5"/>
+<rect x="172" y="61.0" width="150" height="96" rx="14" fill="#FDF1E4" stroke="#D9822B" stroke-width="2.5"/>
+<text x="247.0" y="105.0" text-anchor="middle" font-size="23" font-weight="700" fill="#7A4312">연구계획서</text>
+<text x="247.0" y="133.0" text-anchor="middle" font-size="16" fill="#7A4312" opacity="0.85">입력 · 문서</text>
+<rect x="352" y="377.0" width="150" height="96" rx="14" fill="#E7F5EE" stroke="#1E8A5A" stroke-width="2.5"/>
+<text x="427.0" y="421.0" text-anchor="middle" font-size="23" font-weight="700" fill="#0F4D32">② 마스킹</text>
+<text x="427.0" y="449.0" text-anchor="middle" font-size="16" fill="#0F4D32" opacity="0.85">ko-pii · 규칙</text>
+<rect x="532" y="219.0" width="170" height="96" rx="14" fill="#E9F1FD" stroke="#2F6FD1" stroke-width="2.5"/>
+<text x="617.0" y="263.0" text-anchor="middle" font-size="23" font-weight="700" fill="#163C7A">③ 사실 추출</text>
+<text x="617.0" y="291.0" text-anchor="middle" font-size="16" fill="#163C7A" opacity="0.85">F01–F18 · 근거 문장</text>
+<rect x="732" y="61.0" width="150" height="96" rx="14" fill="#FDF1E4" stroke="#D9822B" stroke-width="2.5"/>
+<text x="807.0" y="105.0" text-anchor="middle" font-size="23" font-weight="700" fill="#7A4312">④ 사실 확인</text>
+<text x="807.0" y="133.0" text-anchor="middle" font-size="16" fill="#7A4312" opacity="0.85">수정 · 확정</text>
+<rect x="912" y="363.0" width="330" height="124" rx="14" fill="#E7F5EE" stroke="#1E8A5A" stroke-width="2.5"/>
+<text x="1077.0" y="433.0" text-anchor="middle" font-size="23" font-weight="700" fill="#0F4D32"></text>
+<rect x="926" y="375.0" width="146" height="46" rx="10" fill="#FFFFFF" stroke="#1E8A5A" stroke-width="1.8"/>
+<text x="999" y="405.0" text-anchor="middle" font-size="19" font-weight="700" fill="#0F4D32">⑤ 기관 대조</text>
+<rect x="1082" y="375.0" width="146" height="46" rx="10" fill="#FFFFFF" stroke="#1E8A5A" stroke-width="1.8"/>
+<text x="1155" y="405.0" text-anchor="middle" font-size="19" font-weight="700" fill="#0F4D32">⑥ 관문 판정</text>
+<rect x="926" y="429.0" width="146" height="46" rx="10" fill="#FFFFFF" stroke="#1E8A5A" stroke-width="1.8"/>
+<text x="999" y="459.0" text-anchor="middle" font-size="19" font-weight="700" fill="#0F4D32">⑦ 경로 결정</text>
+<rect x="1082" y="429.0" width="146" height="46" rx="10" fill="#FFFFFF" stroke="#1E8A5A" stroke-width="1.8"/>
+<text x="1155" y="459.0" text-anchor="middle" font-size="19" font-weight="700" fill="#0F4D32">⑧ 서류·일정</text>
+<rect x="912" y="548.0" width="78" height="70" rx="14" fill="#F1F3F6" stroke="#7A8494" stroke-width="2.5"/>
+<text x="951.0" y="591.0" text-anchor="middle" font-size="23" font-weight="700" fill="#3A4250"></text>
+<text x="951" y="590.0" text-anchor="middle" font-size="16" font-weight="700" fill="#3A4250">법령 원문</text>
+<path d="M951.0,548.0 L951.0,491.0" fill="none" stroke="#7A8494" stroke-width="2.4" marker-end="url(#a)"/>
+<rect x="996" y="548.0" width="78" height="70" rx="14" fill="#F1F3F6" stroke="#7A8494" stroke-width="2.5"/>
+<text x="1035.0" y="591.0" text-anchor="middle" font-size="23" font-weight="700" fill="#3A4250"></text>
+<text x="1035" y="590.0" text-anchor="middle" font-size="16" font-weight="700" fill="#3A4250">규칙표</text>
+<path d="M1035.0,548.0 L1035.0,491.0" fill="none" stroke="#7A8494" stroke-width="2.4" marker-end="url(#a)"/>
+<rect x="1080" y="548.0" width="78" height="70" rx="14" fill="#F1F3F6" stroke="#7A8494" stroke-width="2.5"/>
+<text x="1119.0" y="591.0" text-anchor="middle" font-size="23" font-weight="700" fill="#3A4250"></text>
+<text x="1119" y="590.0" text-anchor="middle" font-size="16" font-weight="700" fill="#3A4250">기관 11곳</text>
+<path d="M1119.0,548.0 L1119.0,491.0" fill="none" stroke="#7A8494" stroke-width="2.4" marker-end="url(#a)"/>
+<rect x="1164" y="548.0" width="78" height="70" rx="14" fill="#F1F3F6" stroke="#7A8494" stroke-width="2.5"/>
+<text x="1203.0" y="591.0" text-anchor="middle" font-size="23" font-weight="700" fill="#3A4250"></text>
+<text x="1203" y="590.0" text-anchor="middle" font-size="16" font-weight="700" fill="#3A4250">일정·명단</text>
+<path d="M1203.0,548.0 L1203.0,491.0" fill="none" stroke="#7A8494" stroke-width="2.4" marker-end="url(#a)"/>
+<rect x="1282" y="200.0" width="170" height="62" rx="14" fill="#E9F1FD" stroke="#2F6FD1" stroke-width="2.5"/>
+<text x="1367.0" y="227.0" text-anchor="middle" font-size="23" font-weight="700" fill="#163C7A">⑨ 사무국 질문</text>
+<text x="1367.0" y="255.0" text-anchor="middle" font-size="16" fill="#163C7A" opacity="0.85">판단불가</text>
+<rect x="1282" y="272.0" width="170" height="62" rx="14" fill="#E9F1FD" stroke="#2F6FD1" stroke-width="2.5"/>
+<text x="1367.0" y="299.0" text-anchor="middle" font-size="23" font-weight="700" fill="#163C7A">⑩ 결과 리포트</text>
+<text x="1367.0" y="327.0" text-anchor="middle" font-size="16" fill="#163C7A" opacity="0.85">조문 근거</text>
+<rect x="1282" y="377.0" width="170" height="96" rx="14" fill="#E7F5EE" stroke="#1E8A5A" stroke-width="2.5"/>
+<text x="1367.0" y="421.0" text-anchor="middle" font-size="23" font-weight="700" fill="#0F4D32">경로</text>
+<text x="1367.0" y="449.0" text-anchor="middle" font-size="16" fill="#0F4D32" opacity="0.85">A · B · C · 임상시험</text>
+<rect x="1482" y="61.0" width="150" height="96" rx="14" fill="#E7F5EE" stroke="#1E8A5A" stroke-width="2.5"/>
+<text x="1557.0" y="105.0" text-anchor="middle" font-size="23" font-weight="700" fill="#0F4D32">보완 제안</text>
+<text x="1557.0" y="133.0" text-anchor="middle" font-size="16" fill="#0F4D32" opacity="0.85">넣을 문장</text>
+<rect x="1642" y="61.0" width="150" height="96" rx="14" fill="#FDF1E4" stroke="#D9822B" stroke-width="2.5"/>
+<text x="1717.0" y="105.0" text-anchor="middle" font-size="23" font-weight="700" fill="#7A4312">⑪ 제출</text>
+<text x="1717.0" y="133.0" text-anchor="middle" font-size="16" fill="#7A4312" opacity="0.85">사람 승인</text>
+<rect x="1642" y="538.0" width="150" height="90" rx="14" fill="#F1F3F6" stroke="#7A8494" stroke-width="2.5"/>
+<text x="1717.0" y="579.0" text-anchor="middle" font-size="23" font-weight="700" fill="#3A4250">e-IRB</text>
+<text x="1717.0" y="607.0" text-anchor="middle" font-size="16" fill="#3A4250" opacity="0.85">모의 · 공용위원회</text>
+<path d="M247.0,157.0 L247.0,315.0 L427.0,315.0 L427.0,377.0" fill="none" stroke="#1F2A44" stroke-width="2.4" marker-end="url(#a)"/>
+<path d="M502.0,425.0 L617.0,425.0 L617.0,315.0" fill="none" stroke="#1F2A44" stroke-width="2.4" marker-end="url(#a)"/>
+<path d="M617.0,219.0 L617.0,109.0 L732.0,109.0" fill="none" stroke="#1F2A44" stroke-width="2.4" marker-end="url(#a)"/>
+<path d="M807.0,157.0 L807.0,425.0 L912.0,425.0" fill="none" stroke="#1F2A44" stroke-width="2.4" marker-end="url(#a)"/>
+<path d="M1242.0,425.0 L1282.0,425.0" fill="none" stroke="#1F2A44" stroke-width="2.4" marker-end="url(#a)"/>
+<path d="M1242.0,385.0 L1262.0,385.0 L1262.0,231.0 L1282.0,231.0" fill="none" stroke="#1F2A44" stroke-width="2.4" marker-end="url(#a)"/>
+<path d="M1242.0,385.0 L1262.0,385.0 L1262.0,303.0 L1282.0,303.0" fill="none" stroke="#1F2A44" stroke-width="2.4" marker-end="url(#a)"/>
+<path d="M1452.0,425.0 L1557.0,425.0 L1557.0,157.0" fill="none" stroke="#1F2A44" stroke-width="2.4" marker-end="url(#a)"/>
+<path d="M1452.0,425.0 L1680.0,425.0 L1680.0,157.0" fill="none" stroke="#1F2A44" stroke-width="2.4" marker-end="url(#a)"/>
+<path d="M1756.0,157.0 L1756.0,538.0" fill="none" stroke="#1F2A44" stroke-width="2.4" marker-end="url(#a)"/>
+<path d="M1557.0,61.0 L1557.0,40.0 L247.0,40.0 L247.0,61.0" fill="none" stroke="#D9822B" stroke-width="2.4" stroke-dasharray="8 6" marker-end="url(#ah)"/>
+<path d="M1367.0,200.0 L1367.0,174.0 L850.0,174.0 L850.0,157.0" fill="none" stroke="#D9822B" stroke-width="2.4" stroke-dasharray="8 6" marker-end="url(#ah)"/>
+</svg>
