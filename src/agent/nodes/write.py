@@ -163,7 +163,7 @@ def suggest(state: GraphState) -> list[dict]:
 
     def add(rule_id: str, level: str, warning: str, add_text: str | None = None) -> None:
         b = rows[rule_id]["basis"]
-        out.append({"rule_id": rule_id, "level": level, "warning": warning, "add_text": add_text,
+        out.append({"rule_id": rule_id, "level": level, "scope": "법", "warning": warning, "add_text": add_text,
                     "basis": f"{b['law']} {b['article']}"})
 
     code = "예" if f.get("F18") in ("연구책임자", "데이터팀·제3자") else f.get("F17")  # 판정(⑥)과 같이 대응표 쪽을 믿는다
@@ -201,6 +201,16 @@ def suggest(state: GraphState) -> list[dict]:
                 f"받는 방식으로 바꾸고 아래 문장을 넣으면, 규칙 엔진으로 다시 판정한 결과 경로 {alt['route']}입니다({steps})."
                 + (f" 다만 그 방식에서도 {', '.join(left)} 미충족이 남습니다." if left else "")
                 + " 면제 여부는 위원회가 확인하며, 연구에 식별자가 꼭 필요하면 지금 경로를 따릅니다.", fix)
+    venue = state.get("venue")
+    if venue:  # 기관 층: 관할 기관 안내문 기준의 보완 (법 기준 뒤에 둔다)
+        gaps = [i for i in venue["plan_items"] if not i["found"]]
+        if gaps:
+            cells = "; ".join(dict.fromkeys(i["label"] for i in gaps))
+            out.append({"rule_id": f"I-{venue['id'].upper()}-P", "level": "보완 필요", "scope": "기관", "add_text": None,
+                        "warning": f"[{venue['short']}] {venue['plan_form']} 항목 중 계획서에서 찾지 못한 것 {len(gaps)}개: "
+                                   f"{', '.join(i['item'] for i in gaps)} (서식의 칸: {cells})", "basis": venue["source"]})
+        out += [{"rule_id": r["id"], "level": r["level"], "scope": "기관", "warning": f"[{venue['short']}] {r['warning']}",
+                 "add_text": r.get("add_text"), "basis": r["source"]} for r in venue["rules"]]
     return out
 
 
@@ -238,7 +248,7 @@ def highlights(state: GraphState, suggestions: list[dict]) -> list[dict]:
         marks.setdefault((start, start + len(span), key, span), []).append(note)
         return True
 
-    targets = [s["rule_id"] for s in suggestions]
+    targets = [s["rule_id"] for s in suggestions if s["rule_id"] in rows]  # 기관 층 제안은 판정 행이 없어 칠하지 않는다
     targets += [r for r in ("E2", "E4", "E5") if rows.get(r, {}).get("result") == "미충족"]
     for rule_id in targets:
         r = rows[rule_id]

@@ -271,3 +271,20 @@ def test_eighth_review_fixes():
     marks = run({}, unwritten=("F17", "F18"))["highlights"]      # 겹치는 표시 구간은 하나로 합친다
     assert all(a["span_end"] <= b["span_start"] for a, b in zip(marks, marks[1:]))
 
+
+
+def test_institution_layer():
+    uos = run({}, "서울시립대학교")               # 기관 프로필: 제출처·기관 서식·정규심의 일정·기관 규칙
+    assert uos["venue"]["id"] == "uos" and not uos["route"]["fast_track"]  # 면제도 정규심의 안건 → 7일 빠른 길 없음
+    assert uos["schedule"]["scenarios"][0]["submit_by"] == "2026-10-26"    # 11-06 회의 + 결과 14일 < 12-01 개시
+    assert any("별지서식 9-3" in d["doc"] for d in uos["documents"])
+    assert {"I-UOS-1", "I-UOS-2", "I-UOS-P"} <= {s["rule_id"] for s in uos["suggestions"] if s["scope"] == "기관"}
+    cmc = run({}, "서울성모병원")                 # 명단에 없는 별칭도 기관 프로필이 있으면 IRB가 있는 기관
+    assert cmc["venue"]["id"] == "cmc" and cmc["institution"]["irb_exists"] is True and cmc["route"]["fast_track"]
+    assert "I-CMC-1" in {s["rule_id"] for s in cmc["suggestions"]}      # IRB 전에 DRB 승인 필요
+    public = run({}, "없음")
+    assert public["venue"]["id"] == "public" and "제37호" in public["venue"]["plan_form"]
+    plain = run({})                                                    # 프로필이 없는 기관은 예전처럼 공통 서류
+    assert plain["venue"] is None and any(d["source"] == "관할 IRB 서식" for d in plain["documents"])
+    rows = judge.compare_table()                                       # 서식 표준화 비교표: 서류 11 + 계획서 항목 10
+    assert len(rows) == 21 and {"공용위원회", "서울시립대", "서울성모병원", "질병관리청"} <= set(rows[0])

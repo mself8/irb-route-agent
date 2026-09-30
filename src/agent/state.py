@@ -138,6 +138,7 @@ class Suggestion(BaseModel):
     """제출 전 보완: 사무국·DRB가 되물을 것을 미리 막는 경고와 계획서에 넣을 문장."""
     rule_id: str
     level: Literal["보완 필요", "확인 필요", "안내"]
+    scope: Literal["법", "기관"] = "법"        # 법·가이드라인 기준인지, 관할 기관 안내문 기준인지
     warning: str
     add_text: Optional[str] = None            # 계획서에 넣을 문장 초안 (○○는 연구자가 채움)
     basis: Optional[str] = None               # 근거 법령·조항
@@ -150,6 +151,18 @@ class Highlight(BaseModel):
     span_start: int
     span_end: int
     note: str
+
+
+class Venue(BaseModel):
+    """관할 위원회의 기관 층 (data/institutions/profiles.yaml). 기관 프로필이 있는 위원회만 채운다."""
+    id: str
+    name: str
+    short: str
+    submit: str                                # 제출 창구
+    source: str                                # 기관 안내문 출처·확인일
+    plan_form: str = ""                        # 이 기관의 연구계획서 서식 이름
+    plan_items: list[dict] = []                # [{item: 표준 항목, label: 이 기관 서식의 칸, found: 요약 계획서에 있는가}]
+    rules: list[dict] = []                     # 이 계획서에 해당하는 기관 규칙 [{id, level, warning, add_text, source}]
 
 
 class ReportSentence(BaseModel):
@@ -172,6 +185,8 @@ class Result(BaseModel):
     suggestions: list[Suggestion] = []
     highlights: list[Highlight] = []
     masked_text: str = ""                      # 노란색 표시를 그릴 가린 계획서
+    venue: Optional[Venue] = None              # 관할 위원회의 기관 층 (제출 창구·기관 규칙·서식 항목)
+    compare: list[dict] = []                   # 서식 표준화: 표준 서류·계획서 항목별로 기관마다 다른 서식 이름
     notice: str = NOTICE
 
 
@@ -196,3 +211,4 @@ class GraphState(TypedDict, total=False):
     report: list[dict]
     suggestions: list[dict]
     highlights: list[dict]
+    venue: dict

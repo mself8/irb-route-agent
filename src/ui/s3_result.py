@@ -3,7 +3,22 @@ import html
 
 import streamlit as st
 
+from agent import api
+
 YELLOW = "#FFE066"
+# "다른 기관에 낸다면": 기관 프로필(data/institutions/profiles.yaml)이 있는 곳. 값은 ⑤ 기관 대조에 넣을 이름
+OTHER_VENUES = {"서울시립대학교": "서울시립대학교", "서울성모병원": "가톨릭대학교 서울성모병원", "질병관리청": "질병관리청",
+                "소속 없음 → 공용위원회": "없음"}
+
+
+def _card(s) -> None:
+    with st.container(border=True):
+        st.markdown(f"**{s.level}** · {s.rule_id} · {s.warning}")
+        if s.add_text:
+            st.caption("계획서에 넣을 문장. [ ]는 사실에 맞게 채우세요 (오른쪽 위 아이콘으로 복사)")
+            st.code(s.add_text, language=None, wrap_lines=True)
+        if s.basis:
+            st.caption(f"근거: {s.basis}")
 
 
 def _marked(text: str, highlights) -> str:
@@ -34,6 +49,9 @@ def render() -> None:
         for n, committee in zip(route.order, route.committees):
             st.write(f"{n}. {committee}")
         st.caption("근거 규칙 " + " · ".join(route.trace))
+        if result.venue:
+            st.markdown(f"**제출처** {result.venue.name}")
+            st.caption(result.venue.submit)
     with c2.container(border=True):
         st.markdown("**어떤 서류**")
         for d in result.documents:
@@ -46,16 +64,25 @@ def render() -> None:
             st.write(f"보완 {sc.revisions}회{default}: {sc.submit_by or '공개 수치 없음'}{step}")
         for line in result.schedule.missing:
             st.caption(line)
+    law = [s for s in result.suggestions if s.scope == "법"]
+    inst = [s for s in result.suggestions if s.scope == "기관"]
+    if law:
+        st.markdown("#### 제출 전 보완 · 법·가이드라인 기준")
+        for s in law:
+            _card(s)
+    if result.venue:
+        venue = result.venue
+        st.markdown(f"#### 제출 전 보완 · {venue.short} 안내문 기준")
+        found = sum(i["found"] for i in venue.plan_items)
+        with st.container(border=True):
+            st.markdown(f"**{venue.plan_form}** 항목 {len(venue.plan_items)}개 중 {found}개를 계획서에서 찾음")
+            for i in venue.plan_items:
+                st.write(("✅ " if i["found"] else "⬜ ") + f"{i['item']} — {i['label']}")
+            st.caption("요약 계획서의 낱말로만 확인합니다. 제출 전 전체 계획서를 이 서식에 맞춰 쓰세요.")
+        for s in inst:
+            _card(s)
+        st.caption(f"출처: {venue.source}")
     if result.suggestions:
-        st.markdown("#### 제출 전 보완")
-        for s in result.suggestions:
-            with st.container(border=True):
-                st.markdown(f"**{s.level}** · {s.rule_id} · {s.warning}")
-                if s.add_text:
-                    st.caption("계획서에 넣을 문장. [ ]는 사실에 맞게 채우세요 (오른쪽 위 아이콘으로 복사)")
-                    st.code(s.add_text, language=None, wrap_lines=True)
-                if s.basis:
-                    st.caption(f"근거: {s.basis}")
         fixes = []
         for s in need:  # R-11 문구에 R-12 문구가 들어 있으면 한 번만 넣는다
             if s.add_text and s.add_text not in " ".join(fixes):
@@ -68,6 +95,16 @@ def render() -> None:
                 st.session_state.start_date = start_date
             st.session_state.step = 0
             st.rerun()
+    st.markdown("#### 다른 기관에 낸다면")
+    left, right = st.columns([3, 1])
+    choice = left.selectbox("기관", list(OTHER_VENUES), index=None, placeholder="기관을 고르면 그 기관 기준으로 다시 판정합니다",
+                            label_visibility="collapsed")
+    if right.button("이 기관 기준으로 다시 판정", disabled=choice is None):
+        st.session_state.result = api.rejudge(result.run_id, {"institution_name": OTHER_VENUES[choice], "irb_exists": None,
+                                                              "contract": None})
+        st.rerun()
+    with st.expander("기관별 서식 비교 (서식 표준화: 표준 항목 한 줄에 기관마다 다른 서식 이름)"):
+        st.dataframe(result.compare, hide_index=True)
     if result.highlights and result.masked_text:
         st.markdown("#### 계획서에서 볼 곳")
         st.markdown(_marked(result.masked_text, result.highlights), unsafe_allow_html=True)

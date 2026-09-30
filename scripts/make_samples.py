@@ -110,7 +110,7 @@ def run_engine(plan: str, masked: str, facts: list[dict]) -> dict:
     for step in (judge.institution, judge.gates, judge.route, judge.docs_schedule, write.abstain, write.report):
         state = {**state, **step(state)}
     return {k: state[k] for k in ("institution", "judgments", "route", "documents", "schedule", "abstain", "report",
-                                  "suggestions", "highlights", "masked_text")}
+                                  "suggestions", "highlights", "masked_text", "venue")}
 
 
 for sample_id, spec in SAMPLES.items():

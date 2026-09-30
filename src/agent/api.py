@@ -14,6 +14,7 @@ from functools import lru_cache
 from langgraph.types import Command
 
 from . import samples
+from .nodes.judge import compare_table
 from .state import FACT_LABELS, Pending, Result
 
 FAKE = os.getenv("FAKE", "1") == "1"
@@ -47,7 +48,8 @@ def start(plan_text: str, institution_name: str, target_start_date: str) -> Pend
 def confirm(run_id: str, confirmed_facts: list[dict], edited_by_user: list[str] | None = None) -> Result:
     if FAKE:
         sample = samples.load(run_id.removeprefix("fake:"))
-        return Result(run_id=run_id, facts=confirmed_facts or sample["pending"]["facts"], **sample["result"])
+        return Result(run_id=run_id, facts=confirmed_facts or sample["pending"]["facts"], compare=compare_table(),
+                      **sample["result"])
     _graph().invoke(
         Command(resume={"confirmed_facts": confirmed_facts, "edited_by_user": edited_by_user or []}),
         _cfg(run_id),
@@ -94,4 +96,6 @@ def _result(run_id: str) -> Result:
         suggestions=v.get("suggestions", []),
         highlights=v.get("highlights", []),
         masked_text=v.get("masked_text", ""),
+        venue=v.get("venue"),
+        compare=compare_table(),
     )
