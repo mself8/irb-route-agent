@@ -73,6 +73,7 @@ FAKE=0 streamlit run app.py                            # 결과 화면 → "제�
 - UI 글꼴: Paperlogy 1.000 (PT&, SIL OFL 1.1, https://freesentation.blog/paperlogyfont). 사용자 제공 TTF를 WOFF2로 압축해 포함(`src/ui/fonts/`, OFL.txt 동봉). 변환 도구: FontTools 4.61.1 (MIT, https://github.com/fonttools/fonttools), Brotli 1.2.0 (MIT, https://github.com/google/brotli)
 - 시연용 공개 주소: Cloudflare Tunnel cloudflared 2026.9.3 (Apache-2.0, https://github.com/cloudflare/cloudflared)의 임시 주소(trycloudflare.com)로 GPU 서버의 앱(실제 모드)을 연다. 로그인이 없어 시연하는 동안만 켠다. 계획서와 모델은 서버에 그대로 있고, 주소는 화면만 중계한다
 - 데모 영상(제출물): 실제 모드(FAKE=0) 화면을 Playwright for Python 1.63.0으로 녹화하고, FFmpeg 7.0.2 (GPL 빌드, imageio-ffmpeg 0.6.0 배포본, https://github.com/imageio/imageio-ffmpeg)로 AI 대기 구간을 잘랐다. 잘라 낸 자리에 생략한 초를 적은 자막은 Pillow 12.3.0 (MIT-CMU, https://python-pillow.org)과 Noto Sans CJK KR (SIL OFL 1.1, https://github.com/notofonts/noto-cjk)으로 그렸다. 샘플은 `data/samples/real1_cdw_cmc.json`, 제출은 로컬 모의 e-IRB에만 했다
+- 공용위원회 e-IRB 데모 영상(제출물): macOS 기본 화면 기록으로 실제 모드 앱(Qwen3.8)과 공용위원회 e-IRB 화면을 찍고, FFmpeg 7.0.2 (GPL 빌드, imageio-ffmpeg 0.6.0 배포본)로 AI 대기·로딩 구간을 자르고 2~3배속했다(화면에 배속·생략 표시). 자막은 Pillow 12.3.0과 Noto Sans CJK KR로 그렸다. 샘플은 가상 계획서, e-IRB 입력은 Claude in Chrome(제품 코드 아님)이고 저장·제출은 하지 않았다
 - LLM: Qwen3.8-27B-FP8 (Qwen, Hugging Face `Qwen/Qwen3.8-27B-FP8`, 리비전 017b9c7, Apache-2.0)
 - LLM 서빙: vLLM 0.25.1 (Apache-2.0), 로컬 GPU(RTX A6000 2장). 계획서가 서버 밖으로 나가지 않습니다.
 - 법령 원문 (국가법령정보센터 law.go.kr, 확인일 2026-09-29): 생명윤리 및 안전에 관한 법률·시행령·시행규칙, 개인정보 보호법·시행령, 약사법, 의약품 등의 안전에 관한 규칙, 의료기기법·시행규칙, 공용기관생명윤리위원회 고시. 정리본은 `data/laws/` (본선 전 수집)
