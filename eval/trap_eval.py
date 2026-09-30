@@ -330,10 +330,10 @@ def sealed_alarm() -> dict[str, set]:
     return alarm
 
 
-def sealed(which: str, stage: int, workers: int) -> None:
+def sealed(which: str, stage: int, workers: int, ids: list[str] | None = None, tag: str = "") -> None:
     from agent.nodes import read as read_node, write as write_node
     data = json.loads(SEALED[which].read_text(encoding="utf-8"))
-    cases = data["cases"] if stage == 1 else sample(data["cases"], which)
+    cases = [c for c in data["cases"] if c["id"] in ids] if ids else data["cases"] if stage == 1 else sample(data["cases"], which)
     original = read_node._impl
     write_node._impl = lambda name: None if name == "phrasing" else original(name)  # 설명문 다듬기(AI)는 판정·경로와 무관해 끈다
     api._graph()
@@ -350,7 +350,7 @@ def sealed(which: str, stage: int, workers: int) -> None:
             out = list(pool.map(lambda c: sealed_run(c, 2), cases))
     alarm = sealed_alarm()
     commit = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "--short", "HEAD"], capture_output=True, text=True).stdout.strip()
-    dest = RESULTS / f"{which}300_stage{stage}.json"
+    dest = RESULTS / f"{which}300_stage{stage}{tag}.json"
     dest.write_text(json.dumps({"note": f"{SYNTH_NOTE} · 측정 커밋 {commit}", "commit": commit, "stage": stage, "set": which,
                                 "alarm": {k: sorted(v) for k, v in alarm.items()}, "cases": out}, ensure_ascii=False, indent=1),
                     encoding="utf-8")
@@ -366,9 +366,11 @@ if __name__ == "__main__":
     ap.add_argument("--sealed", choices=list(SEALED), help="시험용 600건: traps 또는 synth")
     ap.add_argument("--stage", type=int, choices=[1, 2], default=1, help="1=정답 사실로 엔진만, 2=LLM으로 끝까지(층화 100건)")
     ap.add_argument("--workers", type=int, default=1)
+    ap.add_argument("--ids", nargs="*", help="이 건만 잰다 (표본 밖 보충 측정)")
+    ap.add_argument("--tag", default="", help="결과 파일 이름 꼬리 (예: _negation)")
     a = ap.parse_args()
     if a.sealed:
-        sealed(a.sealed, a.stage, a.workers)
+        sealed(a.sealed, a.stage, a.workers, a.ids, a.tag)
     elif a.report:
         spec = yaml.safe_load((ROOT / "eval" / "traps" / "traps.yaml").read_text(encoding="utf-8"))
         report(spec, json.loads(a.report.read_text(encoding="utf-8")), a.report.with_suffix(".md"), a.before)
