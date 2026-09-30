@@ -359,3 +359,29 @@ def test_institution_criteria_rows():
     assert "분석하였다" in marked and "19세 이상" in marked
     other = run({"F12": ["삼성서울병원"]}, "삼성서울병원")               # 기관을 바꾸면 판정 기준도 바뀐다
     assert not [r for r in other["judgments"] if r["rule_id"].startswith("I-CUK")]
+
+
+def test_trap_findings_fixed():
+    """함정 데이터 평가(2685841)에서 나온 엔진 결함."""
+    trial = run({"F01": "중재", "F10": "아니오"})                      # 중재인데 임상시험 아님 → 연구자에게 한 번 더 확인
+    assert any(r["rule_id"] == "T1" and r["abstain_reason"] == "나" for r in trial["judgments"])
+    answered = run({"F01": "중재", "F10": "아니오"}, extra={"F10": "아니오"})  # 연구자가 답했으면 다시 묻지 않는다
+    assert not any(r["rule_id"] == "T1" for r in answered["judgments"])
+    export = run({"F06": "예"})                                       # 샘플 2 본문엔 '결합' 서술이 있어 결합으로 본다
+    assert "D3" in ids(export, "충족")
+    base = samples.load("sample2_pseudo")
+    only_out = {**base["pending"], "masked_text": base["pending"]["masked_text"].replace("다른 기관 데이터와 결합하거나 외부로 반출하지 않는다", "분석 결과는 외부 기관에 반출한다")}
+    facts = [dict(f, value="예", status="found") if f["key"] == "F06" else dict(f) for f in only_out["facts"]]
+    state = {"institution_name": "가상대학교병원", "target_start_date": "2026-12-01", "today": "2026-09-30",
+             "masked_text": only_out["masked_text"], "facts": facts, "confirmed_facts": facts, "extra_inputs": {}}
+    state = {**state, **judge.institution(state)}
+    state = {**state, **judge.gates(state)}
+    assert "D3" not in ids(state) and "R-13" not in ids(state)          # 반출만이면 결합전문기관 절차가 아니다
+    text = "선행연구에서 불안 수준을 조사하였다. 본 연구는 자료를 분석한다. 연구가 이미 진행되었다. 만 19~24세 대학생. 감사드립니다."
+    st = {"masked_text": text}
+    past = [text[a:b] for a, b in judge._past_tense(st)]
+    assert any("진행되었다" in s for s in past) and not any("선행연구" in s for s in past)
+    assert not judge._age_without_man(st)                              # '만 19~24세'의 24세는 지킨 것
+    assert judge._mixed_style(st)                                      # '드립니다'도 경어체
+    cuk = run({"F12": ["가톨릭대"], "F01": "설문·면담"}, "가톨릭대")  # 연락처를 받지 않으면 파기 문구를 요구하지 않는다
+    assert "I-CUK-15" not in {r["rule_id"] for r in cuk["judgments"]}

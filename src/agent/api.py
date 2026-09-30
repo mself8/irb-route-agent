@@ -8,6 +8,7 @@ FAKE=1(기본)이면 그래프를 돌리지 않고 data/samples의 예시 결과
 화면 개발과 데모 비상용이다. 실제 그래프는 FAKE=0.
 """
 import os
+import threading
 import uuid
 from functools import lru_cache
 
@@ -21,10 +22,19 @@ FAKE = os.getenv("FAKE", "1") == "1"
 _FAKE_RESULTS: dict[str, Result] = {}  # 예시 모드: 판단불가에 답한 결과를 run_id별로 기억(제출 준비가 답을 잃지 않게)
 
 
+_GRAPH_LOCK = threading.Lock()
+
+
 @lru_cache(maxsize=1)
-def _graph():
+def _build_graph():
     from .graph import build_graph
     return build_graph()
+
+
+def _graph():
+    """그래프는 하나만 쓴다. 여러 세션이 처음에 동시에 부르면 서로 다른 그래프를 쥐는 일을 막는다(함정 평가에서 발견)."""
+    with _GRAPH_LOCK:
+        return _build_graph()
 
 
 def _cfg(run_id: str) -> dict:

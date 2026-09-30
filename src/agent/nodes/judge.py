@@ -114,6 +114,12 @@ def _written(state: GraphState) -> set[str]:
     return {k for k in found if k not in TOLD or not text or any(w in text for w in TOLD[k])}
 
 
+def _linked(state: GraphState) -> bool:
+    """F06(결합·반출)이 '예'일 때 결합인지. 계획서에 결합 서술이 없으면 반출만 하는 것으로 본다(결합전문기관 절차 아님)."""
+    text = state.get("masked_text", "")
+    return not text or any(w in text for w in ("결합", "연계", "링크"))
+
+
 def _yes(v) -> bool:
     return v == "예"
 
@@ -200,6 +206,10 @@ def gates(state: GraphState) -> dict:
     if f.get("F10") is None:
         d["pending"] = True
         rows.append(_row("T1", "판단불가", "의약품·의료기기 임상시험인지 정보 없음", "나", ["F10"]))
+    elif f.get("F01") == "중재" and "F10" not in state.get("extra_inputs", {}) and "F10" not in (state.get("edited_by_user") or []):
+        # 중재 연구인데 임상시험이 아니라고 뽑혔으면(제목만 보고 판단하는 등) 연구자에게 한 번 더 확인한다
+        d["pending"] = True
+        rows.append(_row("T1", "판단불가", "중재 연구인데 임상시험이 아니라고 추출됨 → 의약품·의료기기 투여·사용 여부 확인", "나", ["F10"]))
 
     data, kind = f.get("F03"), f.get("F01")
     ids, code, key = _has(f.get("F16")), f.get("F17"), f.get("F18")
@@ -246,7 +256,7 @@ def gates(state: GraphState) -> dict:
                 rows.append(_row("R-05", "충족", f"1차 판정 {level} ({env}) · 적정성 검토: {REVIEW[level]} "
                                  "(개인정보위 지침 기준, DRB와의 관계는 기관확인)", refs=["F05"]))
                 rows.append(_row("R-06", "판단불가", "기관 지침으로 위험도를 조정할 수 있음", "③"))
-            if _yes(f.get("F06")):
+            if _yes(f.get("F06")) and _linked(state):
                 rows.append(_row("D3", "충족", "결합전문기관에서 결합", refs=["F06"]))
             elif f.get("F06") is None:
                 rows.append(_row("D3", "판단불가", "다른 기관 데이터와 결합하는지 정보 없음", "나", ["F06"]))
@@ -458,7 +468,8 @@ def venue_view(state: GraphState, venue: dict) -> dict:
               "found": any(x in written for x in std[k].get("facts", [])) or any(w in text for w in std[k].get("words", []))}
              for k, label in venue.get("plan", {}).items()]
     hits = [{k: r.get(k) for k in ("id", "level", "warning", "add_text", "source")} for r in venue.get("rules", [])
-            if _holds(state, r["when"]) and not any(w in text for w in r.get("told", [])) and _checked(state, r)]
+            if _holds(state, r["when"]) and _triggered(state, r) and not any(w in text for w in r.get("told", []))
+            and _checked(state, r)]
     return {k: venue.get(k, "") for k in ("id", "name", "short", "submit", "source", "plan_form")} | {"plan_items": items, "rules": hits}
 
 
@@ -482,18 +493,22 @@ def _fact_span(state: GraphState, key: str) -> tuple[int, int] | None:
 
 
 def _past_tense(state):
-    """연구 행위를 이미 한 것처럼 쓴 문장 ('모집하였다', '분석했다'). 선행연구 서술('보고되었다')은 잡지 않는다."""
-    return _sentences(state.get("masked_text", ""), rf"(?:{_ACTIONS})(?:하였|했)다")
+    """연구 행위를 이미 한 것처럼 쓴 문장('모집하였다', '분석했다', '진행되었다'). 선행연구·문헌 서술은 잡지 않는다."""
+    text = state.get("masked_text", "")
+    found = _sentences(text, rf"(?:{_ACTIONS})(?:하였|했|되었|됐)다")
+    return [(a, b) for a, b in found if not any(w in text[a:b] for w in ("선행", "이전 연구", "기존 연구", "문헌", "보고", "연구에서"))]
 
 
 def _mixed_style(state):
     """계획서(평서체)에 섞인 경어체 문장."""
-    return _sentences(state.get("masked_text", ""), r"습니다|합니다|입니다|됩니다")
+    return _sentences(state.get("masked_text", ""), r"니다(?=[.\s?!]|$)")
 
 
 def _age_without_man(state):
     """'만'이 없는 나이 표기 ('19세 이상'). '만 19세'는 지킨 것이다."""
-    return [m.span() for m in re.finditer(r"(?<!만)(?<!만 )\b\d{1,3}\s?세(?:\s?(?:이상|이하|미만|초과))?", state.get("masked_text", ""))]
+    text = state.get("masked_text", "")
+    return [m.span() for m in re.finditer(r"(?<!만)(?<!만 )\b\d{1,3}\s?세(?:\s?(?:이상|이하|미만|초과))?", text)
+            if not re.search(r"만\s?\d{1,3}\s?세?\s?[~\-–]\s?$", text[max(0, m.start() - 15):m.start()])]
 
 
 def _sample_size_rationale(state):
@@ -556,6 +571,12 @@ CHECKS = {"past_tense": _past_tense, "mixed_style": _mixed_style, "age_without_m
           "recruit_doc": _recruit_doc, "crf_identifiers": _crf_identifiers, "english_title": _english_title}
 
 
+def _triggered(state: GraphState, rule: dict) -> bool:
+    """trigger 낱말이 있는 규칙은 계획서에 그 낱말이 있을 때만 적용한다."""
+    text = state.get("masked_text", "")
+    return not rule.get("trigger") or any(w in text for w in rule["trigger"])
+
+
 def _checked(state: GraphState, rule: dict) -> bool:
     """check가 붙은 규칙은 검사가 위반을 찾았을 때만 낸다(판단할 수 없으면 내지 않는다)."""
     name = rule.get("check")
@@ -575,7 +596,7 @@ def _venue_rows(state: GraphState) -> list[dict]:
     link = re.search(r"https?://[^\s,)]+", venue.get("source", ""))
     rows = []
     for r in venue.get("rules", []):
-        if not (r.get("check") or r.get("told")) or not _holds(state, r["when"]):
+        if not (r.get("check") or r.get("told")) or not _holds(state, r["when"]) or not _triggered(state, r):
             continue
         if r.get("check") in CHECKS:
             spans = CHECKS[r["check"]](state)
@@ -713,7 +734,7 @@ def _schedule(state: GraphState) -> dict:
     target_day = date.fromisoformat(target)
     today = date.fromisoformat(state["today"]) if state.get("today") else date.today()
     if d["drb"] is True and _yes(_facts(state).get("F06")):
-        return _none(default, "결합전문기관·DRB 소요: 공개 수치 없음 → 계산 불가")
+        return _none(default, ("결합전문기관·DRB 소요" if _linked(state) else "외부 반출·DRB 소요") + ": 공개 수치 없음 → 계산 불가")
     venue = _venue(state)
     if venue and venue["schedule"]["kind"] == "csv":  # 기관이 공개한 정규 회의 일정으로 역산 (심의면제도 정규심의 안건인 기관)
         s = venue["schedule"]
