@@ -65,7 +65,7 @@ FAKE=0 streamlit run app.py                            # 결과 화면 → "제�
 본선 중 추가하는 대로 여기에 전량 기록합니다.
 
 - AI 코딩 도구: Claude Code (Anthropic, Claude Opus 5.5) — 코드·테스트·문서 작성 전반. 개발자(송윤)가 지시하고 검토했으며, 세션 2개가 나눠 맡았다(규칙 엔진·화면 / 추출·마스킹·평가). 커밋마다 별도 Claude 리뷰 에이전트가 검토했고, 커밋 메시지에 Co-Authored-By로 표기
-- 화면 코드 생성형 AI: OpenAI Codex CLI (OpenAI, https://github.com/openai/codex, Apache-2.0) — 본선 중 팀원(화면 담당)이 `src/ui/` 화면·글꼴·문서 불러오기 작업에 사용하고 직접 검토했다(버전·모델은 팀원 확인 후 기입)
+- 화면 코드 생성형 AI: OpenAI Codex CLI (OpenAI, https://github.com/openai/codex, Apache-2.0) — 본선 중 팀원(화면 담당)이 `src/ui/` 화면·글꼴·문서 불러오기 작업에 사용하고 직접 검토했다. 모델은 Astra(2026-10-01 기준 최신, 팀원 확인)
 - 기획 단계 생성형 AI: OpenAI Codex CLI — 참가신청서를 바탕으로 한 초기 구조도 초안(본선 전). 발표자료·목업 이미지에 쓴 도구는 제출 전 팀이 확인해 추가
 - 평가 정답 독립 채점: 합성 계획서·함정 693건(모두 가상)의 정답을 두 계열이 법령 원문만 보고 따로 달았다 — Claude 서브에이전트(Claude Opus 5.5)와 OpenAI Codex CLI 0.159.2(gpt-6.1-sol). 가상 계획서만 보냈고 실제 개인정보는 없다(`eval/crosscheck.py`, `eval/results/crosscheck*`)
 - 데모 영상의 실제 기관 사이트 장면: Claude in Chrome(Anthropic 브라우저 확장)이 공용기관생명윤리위원회 e-IRB 신규 심의 신청 화면에 우리 결과(가상 샘플 계획서)를 채운 것이다. 제품 코드가 아니며, 저장·제출은 누르지 않았다. 로그인(동의한 팀원 본인 계정)·동의·서약·파일 첨부·최종 제출은 사람이 한다
