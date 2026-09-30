@@ -1,0 +1,6 @@
+# 파이썬 3.10. 설치: pip install -r requirements.txt
+streamlit==1.64.0
+langgraph==1.2.12
+pydantic==2.13.5
+PyYAML==6.0.3
+pytest
