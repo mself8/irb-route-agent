@@ -3,7 +3,7 @@ name: 서울시립대학교 생명윤리위원회
 short: 서울시립대
 aliases: [서울시립대학교, 서울시립대, 서울시립대학교 생명윤리위원회]
 submit: R-BAY(r-bay.co.kr)에서 신청하고 학과 조교를 통해 공문 발송
-source: 서울시립대 생명윤리위원회 표준운영지침 Ver.2.3·FAQ v3·R-BAY 공지 (https://r-bay.co.kr/agency/main/QzMzZ2NYdTVrbHUza0lxZG9ZcE40QT09, https://research.uos.ac.kr/institutionalbioethicscommittee, 확인 2026-09-29)
+source: 서울시립대 생명윤리위원회 표준운영지침 Ver.2.3·별지서식 ver.2.3·FAQ v3·R-BAY 공지·양식함 (https://r-bay.co.kr/agency/main/QzMzZ2NYdTVrbHUza0lxZG9ZcE40QT09, https://research.uos.ac.kr/institutionalbioethicscommittee, 확인 2026-09-29, 양식함·공지 목록 재확인 2026-09-30)
 plan_form: 연구계획서(인간대상연구) [별지서식 9-1]
 docs:
   신청서: 연구심의 신청서 [별지서식 6] (R-BAY 입력으로 갈음)
@@ -62,6 +62,88 @@ rules:
     level: 확인 필요
     warning: 학과 조교를 통한 공문 발송이 있어야 접수됩니다. 마감일에 공문이 접수되지 않으면 받지 않으므로 마감 2~3주 전 접수를 권합니다.
     source: 서울시립대 R-BAY 공지 · FAQ v3
+  - id: I-UOS-5
+    when: always
+    check: past_tense
+    level: 보완 필요
+    warning: "연구는 수행 전에 위원회의 심의를 받고 승인을 얻어야 합니다. FAQ는 \"이미 결과가 도출된 과제의 경우 절대적으로 IRB 심사가 불가\"하다고 안내합니다. 모집·수집·분석을 이미 끝낸 것처럼 과거형으로 쓰면 이미 진행된 연구로 읽힐 수 있으니, 연구 행위는 앞으로 할 일(~할 것이다·~한다)로 적으세요."
+    source: 서울시립대 생명윤리위원회 표준운영지침 Ver.2.3(2026-07-21) 제20조 · FAQ v3(2026-07-20 제작) 「2. 신규 신청 관련」
+  - id: I-UOS-6
+    when: kind=설문·면담|관찰|중재|인체유래물
+    check: sample_size_rationale
+    told: [산출 근거, 산출근거]
+    level: 보완 필요
+    warning: "연구대상자를 직접 모집하면 연구계획서에 예상 연구대상자 수와 산출 근거를 반드시 적어야 합니다. 서식은 선행연구나 통계학적 평가방법에 근거해, 계획된 연구에서 필요한 결과를 얻을 수 있는 최소한 이상의 수를 제시하라고 안내합니다."
+    add_text: "예상 연구대상자 수: [N]명. 산출 근거: [선행연구(참고문헌) 또는 통계학적 평가방법(효과크기·유의수준·검정력 등)]에 근거하여, 계획된 분석에 필요한 최소 인원 이상인 [N]명으로 정한다."
+    source: 서울시립대 연구계획서(인간대상연구) [별지서식 9-1] ver.2.3 「8. 예상 연구대상자 수와 산출 근거」 · 표준운영지침 Ver.2.3 제20조①4호 마목
+  - id: I-UOS-7
+    when: always
+    check: period_before_review
+    level: 보완 필요
+    warning: "연구 시작일을 심의 결과보다 앞선 날짜로 쓰면 승인 전에 연구를 시작하는 것으로 보일 수 있습니다. 이 위원회 서식은 연구기간을 '승인일로부터 ~ 00년 00월 00일'로 적게 하고(신청서도 '연구예정기간 IRB 승인일~'), 모집 공고문의 참여기간·신청기간은 IRB 승인 뒤 실제로 게시할 때 넣으라고 안내합니다."
+    add_text: "연구기간: 승인일로부터 [YYYY년 MM월 DD일]까지"
+    source: 서울시립대 연구계획서(인간대상연구) [별지서식 9-1] ver.2.3 「6. 연구기간」 · 연구심의 신청서 [별지서식 6] 연구예정기간 · 연구 대상자 모집 공고문 [별지서식 13] 작성 안내
+  - id: I-UOS-8
+    when: always
+    check: english_title
+    level: 보완 필요
+    warning: "연구심의 신청서와 연구계획서 서식에는 국문·영문 연구과제명 칸이 따로 있습니다. 계획서에 영문 과제명이 없으면 함께 정해 적으세요."
+    add_text: "연구과제명(영문): [English title]"
+    source: 서울시립대 연구심의 신청서 [별지서식 6] · 연구계획서(인간대상연구) [별지서식 9-1] · 연구계획서 요약[심의면제] [별지서식 9-3] ver.2.3 연구과제명 칸
+  - id: I-UOS-9
+    when: kind=설문·면담|관찰|중재|인체유래물
+    check: recruit_doc
+    told: [모집 공고문, 모집공고문]
+    level: 확인 필요
+    warning: "공개모집을 하거나 공고문을 쓰면 연구 대상자 모집 공고문[별지서식 13]을 함께 내야 합니다. 서식은 대상자가 이해하기 쉽게 쓰고, 참여기간·신청기간은 IRB 승인 뒤 실제로 게시할 때 넣으라고 안내합니다."
+    source: 서울시립대 표준운영지침 Ver.2.3 제20조①8호 · R-BAY 공지 「★ 생명윤리교육/ 제출서류/공문 관련 안내★」(2025-08-14) ⑦ · 연구 대상자 모집 공고문 [별지서식 13] ver.2.3 작성 안내
+  - id: I-UOS-10
+    when: kind=설문·면담
+    level: 확인 필요
+    warning: "설문조사나 인터뷰를 하면 설문지 또는 질문리스트를 반드시 내야 하고, 완성된 질문지로 심의를 받아야 합니다. 질문지가 아직 없으면 심의를 받을 수 없다고 안내합니다."
+    source: 서울시립대 생명윤리위원회 FAQ v3(2026-07-20 제작) 「2. 신규 신청 관련」 · R-BAY 공지 「★ 생명윤리교육/ 제출서류/공문 관련 안내★」(2025-08-14) ⑧
+  - id: I-UOS-11
+    when: always
+    level: 확인 필요
+    warning: "연구계획서는 가급적 10쪽을 넘지 않게 쓰되, 학술적 견지의 연구목적과 세부 연구방법(연구대상자 모집 방법의 구체성 등)이 들어가야 합니다. 서식은 연구의 취지나 기대효과를 연구목적으로 쓰지 말라고 안내합니다. 계획서가 \"터무니없이 부실한 경우\" 심의 안건 상정 전 행정검토 단계에서 반려될 수 있습니다."
+    source: 서울시립대 R-BAY 공지 「★ 생명윤리교육/ 제출서류/공문 관련 안내★」(2025-08-14) ③ · 연구계획서(인간대상연구) [별지서식 9-1]·연구계획서 요약[심의면제] [별지서식 9-3] ver.2.3 연구목적 칸 안내
+  - id: I-UOS-12
+    when: always
+    level: 확인 필요
+    warning: "서류는 양식함의 최신 양식(ver.2.3, '26.7.22. 개정)으로 써야 합니다. 구버전 양식이나 자유양식(이력서 포함)을 쓰거나 필수서류를 빠뜨리면 반송 대상입니다. 글씨체·글씨 크기·표 크기·자간을 바꾸지 말고, 해당 서류를 모두 작성해 하나의 파일로 합친 뒤 PDF로 변환해 내라고 안내합니다."
+    source: 서울시립대 R-BAY 공지 「★ 생명윤리교육/ 제출서류/공문 관련 안내★」(2025-08-14) 서류작성 시 안내사항 · 양식함 「★신규심의, 심의면제,인간대상, 인체유래물 연구양식건(26.7.22.) ★」 · FAQ v3 「2. 신규 신청 관련」
+  - id: I-UOS-13
+    when: always
+    level: 확인 필요
+    warning: "연구책임자가 학위과정 중이면 원칙적으로 지도교수와 함께 신청해야 하고, 그러지 못할 부득이한 사유가 있으면 단독 심의신청 사유서[별지서식 33]를 내야 합니다. 지도교수서약서는 생명윤리준수 서약서로 대체되었습니다. 본교 소속이 아니면 단독이나 연구책임자로 심의를 받을 수 없고, 다른 기관 공동연구자는 신청서에 비회원으로 추가합니다."
+    source: 서울시립대 표준운영지침 Ver.2.3 제20조 · R-BAY 공지 「★ 생명윤리교육/ 제출서류/공문 관련 안내★」(2025-08-14) ② · FAQ v3 「1. 회원가입 및 로그인 관련」·「2. 신규 신청 관련」
+  - id: I-UOS-14
+    when: always
+    level: 안내
+    warning: "다른 기관에서 IRB 승인을 받은 공동연구라도 이 위원회에서 일부만 발췌하거나 설문지만 심의받을 수 없습니다. 연구계획서 전체와 설문지 전체로 신청하고, 그 기관의 통지서와 심의 이력을 첨부해야 합니다."
+    source: 서울시립대 생명윤리위원회 FAQ v3(2026-07-20 제작) 「2. 신규 신청 관련」
+  - id: I-UOS-15
+    when: kind=설문·면담
+    level: 확인 필요
+    warning: "온라인 설문으로 서면동의를 대신하려면 서면동의 대체(온라인 동의) 신청서[별지서식 11]를 내야 합니다. 서식은 플랫폼(예: 네이버폼, 구글폼)에 대상자의 동의 여부와 일시를 기록·확인할 수 있는지 먼저 문의해 적게 하고, 종료·결과보고 때 그 기록(서베이 로그)을 내야 합니다."
+    source: 서울시립대 서면동의 대체(온라인 동의) 신청서 [별지서식 11] ver.2.3 · 표준운영지침 Ver.2.3 제20조①5호 · FAQ v3 「2. 신규 신청 관련」
 exempt_regular: true   # 심의면제도 정규심의 안건이라 7일 빠른 길(가이드라인 표준절차)을 이 기관에서는 쓰지 않는다
 schedule: {kind: csv, path: data/schedules/uos_irb_2026.csv, result_days: 14, cycle_days: 25,
            note: "신규는 심의면제 포함 정규심의 안건 (FAQ v3) · 결과 통보 심의일로부터 14일 이내 (SOP 제36조②) · 보완은 다음 차수 정규심의"}
+forms:       # R-BAY 양식함 「표준운영지침, 별지서식 및 관련 안내」(2026-07-30, 별지서식_2.3.hwpx)·「★신규심의, 심의면제,인간대상, 인체유래물 연구양식건(26.7.22.) ★」 + 표준운영지침 제20·21조. 신규심의·심의면제에 연구자가 내는 서식만
+  - {name: 연구심의 신청서 (R-BAY 입력으로 갈음), number: 별지서식 6, version: ver.2.3, doc: 신청서, url: "https://r-bay.co.kr/agency/sub/QzMzZ2NYdTVrbHUza0lxZG9ZcE40QT09/005001"}
+  - {name: 생명윤리준수 서약서 (연구진 전원), number: 별지서식 7, version: ver.2.3, doc: 서약서, url: "https://r-bay.co.kr/agency/sub/QzMzZ2NYdTVrbHUza0lxZG9ZcE40QT09/005001"}
+  - {name: 이해상충 공개서(연구자용) (연구진 전원), number: 별지서식 8, version: ver.2.3, doc: 이해상충, url: "https://r-bay.co.kr/agency/sub/QzMzZ2NYdTVrbHUza0lxZG9ZcE40QT09/005001"}
+  - {name: 연구계획서(인간대상연구), number: 별지서식 9-1, version: ver.2.3, doc: 계획서, url: "https://r-bay.co.kr/agency/sub/QzMzZ2NYdTVrbHUza0lxZG9ZcE40QT09/005001"}
+  - {name: 연구계획서(인체유래물연구), number: 별지서식 9-2, version: ver.2.3, doc: 계획서, url: "https://r-bay.co.kr/agency/sub/QzMzZ2NYdTVrbHUza0lxZG9ZcE40QT09/005001"}
+  - {name: "연구계획서 요약[심의면제] (지침 제21조 이름: 연구계획서(인간대상연구-심의면제))", number: 별지서식 9-3, version: ver.2.3, doc: 계획서, url: "https://r-bay.co.kr/agency/sub/QzMzZ2NYdTVrbHUza0lxZG9ZcE40QT09/005001"}
+  - {name: 설명문 및 동의서(인간대상연구), number: 별지서식 10-1, version: ver.2.3, doc: 동의서류, url: "https://r-bay.co.kr/agency/sub/QzMzZ2NYdTVrbHUza0lxZG9ZcE40QT09/005001"}
+  - {name: 설명문 및 동의서(인체유래물연구) (시행규칙 별지 제34호서식), number: 별지서식 10-2, version: ver.2.3, doc: 동의서류, url: "https://r-bay.co.kr/agency/sub/QzMzZ2NYdTVrbHUza0lxZG9ZcE40QT09/005001"}
+  - {name: 서면동의 대체(온라인 동의) 신청서, number: 별지서식 11, version: ver.2.3, doc: 동의서류, url: "https://r-bay.co.kr/agency/sub/QzMzZ2NYdTVrbHUza0lxZG9ZcE40QT09/005001"}
+  - {name: 이력서(연구자용) (자유양식 불가, 연구진 전원), number: 별지서식 12, version: ver.2.3, doc: 이력서, url: "https://r-bay.co.kr/agency/sub/QzMzZ2NYdTVrbHUza0lxZG9ZcE40QT09/005001"}
+  - {name: 연구 대상자 모집 공고문 (공개모집·공고문 사용 시), number: 별지서식 13, version: ver.2.3, doc: 모집문서, url: "https://r-bay.co.kr/agency/sub/QzMzZ2NYdTVrbHUza0lxZG9ZcE40QT09/005001"}
+  - {name: 심의면제 자가점검표(인간대상연구), number: 별지서식 14-1, version: ver.2.3, doc: 면제점검, url: "https://r-bay.co.kr/agency/sub/QzMzZ2NYdTVrbHUza0lxZG9ZcE40QT09/005001"}
+  - {name: 심의면제 자가점검표(인체유래물연구), number: 별지서식 14-2, version: ver.2.3, doc: 면제점검, url: "https://r-bay.co.kr/agency/sub/QzMzZ2NYdTVrbHUza0lxZG9ZcE40QT09/005001"}
+  - {name: 인체유래물등(검사대상물) 관리대장 (인체유래물연구 심의면제 시), number: 별지서식 17, version: ver.2.3, url: "https://r-bay.co.kr/agency/sub/QzMzZ2NYdTVrbHUza0lxZG9ZcE40QT09/005001"}
+  - {name: 단독 심의신청 사유서 (학위과정 연구책임자가 지도교수와 함께 신청하지 못할 때), number: 별지서식 33, version: ver.2.3, doc: 기관서류, url: "https://r-bay.co.kr/agency/sub/QzMzZ2NYdTVrbHUza0lxZG9ZcE40QT09/005001"}
+  - {name: IRB 심의신청 공문 예시 (이미지, 학과 사무실이 전자문서로 발송), doc: 기관서류, url: "https://r-bay.co.kr/agency/sub/QzMzZ2NYdTVrbHUza0lxZG9ZcE40QT09/003001"}
