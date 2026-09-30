@@ -29,3 +29,11 @@ def test_masks_names_only_in_name_context():
 def test_no_pii_is_unchanged():
     text = "연구 방법: 가명처리한 데이터셋을 제공받아 원내 분석실에서 분석한다."
     assert pii.mask(text) == (text, [])
+
+
+def test_researcher_labels_and_common_words():
+    # 누락 주입 검증에서 발견: "연구원:" 뒤 이름을 못 가림 / "정규 연구원"의 '정규'를 이름으로 가림
+    assert pii.mask("담당 연구원: 김민수")[0] == "담당 연구원: [이름]"
+    assert pii.mask("공동연구원: 이서연, 연구담당자: 최하나")[0] == "공동연구원: [이름], 연구담당자: [이름]"
+    text = "연구소에는 정규 연구원 4명과 인턴 연구원 2명이 일합니다."
+    assert pii.mask(text) == (text, [])
