@@ -220,7 +220,7 @@ def test_ui_demo_flow(monkeypatch, mock_site):
     click("사실 추출 시작")
     click("사실 확정하고 판정")
     click("제출 준비 (모의 e-IRB)")
-    click("제출 조건 확인하고 모의 e-IRB에 채우기")
+    click("제출 사이트로 이동")
     assert app.session_state.result.submission.status == "blocked"
     click("판단불가 화면에서 입력하기")
     next(r for r in app.radio if "누가 분석" in r.label).set_value("기관 내부").run(timeout=30)
@@ -229,12 +229,12 @@ def test_ui_demo_flow(monkeypatch, mock_site):
     for box in app.checkbox:
         box.check()
     app.run(timeout=30)
-    click("제출 조건 확인하고 모의 e-IRB에 채우기")
+    click("제출 사이트로 이동")
     assert app.session_state.result.submission.status == "awaiting_approval"
     click("승인하고 최종 제출")
     assert not app.exception
     assert app.session_state.result.submission.receipt.startswith("MOCK-2026-")
     assert any("접수번호" in s.value for s in app.success)
-    assert not any(b.label == "제출 조건 확인하고 모의 e-IRB에 채우기" for b in app.button)  # 접수 뒤에는 다시 채우지 않는다
+    assert not any(b.label == "제출 사이트로 이동" for b in app.button)  # 접수 뒤에는 다시 채우지 않는다
     for d in Path("/tmp").glob("nais_*"):
         shutil.rmtree(d, ignore_errors=True)
