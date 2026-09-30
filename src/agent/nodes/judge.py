@@ -84,6 +84,12 @@ def _yes(v) -> bool:
     return v == "예"
 
 
+def _yn(v: str | None) -> bool | None:
+    """명단 CSV의 예/아니오. 빈칸은 확인 전이라 None(모름)."""
+    v = (v or "").strip()
+    return True if v == "예" else False if v == "아니오" else None
+
+
 def _has(v) -> bool | None:
     """목록형 사실(식별자·민감정보·취약 대상)이 있는지. 모르면 None."""
     if v is None:
@@ -118,7 +124,7 @@ def institution(state: GraphState) -> dict:
     if not name:
         return {"institution": {"name": None, "affiliated": None}}
     row = _lookup(name)
-    irb = _yes(row["IRB_등록"]) if row else None
+    irb = _yn(row["IRB_등록"]) if row else None
     answer = extra.get("irb_exists")
     if answer in ("있음", "없음"):
         irb = answer == "있음"
@@ -126,8 +132,8 @@ def institution(state: GraphState) -> dict:
         "name": name,
         "affiliated": True,
         "irb_exists": irb,
-        "irb_certified": _yes(row["IRB_인증"]) if row else None,
-        "clinical_trial_site": _yes(row["임상시험실시기관"]) if row else None,
+        "irb_certified": _yn(row["IRB_인증"]) if row else None,
+        "clinical_trial_site": _yn(row["임상시험실시기관"]) if row else None,
         "source": [row["출처"]] if row else (["연구자 입력"] if answer in ("있음", "없음") else []),
         "checked_at": row["확인일"] if row else None,
     }}
