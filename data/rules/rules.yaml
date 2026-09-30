@@ -116,7 +116,7 @@
   team_id: R-01
   gate: IRB·위탁
   requirement: 위탁 협약 가능 기관인가 (인증 미취득·취소)
-  type: 판단불가(③)
+  type: 사실형
   basis: {law: 생명윤리법 시행규칙, article: 제5조 ①3호, text: "법 제14조제1항에 따른 인증을 받지 못하였거나 같은 조 제4항에 따라 인증이 취소된 기관", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률시행규칙/제5조"}
 
 - id: J8
@@ -188,3 +188,9 @@
   requirement: 임상시험에 생명윤리법 기관위원회 심의가 추가로 필요한가 (기관 SOP)
   type: 판단불가(③)
   basis: {law: 생명윤리법, article: 제4조 ①, text: "① 생명윤리 및 안전에 관하여는 다른 법률에 특별한 규정이 있는 경우를 제외하고는 이 법에 따른다.", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률/제4조"}
+
+- id: J3
+  gate: IRB·위탁
+  requirement: 소속 기관이 다른 기관위원회 또는 공용위원회와 위탁 협약을 맺었는가
+  type: 판단불가(③)
+  basis: {law: 생명윤리법, article: 제10조 ②, text: "업무의 수행을 위탁하기로 협약을 맺은 기관은 기관위원회를 설치한 것으로 본다.", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률/제10조"}

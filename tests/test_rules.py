@@ -5,13 +5,13 @@ from agent import samples
 from agent.nodes import judge, write
 
 
-def run(overrides: dict, institution: str = "가상대학교병원", extra: dict | None = None) -> dict:
+def run(overrides: dict, institution: str = "가상대학교병원", extra: dict | None = None, target: str = "2026-12-01") -> dict:
     facts = [dict(f) for f in samples.load("sample2_pseudo")["pending"]["facts"]]
     for f in facts:
         if f["key"] in overrides:
             f["value"] = overrides[f["key"]]
             f["status"] = "not_found" if f["value"] is None else "found"
-    state = {"institution_name": institution, "target_start_date": "2026-12-01",
+    state = {"institution_name": institution, "target_start_date": target, "today": "2026-09-30",
              "confirmed_facts": facts, "extra_inputs": extra or {}}
     for step in (judge.institution, judge.gates, judge.route, judge.docs_schedule, write.abstain, write.report):
         state = {**state, **step(state)}
@@ -66,8 +66,14 @@ def test_missing_or_conflicting_code_facts_ask_researcher_first():
     assert "F17" in asks(run({"F17": None, "F18": None}))
     assert "F18" in asks(run({"F18": None}))
     assert "F16" in asks(run({"F16": "모름"}))                  # "모름"은 식별자가 아니라 모르는 값
-    conflict = run({"F17": "아니오", "F18": "연구책임자"})       # 코드가 없는데 대응표가 있다는 모순
-    assert conflict["decision"]["exempt"] != "yes" and "F17" in asks(conflict)
+    conflict = run({"F17": "아니오", "F18": "연구책임자"})       # 대응표가 있으면 코드도 있다고 보고 되묻지 않는다
+    assert conflict["decision"]["exempt"] == "unknown" and "F17" not in asks(conflict)
+    loop = run({"F17": "아니오", "F18": None})                  # 가명처리인데 코드 없음 → 대응표를 묻는다(같은 질문 반복 없음)
+    assert "F18" in asks(loop) and "F17" not in asks(loop) and "D1" in ids(loop, "충족")
+    viewed = run({"F03": "원자료", "F02": "예", "F17": None, "F18": None})
+    assert "F17" in asks(viewed) and viewed["decision"]["exempt"] == "unknown"
+    viewed_key = run({"F03": "원자료", "F02": "예", "F17": None, "F18": "연구책임자"})
+    assert next(r for r in viewed_key["judgments"] if r["rule_id"] == "E3")["abstain_reason"] == "①"
 
 
 def test_values_typed_on_screen_are_normalized():
@@ -76,17 +82,30 @@ def test_values_typed_on_screen_are_normalized():
     assert "R-05" in ids(run({"F05": "기관 내부 폐쇄망"}), "판단불가")    # 선택지 밖 값은 다시 묻는다
 
 
-def test_pseudonymous_route_needs_no_consent_waiver():
-    state = run({})
-    assert "C3" not in ids(state)  # 가명정보 특례로 쓰면 동의면제 판단 불필요 (가이드라인 부록3)
-    assert not any("동의 면제" in d["doc"] for d in state["documents"])
+def test_consent_waiver_is_left_to_committee_on_every_route():
+    # 가명정보 특례로 쓰는 경우 동의면제 판단이 필요한지는 가이드라인 안에서도 엇갈린다 (prep 케이스 5, 이슈 #9)
+    assert "C3" in ids(run({}), "판단불가")
     assert "C3" in ids(run(IDENTIFIED), "판단불가")
+
+
+def test_unknown_premises_do_not_produce_dates_or_drop_drb():
+    no_ids = run({"F16": None})                                 # 식별자를 몰라도 가명처리면 DRB 경로는 남는다
+    assert no_ids["route"]["route"] == "A" and "D1" in ids(no_ids, "충족") and "F16" in asks(no_ids)
+    no_consent = run({"F11": None})                             # 동의 여부를 모르면 경로 미정, 날짜 없음
+    assert no_consent["route"]["route"] == "미정" and not no_consent["route"]["fast_track"]
+    assert all(s.get("submit_by") is None for s in no_consent["schedule"]["scenarios"])
+    no_trial = run({**IDENTIFIED, "F10": None}, "없음")         # 임상시험 여부를 모르면 날짜를 내지 않는다
+    assert all(s.get("submit_by") is None for s in no_trial["schedule"]["scenarios"])
+    no_kind = run({"F01": None})
+    assert "F01" in asks(no_kind) and no_kind["decision"]["exempt"] == "unknown"
 
 
 def test_biospecimen_research_uses_its_own_exemption_rule():
     state = run({"F09": "예"})
     assert "S6" in ids(state, "충족") and "E5" in ids(state, "판단불가") and "E3" not in ids(state)
     assert state["decision"]["exempt"] == "unknown"
+    state = run({**IDENTIFIED, "F09": "예"})                   # 개인정보를 적으면 사실로 면제 불가
+    assert "E5" in ids(state, "미충족") and state["decision"]["exempt"] == "no"
 
 
 def test_survey_exemption_is_left_to_committee():
@@ -94,6 +113,8 @@ def test_survey_exemption_is_left_to_committee():
     assert "E2" in ids(state, "판단불가") and "S7" not in ids(state)  # 대면 설문은 익명이어도 인간대상연구
     state = run({"F01": "설문·면담", "F03": "원자료", "F16": [], "F07": [], "F08": ["미성년자"]})
     assert "E4" in ids(state, "미충족") and state["decision"]["exempt"] == "no"
+    state = run({"F01": "설문·면담", "F03": "원자료", "F17": "아니오", "F07": ["정신질환"], "F08": []})
+    assert "E2" in ids(state, "미충족") and state["decision"]["exempt"] == "no"
 
 
 def test_unknown_affiliation_asks_institution():
@@ -107,7 +128,8 @@ def test_unknown_irb_asks_then_rejudges():
     state = run(IDENTIFIED, "없는병원")
     assert asks(state)[0] == "irb_exists" and state["schedule"]["scenarios"][0].get("submit_by") is None
     state = run(IDENTIFIED, "없는병원", {"irb_exists": "없음"})
-    assert state["route"]["route"] == "B" and "J6" in ids(state, "판단불가")
+    assert state["route"]["route"] == "B" and "J6" in ids(state, "충족") and "J3" in ids(state, "판단불가")
+    assert all(s.get("submit_by") is None for s in state["schedule"]["scenarios"])  # 협약 소요 비공개
 
 
 def test_public_irb_backward_schedule_matches_prep_answer():
@@ -115,6 +137,12 @@ def test_public_irb_backward_schedule_matches_prep_answer():
     state = run(IDENTIFIED, "없음")
     dates = [s.get("submit_by") for s in state["schedule"]["scenarios"]]
     assert dates == ["2026-11-12", "2026-10-29", "2026-10-13"]
+    past = run(IDENTIFIED, "없음", target="2026-10-20")         # 이미 지난 마감은 날짜 대신 "마감 경과"
+    assert past["schedule"]["scenarios"][1].get("submit_by") is None
+    assert "마감 경과" in past["schedule"]["scenarios"][1]["step"]
+    exempt = run(ANONYMOUS, "없음")                              # 공용위원회 심의면제는 수시 접수
+    assert all(s.get("submit_by") is None for s in exempt["schedule"]["scenarios"])
+    assert run({})["schedule"]["scenarios"][0]["submit_by"] == "2026-11-23"  # DRB 빠른 길도 개시일 전날 기준
 
 
 def test_sensitive_info_makes_one_revision_default():
