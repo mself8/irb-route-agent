@@ -52,3 +52,29 @@
 - 정기회의 주기·접수 마감·결과 통보 기간·2026 회의 날짜: 공개 페이지 없음 → `schedule: none`.
 - 연구계획서 서식 항목(후향 의무기록·개인정보 연구): 공개 서식 없음 → `plan` 비움.
 - 공문·연구진 전원 제출·서명 같은 기관 고유 규칙, SOP·규정집 공개본: 없음.
+
+## 서식·작성 규칙 추가 조사 (2026-09-30 저녁)
+
+결론: 신규심사·심사면제 서식 목록(이름·번호·버전)과 보완 사례·작성 요령·IRB FAQ·체크리스트는 공개 페이지 어디에도 없다. 서식과 요령은 e-IRB(로그인) 안에만 있는 것으로 보인다 → 프로필 `forms: []`.
+
+### 더 확인한 곳
+
+| URL | 결과 |
+|---|---|
+| https://irb.kumc.or.kr/Main.aspx · /Board/BoardList.aspx | Login.aspx로 302 이동 → 로그인 필요 |
+| https://irb.kumc.or.kr/Popup/PopNotice.htm | 공개. 제목 「e-IRB로그인 시 변경 사항 안내」뿐(로그인 화면에서도 주석 처리) |
+| https://irb.kumc.or.kr/Help.aspx | 코드 없이 열면 빈 '도움말' |
+| 임상연구지원실 뉴스레터 목록 API https://www.kumc.or.kr/api/article/89?boardNo=89&instNo=0&startIndex=1&pageRow=60 | 51개호 전부(2022-1차~26.07). 46개호는 통이미지(OCR로 읽음). 주제는 대부분 의료기기 규제라 IRB 신청 요령·보완 사례 없음 |
+| https://www.kumc.or.kr/kr/medsh-newsLetter/view.do?article=270858 (26.07, 게시 2026-07-27) | LLM 연구 계획 수립 때 AI 출력·임상적 의미·참조표준·'LLM 단독 성능 vs 의료진 수행능력'을 정의하고, "모델명과 버전, 프롬프트, 참조 데이터베이스, 주요 파라미터와 변경 일자를 기록"하라고 권함("법적 효력을 가지는 문서가 아니"라고 명시). LLM 연구일 때만 해당하는데 규칙 조건(when)으로 가를 수 없어 프로필 규칙에는 넣지 않음 |
+| https://www.kumc.or.kr/kr/medsh-newsLetter/view.do?article=270857 (26.06) | SaMD 표시 요건. IRB 서류 규칙 아님 |
+| kumc 게시판 medsh-archives·medsh-notice·medsh-news·medical-archives·etetdReference, anamrnd 공지(anam-info-news 18건) | IRB 서식·요령 없음 |
+| https://www.kumc.or.kr/api/search/search.do?query=… | 「IRB 보완」·「IRB 양식」 0건, 「심의면제」는 26.05 뉴스레터 1건 |
+| http://ctc.kumc.or.kr/mnu_02/02_researcher.jsp (안암 임상시험센터 연구자 안내) | "CTC 서비스 지원은 IRB 심의 승인 후에 계약 및 제공 가능", QI 서비스가 'IRB Initial Submission' 지원. 임상시험센터 서비스 안내라 규칙에 넣지 않음 |
+| http://ctc.kumc.or.kr/mnu_05/05_morgue.jsp (안암 CTC 자료실 10건) | 연구비·EMR 서류뿐 |
+| https://www.kughctc.or.kr/kr/information/data.php?bgu=view&idx=32 · idx=43 | 구로병원 임상시험센터 자료. "과제 심의 신청서" 이름 언급, 모집 공고문도 원내 IRB 승인 대상. 구로병원 자료라 안암 프로필에는 넣지 않음 |
+| https://www.kumc.or.kr/api/article/29/55159?instNo=0&articleNo=55159&boardNo=29 | 2014 안산 IRB 홈페이지 오픈 공지("필요한 서식 및 자료"). 안내된 asirb.kumc.or.kr은 DNS 없음 |
+| anam·guro·ansan.kumcrnd.or.kr | DNS 없음(검색엔진에만 남음) |
+
+### 프로필에 더한 것
+
+- I-KUMC-6 (`check: period_before_review`): IRB.do·anamrnd 심의 절차도의 순서 "IRB 신청(E-IRB시스템) → 행정점검 및 접수 → 정기/신속심사 → 승인 → 계약서 검토 → 연구 시작". 연구 시작일을 승인 이후로 적게 하는 근거로만 썼다.

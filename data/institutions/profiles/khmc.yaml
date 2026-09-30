@@ -3,7 +3,7 @@ name: 경희대학교병원 임상시험심사위원회(IRB)
 short: 경희대병원
 aliases: [경희대병원, 경희대학교병원, 경희대학교병원 IRB, 경희대병원 IRB, 경희대학교병원 임상시험심사위원회]
 submit: R-BAY e-IRB(r-bay.co.kr, 경희대학교병원 IRB)에 로그인해 '신청보고작성 → 신규계획'으로 신청 (경희의료원 홈페이지 'e-IRB' 링크와 같은 곳)
-source: 경희대병원 IRB 공지(초기심의·심의면제 제출서류 안내, 2026년도 정규심의 일정, SOP Ver.9.5·9.6·9.7 개정 안내, 심사비 안내, 심의 접수 서류 검토 안내) · 경희의료원 임상의학연구소 IRB 소개 (https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09 · https://www.khmc.or.kr/kr/research-education/research-institution/cri_organization1.do, 확인 2026-09-30)
+source: 경희대병원 IRB 공지(초기심의·심의면제 제출서류 안내, 2026년도 정규심의 일정, SOP Ver.9.5·9.6·9.7 개정 안내, 심사비 안내, 심의 접수 서류 검토 안내, 서식 변경 안내, 모집·원내 직원 참여 기준, 시정/보완 답변서 안내) · 경희의료원 임상의학연구소 IRB 소개·정보광장 CDM 안내 (https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09 · https://www.khmc.or.kr/kr/research-education/research-institution/cri_organization1.do · https://www.khmc.or.kr/kr/cri-notice/list.do, 확인 2026-09-30)
 plan_form: 연구계획서 (요약 포함) — 서식 칸 이름은 공개 페이지에서 확인 못 함
 docs:
   신청서: 연구심의신청서 (e-IRB '신청보고작성 → 신규계획'에서 직접 입력)
@@ -18,6 +18,7 @@ docs:
 rules:
   - id: I-KHMC-1
     when: always
+    check: crf_identifiers
     level: 보완 필요
     told: [연구번호, 연구대상자 코드, 부여한 코드, 코드화]
     warning: "증례기록서(CRF)에는 병원등록번호·주민등록번호·이름을 쓸 수 없고, 연구자가 부여한 코드로 기록해야 합니다."
@@ -35,8 +36,10 @@ rules:
     source: 경희대병원 IRB 공지 「IRB 심의 접수 서류 검토 관련하여 안내드립니다」(2026-09-03)
   - id: I-KHMC-4
     when: always
-    level: 확인 필요
-    warning: "영문 연구 제목을 반드시 적어야 합니다. 첨부파일은 파일명 앞에 번호를 붙여 20MB 이내 압축파일 3개로 내기를 권하고, 서류가 많으면 제출 목록(워드)을 함께 붙입니다."
+    check: english_title
+    level: 보완 필요
+    warning: "초기심의 제출서류 안내는 영문 연구 제목을 반드시 적으라고 합니다. 국문 제목과 함께 영문 제목을 정해 두어야 합니다."
+    add_text: "연구 제목 — 국문: [ ] / 영문: [ ]"
     source: 경희대병원 IRB 공지 「초기심의 의뢰 시 제출서류 안내」(첨부 hwp)
   - id: I-KHMC-5
     when: always
@@ -51,8 +54,8 @@ rules:
   - id: I-KHMC-7
     when: exempt
     level: 확인 필요
-    warning: "심의면제는 '심의 면제 요청서'(e-IRB 양식함 서식)를 붙여 신청하며, 신속심의와 같은 담당이 받습니다. 면제 대상 범위와 면제가 안 될 때의 처리는 공개 문서에 없으니 담당에게 확인하세요."
-    source: 경희대병원 IRB 공지 「초기심의 의뢰 시 제출서류 안내」(첨부 hwp) · 「심의 면제 의뢰 시 제출서류 안내」 · R-BAY 경희대병원 IRB 업무별 담당자 안내
+    warning: "심의면제는 연구자가 정할 수 없고, 위원회가 법령의 심의면제 대상인지 판단합니다. 면제 대상이라도 확인을 위해 위원회 심의면제를 받아야 하며, '심의 면제 요청서'(e-IRB 양식함 서식, 2017 공지 이름은 '심사 면제 평가표')를 붙여 신청하고 신속심의와 같은 담당이 받습니다. 면제가 안 될 때의 처리는 공개 문서에 없으니 담당에게 확인하세요."
+    source: 경희의료원 임상의학연구소 IRB 소개(심의 범위) · 경희대병원 IRB 공지 「초기심의 의뢰 시 제출서류 안내」(첨부 hwp) · 「심의 면제 의뢰 시 제출서류 안내」 · 「심사 면제 평가표 서식이 변경되었습니다」(2017-02-23) · R-BAY 경희대병원 IRB 업무별 담당자 안내
   - id: I-KHMC-8
     when: drb
     level: 확인 필요
@@ -63,5 +66,83 @@ rules:
     level: 안내
     warning: "의료영상(PACS) 연구 데이터를 비식별화해 받으면 2026-09-01 신청분부터 산정 기준에 따라 비용이 부과됩니다(경희의료원 의료영상정보관리규정)."
     source: 경희대병원 IRB 공지 「연구 데이터 비식별화 비용 산정 안내」(2026-08-28, 첨부 pdf)
+  - id: I-KHMC-10
+    when: always
+    level: 확인 필요
+    warning: "첨부파일은 파일명 앞에 번호를 붙여 20MB 이내 3개 파일로 내기를 권하고, 서류가 많으면 제출 목록(워드)을 함께 붙입니다. 한 칸에 올릴 수 있는 용량은 업무시간(08~17시) 20MB, 업무시간 외 50MB입니다. 설명문·동의서와 모집 광고문·매체 정보는 수정 가능한 파일로 냅니다."
+    source: 경희대병원 IRB 공지 「초기심의 의뢰 시 제출서류 안내」(첨부 hwp) · 「시간대별 첨부파일 용량 제한 안내」(2016-08-12)
+  - id: I-KHMC-11
+    when: always
+    check: past_tense
+    level: 보완 필요
+    warning: "이 위원회는 연구를 수행하기 전에 승인이나 면제를 받아야 하고 사후심의는 하지 않는다고 안내합니다. 계획서가 연구를 이미 한 것처럼 과거형으로 적혀 있으면 수행 전 계획으로 고쳐 써야 합니다."
+    source: 경희의료원 임상의학연구소 IRB 소개 '심의 범위' (https://www.khmc.or.kr/kr/research-education/research-institution/cri_organization1.do)
+  - id: I-KHMC-12
+    when: always
+    check: period_before_review
+    level: 보완 필요
+    warning: "연구수행 이전에 위원회의 승인 또는 면제를 받아야 하므로, 연구 기간의 시작을 승인(또는 면제) 이후로 적어야 합니다."
+    add_text: "연구 기간: IRB 승인(면제)일로부터 [YYYY.MM.DD]까지"
+    source: 경희의료원 임상의학연구소 IRB 소개 '심의 범위' (https://www.khmc.or.kr/kr/research-education/research-institution/cri_organization1.do)
+  - id: I-KHMC-13
+    when: kind=기록 이용
+    level: 안내
+    warning: "경희의료원은 2008-01 이후 EMR 자료를 OMOP CDM으로 변환해 두었고, 이 CDM은 IRB 심의 면제(IRB No. 2020-01-047)를 받아 단일기관 연구는 원칙적으로 추가 IRB 승인 없이 수행할 수 있다고 안내합니다. 쓰려는 자료가 이 CDM인지, 원자료(EMR)인지 먼저 확인하세요."
+    source: 경희의료원 임상의학연구소 정보광장 「Common Data Model (CDM)을 활용한 임상연구」(2024-04-16, https://www.khmc.or.kr/kr/cri-notice/view.do?boardNo=66&articleNo=17967)
+  - id: I-KHMC-14
+    when: kind=설문·면담|관찰|중재|인체유래물
+    check: recruit_doc
+    told: [모집 공고, 모집공고, 광고문, 모집 문건]
+    level: 확인 필요
+    warning: "대상자를 모집하면 모집 절차(광고문·매체 정보 등)를 수정 가능한 파일로 함께 내야 합니다. 전화·문자·메일로 따로 정보를 주면 그 방법과 내용, 콜센터 운영 방법, 모집 중 얻은 개인정보의 관리 방법도 내야 합니다."
+    source: 경희대병원 IRB 공지 「초기심의 의뢰 시 제출서류 안내」(첨부 hwp) · 「IRB SOP & Guideline 개정(Ver.9.7)」(2026-01-27)
+  - id: I-KHMC-15
+    when: kind=설문·면담|관찰|중재|인체유래물
+    level: 확인 필요
+    warning: "SOP Ver.9.7은 모집공고에 모든 매체를 쓸 수 있게 했지만 알바 모집 사이트처럼 대상자 모집 목적으로 보기 어려운 매체는 쓸 수 없습니다. 온라인 모집공고의 정보는 편집이 통제된 형태(locked format)로 게시해야 하고, 댓글 등으로 연구 정보가 오인되지 않게 관리해야 합니다."
+    source: 경희대병원 IRB 공지 「IRB SOP & Guideline 개정(Ver.9.7)」(2026-01-27)
+  - id: I-KHMC-16
+    when: kind=설문·면담|관찰|중재|인체유래물
+    level: 확인 필요
+    warning: "원내 직원과 그 가족을 대상자로 모집하면 모집 사유와 대책을 적어 내야 하고, 이 위원회 기준은 원내 직원·가족을 전체 본원 연구대상자의 1/4 이하로 둡니다."
+    source: 경희대병원 IRB 공지 「원내 직원 및 가족의 연구 참여 심의 기준입니다.」(2022-04-06)
+  - id: I-KHMC-17
+    when: kind=설문·면담|관찰|중재|인체유래물
+    level: 확인 필요
+    warning: "설명문·동의서는 양식함의 '대상자설명서 및 동의서 체크리스트/예시문'(SOP Ver.9.6, 2025-03-01 개정)을 따릅니다. 개정 서식은 수집한 개인정보·민감정보의 국외 이전 동의 내용을 넣었고, 연락처의 부서명은 '임상연구윤리부'(옛 피험자권리보호부)로 적어야 합니다."
+    source: 경희대병원 IRB 공지 「IRB SOP & Guideline 개정(Ver.9.6)」(2025-02-28) · 「"피험자권리보호부 -> 임상연구윤리부" 변경 안내드립니다.」(2026-04-23)
+  - id: I-KHMC-18
+    when: kind=인체유래물
+    level: 안내
+    warning: "병리 조직 연구는 공정한 제3자가 조직 공여자의 식별정보를 익명 처리한 경우 동의 면제를 고려할 수 있다고 안내합니다(그 제3자는 연구와 저자에 참여하지 않음)."
+    source: 경희대병원 IRB 공지 「IRB SOP & Guideline 개정」(2021-04-28, 시행 2021-05-01)
+  - id: I-KHMC-19
+    when: always
+    level: 안내
+    warning: "시정·보완 답변은 '위원회 심사의견에 대한 답변서'(KF 06-001)와 변경대비표(변경 전후 항목·내용·페이지·Version·변경사유)로 냅니다. 반영이 안 됐거나 수정 부분을 찾기 어려우면 반송될 수 있고, 보완 답변서는 초기심의 패널의 정규심의 2주 전까지 내야 합니다."
+    source: 경희대병원 IRB 공지 「시정 답변서(신속심의) 또는 보완 답변서(정규심의) 심의 의뢰 시 제출서류 안내」(2016-09-27) · 「심의 결과에 대한 안내」(2016-09-27)
 drb_order: unknown   # IRB와 DRB의 순서는 공개 안내 없음
 schedule: {kind: none, note: "2026 정규심의 날짜·마감은 공개(패널 A·B·C 월 3회, 회의 14일 전 마감)이나 결과 통보 기한이 비공개라 역산 안 함 · 신속심의는 정해진 심의일 없이 행정검토 뒤 14일 이내 처리 · 보완 답변서는 처음 심의한 패널의 정규심의 14일 전까지"}
+forms:       # R-BAY 공지(본문은 POST로만 열림, 공지 번호는 notes)에서 이름을 확인한 서식. 신규·면제 서식에는 KF 번호·버전 표기가 없고 파일은 e-IRB 양식함(로그인)에 있다. 공개 파일은 심사비 서식 2종과 시체 연구 동의서뿐
+  - {name: "연구심의신청서 (e-IRB '신청보고작성 → 신규계획'에서 직접 입력)", doc: 신청서, url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "연구계획서 (요약 포함, 계획서 안에 요약이 있으면 따로 안 냄)", doc: 계획서, url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "대상자설명서 및 동의서 (수정 가능한 워드·한글 파일)", doc: 동의서류, url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "대상자설명서 및 동의서 체크리스트/예시문 (양식함)", version: "SOP Ver.9.6 개정 2025-03-01", doc: 동의서류, url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "시험(연구)대상자설명서 예시문 (양식함)", doc: 동의서류, url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "동의서 작성 시 참고자료 (양식함)", doc: 동의서류, url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "동의 면제 요청서 · 동의서 면제 요청서 (2017 공지 이름: 동의면제평가표·동의서면제평가표, 양식함)", version: "2017-02-23 서식 변경", doc: 동의서류, url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "심의면제 요청서 (2017 공지 이름: 심사 면제 평가표, 양식함)", version: "2017-02-23 서식 변경", doc: 면제점검, url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "증례기록서(CRF) 또는 증례기록 면제 사유서 (데이터를 이용하는 연구)", doc: 자료양식, url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "연구책임자 최근 이력 및 경력 (최근 6개월 이내 서명)", doc: 이력서, url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "임상시험등 종사자교육/임상연구 관련 교육 이수증", doc: 교육, url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "이해상충서약서 (양식함)", version: "2021-05-01 서식 변경", doc: 이해상충, url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "모집공고문 평가표 (양식함)", version: "2021-05-01 서식 변경", doc: 모집문서, url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "위임서명록 (예시, 공동연구자·CRC가 있을 때, 신규에는 위임업무만 작성)", doc: 기관서류, url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "연구비 산정 내역서 (해당 시)", doc: 기관서류, url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "연차지속심의 면제 요청서 (후향적 의무기록 연구, 해당 시, 양식함)", version: "SOP Ver.9.5 2024-04-01", doc: 기관서류, url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "심의비 입금 확인증 또는 심의비 지원 확인증", doc: 기관서류, url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "심사비(전자세금계산서) 입금 발급 요청서 (공개 hwp, 사업자등록증 1부 함께)", version: "2014-03 개정", url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "(특진비) 지출결의양식 (공개 hwp, 특진비로 심사비를 낼 때)", url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "접수서류 체크리스트 (양식함)", version: "2021-05-01 변경, SOP Ver.9.5 재개정", url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "시체의 해부·보존·연구·제공 동의서 (시체 연구, 공개 hwp)", number: "시체해부법 시행규칙 별지 제1호서식", doc: 동의서류, url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}
+  - {name: "위원회 심사의견에 대한 답변서 (시정·보완 답변)", number: "KF 06-001", url: "https://r-bay.co.kr/agency/main/czNmb3IxZ2F4NUZwQmplaVVGY29Odz09"}

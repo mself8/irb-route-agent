@@ -35,5 +35,13 @@ rules:
     level: 확인 필요
     warning: 연구비를 2천만원 이상 지원받는 연구자 주도 연구는 신규심사 접수료가 있습니다(2천만~5천만원 미만 60만원, 5천만원 이상 120만원, 부가세 10% 별도). 국책과제·원내지원과제·연구비 없는 순수 학술 연구는 부과되지 않습니다.
     source: 고려대의료원 임상연구윤리센터 심사접수료 안내 (https://www.kumc.or.kr/kr/institution/hrpc/payment.do)
+  - id: I-KUMC-6
+    when: always
+    check: period_before_review
+    level: 보완 필요
+    warning: 고려대병원 IRB 심의 절차도는 e-IRB 신청 → 행정점검·접수 → 정기/신속심사 → 승인 → 계약서 검토·계약 완료 → 연구 시작 순서입니다. 연구 기간의 시작을 IRB 승인 이후로 적어야 합니다.
+    add_text: "연구 기간: IRB 승인일로부터 [YYYY.MM.DD]까지"
+    source: 안암 연구중심병원 IRB 소개 심의 절차도 (https://anamrnd.kumc.or.kr/kr/reserch-support/irb.do) · 고려대의료원 임상연구윤리센터 IRB 심사절차 그림 (https://www.kumc.or.kr/kr/institution/hrpc/IRB.do)
 drb_order: unknown   # 두 위원회 순서는 원내 확인(뉴스레터 26.05)
 schedule: {kind: none, note: "안암병원 IRB 정기심사 날짜·접수 마감·결과 통보 기간은 공개 페이지에 없음 (e-IRB는 로그인 필요) → 계산 불가 · 절차는 행정점검·접수 → 정기/신속심사"}
+forms: []    # 공개 페이지에 신규심사·심사면제 서식 목록·번호·버전이 없음(서식과 작성 요령은 e-IRB 로그인 뒤). 조사 기록은 notes/kumc.md
