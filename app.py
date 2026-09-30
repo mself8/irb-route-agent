@@ -6,11 +6,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent / "src"))
 
 import streamlit as st  # noqa: E402
 
-from ui import s1_input, s2_facts, s3_result, s5_abstain  # noqa: E402
+from ui import s1_input, s2_facts, s3_result, s5_abstain, s6_submit  # noqa: E402
 
 st.set_page_config(page_title="여기까지", layout="wide")
 
-SCREENS = [("입력", s1_input), ("사실 확인", s2_facts), ("판정 결과", s3_result), ("판단불가", s5_abstain)]
+SCREENS = [("입력", s1_input), ("사실 확인", s2_facts), ("판정 결과", s3_result), ("판단불가", s5_abstain), ("제출 준비", s6_submit)]
 step = st.session_state.setdefault("step", 0)
 
 st.title("여기까지")

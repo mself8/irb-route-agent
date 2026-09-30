@@ -126,3 +126,7 @@ def render() -> None:
     if st.button(f"판단불가 {len(result.abstain)}건 보기", type="primary"):
         st.session_state.step = 3
         st.rerun()
+    # ⑪ 제출 도우미: 조건을 확인하고 모의 e-IRB에 채운 뒤 최종 제출 앞에서 멈춘다
+    if st.button("제출 준비 (모의 e-IRB)"):
+        st.session_state.step = 4
+        st.rerun()

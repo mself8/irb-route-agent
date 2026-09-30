@@ -92,3 +92,30 @@ def test_fake_mode_never_submits(monkeypatch):
     p = api.start(s["plan_text"], s["institution_name"], "2026-12-01")
     sub = api.request_submission(p.run_id, {d: True for d in submit.required_docs({"documents": []})}).submission
     assert sub.status in ("blocked", "preview") and sub.receipt is None and "예시 모드" in sub.message
+
+
+def test_ui_demo_flow(monkeypatch, mock_site):
+    """데모 클릭 순서 그대로: 샘플 2 → 확정 → 제출 준비(막힘) → 판단불가에서 F05 답 → 제출 준비 → 서류 체크 → 채우기 → 승인."""
+    from streamlit.testing.v1 import AppTest
+    monkeypatch.setattr(api, "FAKE", False)
+    app = AppTest.from_file(str(ROOT / "app.py")).run(timeout=30)
+    click = lambda label: next(b for b in app.button if b.label == label).click().run(timeout=90)  # noqa: E731
+    app.button(key="sample_sample2_pseudo").click().run(timeout=30)
+    click("사실 추출 시작")
+    click("사실 확정하고 판정")
+    click("제출 준비 (모의 e-IRB)")
+    click("제출 조건 확인하고 모의 e-IRB에 채우기")
+    assert app.session_state.result.submission.status == "blocked"
+    click("판단불가 화면에서 입력하기")
+    next(r for r in app.radio if "누가 분석" in r.label).set_value("기관 내부").run(timeout=30)
+    click("입력한 값으로 다시 판정")
+    click("제출 준비 (모의 e-IRB)")
+    for box in app.checkbox:
+        box.check()
+    app.run(timeout=30)
+    click("제출 조건 확인하고 모의 e-IRB에 채우기")
+    assert app.session_state.result.submission.status == "awaiting_approval"
+    click("승인하고 최종 제출")
+    assert not app.exception
+    assert app.session_state.result.submission.receipt.startswith("MOCK-2026-")
+    assert any("접수번호" in s.value for s in app.success)
