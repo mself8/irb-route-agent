@@ -1,0 +1,219 @@
+{
+  "id": "pc3_multicenter",
+  "title": "prep 케이스 3: 대학·병원 다기관 공동연구 (경로 C)",
+  "_note": "T3 확인 전 초안 · 가상 계획서 · 출처: prep/cases/case3_다기관공동연구.md · 기본은 두 기관 IRB 각각(생명윤리법 제10조①). 한 곳 선정은 제12조②·시행규칙 제11조 합의 사항 → 판단불가(③).",
+  "institution_name": "서울시립대학교",
+  "plan_text": "연구 제목(가제): 관성센서 보행 분석으로 뇌졸중 후 고령 환자의 낙상 위험을 예측하는 다기관 연구\n연구책임자는 서울시립대학교 도시보건데이터학과(가상) 윤태호(가명) 교수입니다.\n공동연구책임자는 가톨릭대학교 서울성모병원 재활의학과 강하윤(가명) 교수입니다.\n연구비는 과학기술정보통신부·한국연구재단 기초연구사업 과제로 지원받습니다.\n대상자는 서울성모병원 재활의학과 외래에 다니는 만 65세 이상 뇌졸중 환자 120명입니다.\n대상자 중에는 인지기능이 떨어져 스스로 동의하기 어려운 분이 일부 있을 수 있습니다.\n병원 연구간호사가 동의를 받은 뒤, 발목에 관성센서를 붙이고 10m 보행 검사를 3회 합니다.\n센서는 연구용 측정 도구이며, 제품 허가를 위한 시험이 아닙니다.\n의무기록에서 나이, 진단명, 낙상 이력을 증례기록서(CRF)에 옮겨 적습니다.\n연구번호와 환자 이름을 잇는 식별코드표는 병원 연구간호사가 따로 보관합니다.\n센서 데이터와 CRF는 이름을 지운 연구번호 형태로 서울시립대 연구실 서버로 보내 분석합니다.\n두 기관 IRB에서 각각 심의를 받을지, 한 곳에서만 받을지는 아직 정하지 못했습니다.\n목표 착수일은 2026년 12월 1일입니다.",
+  "pending": {
+    "masked_text": "연구 제목(가제): 관성센서 보행 분석으로 뇌졸중 후 고령 환자의 낙상 위험을 예측하는 다기관 연구\n연구책임자는 서울시립대학교 도시보건데이터학과(가상) 윤태호(가명) 교수입니다.\n공동연구책임자는 가톨릭대학교 서울성모병원 재활의학과 강하윤(가명) 교수입니다.\n연구비는 과학기술정보통신부·한국연구재단 기초연구사업 과제로 지원받습니다.\n대상자는 서울성모병원 재활의학과 외래에 다니는 만 65세 이상 뇌졸중 환자 120명입니다.\n대상자 중에는 인지기능이 떨어져 스스로 동의하기 어려운 분이 일부 있을 수 있습니다.\n병원 연구간호사가 동의를 받은 뒤, 발목에 관성센서를 붙이고 10m 보행 검사를 3회 합니다.\n센서는 연구용 측정 도구이며, 제품 허가를 위한 시험이 아닙니다.\n의무기록에서 나이, 진단명, 낙상 이력을 증례기록서(CRF)에 옮겨 적습니다.\n연구번호와 환자 이름을 잇는 식별코드표는 병원 연구간호사가 따로 보관합니다.\n센서 데이터와 CRF는 이름을 지운 연구번호 형태로 서울시립대 연구실 서버로 보내 분석합니다.\n두 기관 IRB에서 각각 심의를 받을지, 한 곳에서만 받을지는 아직 정하지 못했습니다.\n목표 착수일은 2026년 12월 1일입니다.",
+    "mask_log": [],
+    "facts": [
+      {
+        "key": "F01",
+        "label": "연구 유형",
+        "value": "관찰",
+        "span": "발목에 관성센서를 붙이고 10m 보행 검사를 3회 합니다",
+        "span_start": 304,
+        "span_end": 335,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F02",
+        "label": "연구자가 식별정보를 직접 열람하는가",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F03",
+        "label": "제공받는 데이터 형태",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F04",
+        "label": "가명처리 수행 주체",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F05",
+        "label": "데이터 이용 환경",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F06",
+        "label": "타 기관 데이터 결합·반출",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F07",
+        "label": "민감정보 5종 포함",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F08",
+        "label": "취약 대상 포함 (미성년 등)",
+        "value": [
+          "인지기능 저하자"
+        ],
+        "span": "인지기능이 떨어져 스스로 동의하기 어려운 분이 일부 있을 수 있습니다",
+        "span_start": 244,
+        "span_end": 282,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F09",
+        "label": "인체유래물 사용",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F10",
+        "label": "의약품·의료기기 임상시험 해당",
+        "value": "아니오",
+        "span": "제품 허가를 위한 시험이 아닙니다",
+        "span_start": 354,
+        "span_end": 372,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F11",
+        "label": "동의 계획",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F12",
+        "label": "수행기관·참여기관",
+        "value": [
+          "서울시립대학교",
+          "가톨릭대학교 서울성모병원"
+        ],
+        "span": "두 기관 IRB에서 각각 심의를 받을지",
+        "span_start": 514,
+        "span_end": 535,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F13",
+        "label": "연구 기간",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F14",
+        "label": "배아·유전자 연구 해당",
+        "value": "아니오",
+        "span": "관성센서 보행 분석으로 뇌졸중 후 고령 환자의 낙상 위험을 예측하는 다기관 연구",
+        "span_start": 11,
+        "span_end": 55,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F15",
+        "label": "연구 참여 인원 규모",
+        "value": 120,
+        "span": "뇌졸중 환자 120명",
+        "span_start": 220,
+        "span_end": 231,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F16",
+        "label": "수집·기록하는 식별자",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F17",
+        "label": "연구용 식별코드 사용",
+        "value": "예",
+        "span": "연구번호와 환자 이름을 잇는 식별코드표",
+        "span_start": 418,
+        "span_end": 439,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F18",
+        "label": "대응표 보관 주체",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      }
+    ]
+  },
+  "expected": {
+    "route": "C",
+    "rule_ids": [
+      "J2"
+    ],
+    "abstain": [
+      "J10"
+    ],
+    "decided": [
+      "J2"
+    ],
+    "unscored_facts": [
+      "F02",
+      "F03",
+      "F06",
+      "F11",
+      "F13",
+      "F16",
+      "F18"
+    ]
+  }
+}

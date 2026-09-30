@@ -1,0 +1,220 @@
+{
+  "id": "pc5_linkage_export",
+  "title": "prep 케이스 5: 병원 가명정보 + 국가 코호트 결합·반출 (경로 A + 결합전문기관)",
+  "_note": "T3 확인 전 초안 · 가상 계획서 · 출처: prep/cases/case5_데이터반출.md · 개인정보 보호법 제28조의3: 서로 다른 처리자의 가명정보 결합은 결합전문기관, 반출은 전문기관장 승인(D3 충족). IRB는 질병관리청, DRB는 서울성모(기관이 달라 순서 규칙 없음 → 기관확인).",
+  "institution_name": "질병관리청",
+  "plan_text": "연구 제목(가제): 당뇨병 환자 진료기록과 국가 코호트 자료를 결합한 심혈관 합병증 예측모형 개발\n연구책임자는 질병관리청 국립보건연구원 만성질환데이터과(가상) 문가람(가명) 연구관입니다.\n자료원 1은 가톨릭대학교 서울성모병원이 보유한 2019~2024년 제2형 당뇨병 환자 약 1만 2천 명의 전자의무기록(검사 수치, 처방, 진단코드)입니다.\n환자 동의는 따로 받지 않고, 병원 데이터팀이 가명처리한 데이터셋을 제공받을 예정입니다.\n자료원 2는 질병관리청이 보유한 만성질환 코호트 조사 자료(가상)입니다.\n두 자료는 결합전문기관에서 결합합니다.\n결합된 자료는 가명정보 상태로 결합전문기관 밖의 질병관리청 분석 서버로 반출해 분석합니다.\n진단코드에는 우울증 등 정신건강의학과 진단이 일부 섞여 있을 수 있습니다.\n연구진은 이름, 주민등록번호, 연락처를 받지 않고 환자를 직접 만나지 않습니다.\n서울성모병원 쪽 공동연구자를 둘지는 아직 정하지 않았습니다.\n목표 분석 시작일은 2026년 12월 1일입니다.",
+  "pending": {
+    "masked_text": "연구 제목(가제): 당뇨병 환자 진료기록과 국가 코호트 자료를 결합한 심혈관 합병증 예측모형 개발\n연구책임자는 질병관리청 국립보건연구원 만성질환데이터과(가상) 문가람(가명) 연구관입니다.\n자료원 1은 가톨릭대학교 서울성모병원이 보유한 2019~2024년 제2형 당뇨병 환자 약 1만 2천 명의 전자의무기록(검사 수치, 처방, 진단코드)입니다.\n환자 동의는 따로 받지 않고, 병원 데이터팀이 가명처리한 데이터셋을 제공받을 예정입니다.\n자료원 2는 질병관리청이 보유한 만성질환 코호트 조사 자료(가상)입니다.\n두 자료는 결합전문기관에서 결합합니다.\n결합된 자료는 가명정보 상태로 결합전문기관 밖의 질병관리청 분석 서버로 반출해 분석합니다.\n진단코드에는 우울증 등 정신건강의학과 진단이 일부 섞여 있을 수 있습니다.\n연구진은 이름, 주민등록번호, 연락처를 받지 않고 환자를 직접 만나지 않습니다.\n서울성모병원 쪽 공동연구자를 둘지는 아직 정하지 않았습니다.\n목표 분석 시작일은 2026년 12월 1일입니다.",
+    "mask_log": [],
+    "facts": [
+      {
+        "key": "F01",
+        "label": "연구 유형",
+        "value": "기록 이용",
+        "span": "전자의무기록(검사 수치, 처방, 진단코드)",
+        "span_start": 164,
+        "span_end": 187,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F02",
+        "label": "연구자가 식별정보를 직접 열람하는가",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F03",
+        "label": "제공받는 데이터 형태",
+        "value": "가명처리",
+        "span": "가명처리한 데이터셋",
+        "span_start": 218,
+        "span_end": 228,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F04",
+        "label": "가명처리 수행 주체",
+        "value": "기관 데이터팀",
+        "span": "병원 데이터팀이",
+        "span_start": 209,
+        "span_end": 217,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F05",
+        "label": "데이터 이용 환경",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F06",
+        "label": "타 기관 데이터 결합·반출",
+        "value": "예",
+        "span": "두 자료는 결합전문기관에서 결합합니다",
+        "span_start": 283,
+        "span_end": 303,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F07",
+        "label": "민감정보 5종 포함",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F08",
+        "label": "취약 대상 포함 (미성년 등)",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F09",
+        "label": "인체유래물 사용",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F10",
+        "label": "의약품·의료기기 임상시험 해당",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F11",
+        "label": "동의 계획",
+        "value": "없음",
+        "span": "환자 동의는 따로 받지 않고",
+        "span_start": 192,
+        "span_end": 207,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F12",
+        "label": "수행기관·참여기관",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F13",
+        "label": "연구 기간",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F14",
+        "label": "배아·유전자 연구 해당",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F15",
+        "label": "연구 참여 인원 규모",
+        "value": 12000,
+        "span": "약 1만 2천 명",
+        "span_start": 153,
+        "span_end": 162,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F16",
+        "label": "수집·기록하는 식별자",
+        "value": [],
+        "span": "이름, 주민등록번호, 연락처를 받지 않고",
+        "span_start": 403,
+        "span_end": 425,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F17",
+        "label": "연구용 식별코드 사용",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F18",
+        "label": "대응표 보관 주체",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      }
+    ]
+  },
+  "expected": {
+    "route": "A",
+    "rule_ids": [
+      "D1",
+      "D6",
+      "J2"
+    ],
+    "abstain": [
+      "D7"
+    ],
+    "decided": [
+      "D1",
+      "D3"
+    ],
+    "unscored_facts": [
+      "F02",
+      "F05",
+      "F07",
+      "F08",
+      "F10",
+      "F12",
+      "F13",
+      "F14",
+      "F17",
+      "F18"
+    ]
+  }
+}

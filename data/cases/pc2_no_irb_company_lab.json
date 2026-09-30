@@ -1,0 +1,225 @@
+{
+  "id": "pc2_no_irb_company_lab",
+  "title": "prep 케이스 2: IRB 미설치 기업 연구소 (경로 B, 위탁 협약)",
+  "_note": "T3 확인 전 초안 · 가상 계획서 · 출처: prep/cases/case2_미설치기관소속.md · 시행규칙 제5조①3호(인증 미취득 기관) → 위탁 협약 가능. 계획서는 '협약 없음·검토 중'이라 적었지만 사실 항목에 협약 칸이 없어 엔진은 (나)로 묻는다. 간호사는 취약한 환경(별표4 더목 의료기관 근무자).",
+  "institution_name": "슬립로그 디지털헬스연구소",
+  "plan_text": "연구 제목(가제): 스마트워치 수면 기록으로 교대근무자 피로도를 예측하는 알고리즘 개발\n연구책임자는 주식회사 슬립로그(가상) 부설 디지털헬스연구소의 오민재(가명) 선임연구원입니다.\n연구소에는 정규 연구원 4명과 대학원에서 파견 온 인턴 연구원 2명이 일합니다.\n회사에는 기관생명윤리위원회가 없고, 다른 기관 IRB와 위탁 협약을 맺은 적도 없습니다.\n공용위원회와의 협약을 알아보는 중이지만 아직 신청하지는 않았습니다.\n연구비는 중소벤처기업부 R&D 과제로 지원받습니다.\n대상자는 대학병원 간호사와 물류센터 야간 근무자 등 교대근무자 40명입니다.\n참여자는 4주 동안 손목형 스마트워치를 차고, 매일 아침 앱으로 피로도 설문 5문항에 답합니다.\n스마트워치는 심박수와 움직임만 측정하며, 약물 투여나 채혈은 하지 않습니다.\n앱 가입 때 이메일 주소와 생년월일을 받고, 분석 전에 연구 ID로 바꿉니다.\n이 알고리즘으로 의료기기 허가를 받으려는 것은 아닙니다.\n목표 착수일은 2026년 12월 1일입니다.",
+  "pending": {
+    "masked_text": "연구 제목(가제): 스마트워치 수면 기록으로 교대근무자 피로도를 예측하는 알고리즘 개발\n연구책임자는 주식회사 슬립로그(가상) 부설 디지털헬스연구소의 오민재(가명) 선임연구원입니다.\n연구소에는 [이름] 연구원 4명과 대학원에서 파견 온 인턴 연구원 2명이 일합니다.\n회사에는 기관생명윤리위원회가 없고, 다른 기관 IRB와 위탁 협약을 맺은 적도 없습니다.\n공용위원회와의 협약을 알아보는 중이지만 아직 신청하지는 않았습니다.\n연구비는 중소벤처기업부 R&D 과제로 지원받습니다.\n대상자는 대학병원 간호사와 물류센터 야간 근무자 등 교대근무자 40명입니다.\n참여자는 4주 동안 손목형 스마트워치를 차고, 매일 아침 앱으로 피로도 설문 5문항에 답합니다.\n스마트워치는 심박수와 움직임만 측정하며, 약물 투여나 채혈은 하지 않습니다.\n앱 가입 때 이메일 주소와 생년월일을 받고, 분석 전에 연구 ID로 바꿉니다.\n이 알고리즘으로 의료기기 허가를 받으려는 것은 아닙니다.\n목표 착수일은 2026년 12월 1일입니다.",
+    "mask_log": [
+      {
+        "type": "이름",
+        "count": 1
+      }
+    ],
+    "facts": [
+      {
+        "key": "F01",
+        "label": "연구 유형",
+        "value": "설문·면담",
+        "span": "매일 아침 앱으로 피로도 설문 5문항에 답합니다",
+        "span_start": 334,
+        "span_end": 360,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F02",
+        "label": "연구자가 식별정보를 직접 열람하는가",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F03",
+        "label": "제공받는 데이터 형태",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F04",
+        "label": "가명처리 수행 주체",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F05",
+        "label": "데이터 이용 환경",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F06",
+        "label": "타 기관 데이터 결합·반출",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F07",
+        "label": "민감정보 5종 포함",
+        "value": [],
+        "span": "스마트워치는 심박수와 움직임만 측정하며",
+        "span_start": 362,
+        "span_end": 383,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F08",
+        "label": "취약 대상 포함 (미성년 등)",
+        "value": [
+          "의료기관 근무자"
+        ],
+        "span": "대학병원 간호사",
+        "span_start": 270,
+        "span_end": 278,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F09",
+        "label": "인체유래물 사용",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F10",
+        "label": "의약품·의료기기 임상시험 해당",
+        "value": "아니오",
+        "span": "이 알고리즘으로 의료기기 허가를 받으려는 것은 아닙니다",
+        "span_start": 449,
+        "span_end": 479,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F11",
+        "label": "동의 계획",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F12",
+        "label": "수행기관·참여기관",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F13",
+        "label": "연구 기간",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F14",
+        "label": "배아·유전자 연구 해당",
+        "value": "아니오",
+        "span": "스마트워치 수면 기록으로 교대근무자 피로도를 예측하는 알고리즘 개발",
+        "span_start": 11,
+        "span_end": 48,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F15",
+        "label": "연구 참여 인원 규모",
+        "value": 40,
+        "span": "교대근무자 40명",
+        "span_start": 294,
+        "span_end": 303,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F16",
+        "label": "수집·기록하는 식별자",
+        "value": [
+          "이메일",
+          "생년월일"
+        ],
+        "span": "이메일 주소와 생년월일을 받고",
+        "span_start": 412,
+        "span_end": 428,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F17",
+        "label": "연구용 식별코드 사용",
+        "value": "예",
+        "span": "분석 전에 연구 ID로 바꿉니다",
+        "span_start": 430,
+        "span_end": 447,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F18",
+        "label": "대응표 보관 주체",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      }
+    ]
+  },
+  "expected": {
+    "route": "B",
+    "rule_ids": [
+      "J2",
+      "J6"
+    ],
+    "abstain": [
+      "J3"
+    ],
+    "decided": [
+      "J2",
+      "J6",
+      "E2"
+    ],
+    "unscored_facts": [
+      "F09",
+      "F11",
+      "F12",
+      "F13",
+      "F18"
+    ]
+  }
+}

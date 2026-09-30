@@ -1,0 +1,221 @@
+{
+  "id": "tc01_small_institute_survey",
+  "title": "IRB 없는 소규모 연구소의 성인 익명 설문 (경로 B)",
+  "_note": "T3 확인 전 초안 · 가상 계획서 · 출처: 팀 문서 「데이터 목록」 4장 시나리오 3 · IRB가 없는 기관 → 위탁 협약 가능 기관(시행규칙 제5조①3호) → 공용위원회 협약. 협약 여부는 계획서에 없어 (나).",
+  "institution_name": "가상생활연구소",
+  "plan_text": "연구 제목: 1인 가구 청년의 식습관과 생활 만족도에 관한 온라인 설문조사\n연구책임자: 박하늘 (가상생활연구소 선임연구원, 010-2222-3333)\n수행기관: 가상생활연구소\n연구소에는 연구원 5명이 일하며, 기관생명윤리위원회는 없습니다.\n대상자는 만 20세 이상 34세 이하 1인 가구 청년 200명입니다.\n참여자는 설문 첫 화면에서 전자 동의를 한 뒤, 식습관 20문항과 생활 만족도 10문항에 온라인으로 답합니다.\n이름이나 연락처는 받지 않고 응답은 익명으로 모읍니다.\n연구 기간: 2026년 12월 1일부터 2027년 5월 31일까지",
+  "pending": {
+    "masked_text": "연구 제목: 1인 가구 청년의 식습관과 생활 만족도에 관한 온라인 설문조사\n연구책임자: [이름] (가상생활연구소 선임연구원, [전화번호])\n수행기관: 가상생활연구소\n연구소에는 연구원 5명이 일하며, 기관생명윤리위원회는 없습니다.\n대상자는 만 20세 이상 34세 이하 1인 가구 청년 200명입니다.\n참여자는 설문 첫 화면에서 전자 동의를 한 뒤, 식습관 20문항과 생활 만족도 10문항에 온라인으로 답합니다.\n이름이나 연락처는 받지 않고 응답은 익명으로 모읍니다.\n연구 기간: 2026년 12월 1일부터 2027년 5월 31일까지",
+    "mask_log": [
+      {
+        "type": "이름",
+        "count": 1
+      },
+      {
+        "type": "전화번호",
+        "count": 1
+      }
+    ],
+    "facts": [
+      {
+        "key": "F01",
+        "label": "연구 유형",
+        "value": "설문·면담",
+        "span": "식습관 20문항과 생활 만족도 10문항에 온라인으로 답합니다",
+        "span_start": 194,
+        "span_end": 227,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F02",
+        "label": "연구자가 식별정보를 직접 열람하는가",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F03",
+        "label": "제공받는 데이터 형태",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F04",
+        "label": "가명처리 수행 주체",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F05",
+        "label": "데이터 이용 환경",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F06",
+        "label": "타 기관 데이터 결합·반출",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F07",
+        "label": "민감정보 5종 포함",
+        "value": [],
+        "span": "식습관 20문항과 생활 만족도 10문항",
+        "span_start": 194,
+        "span_end": 215,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F08",
+        "label": "취약 대상 포함 (미성년 등)",
+        "value": [],
+        "span": "만 20세 이상 34세 이하 1인 가구 청년 200명",
+        "span_start": 133,
+        "span_end": 162,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F09",
+        "label": "인체유래물 사용",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F10",
+        "label": "의약품·의료기기 임상시험 해당",
+        "value": "아니오",
+        "span": "온라인 설문조사",
+        "span_start": 33,
+        "span_end": 41,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F11",
+        "label": "동의 계획",
+        "value": "서면동의",
+        "span": "설문 첫 화면에서 전자 동의를 한 뒤",
+        "span_start": 172,
+        "span_end": 192,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F12",
+        "label": "수행기관·참여기관",
+        "value": [
+          "가상생활연구소"
+        ],
+        "span": "수행기관: 가상생활연구소",
+        "span_start": 78,
+        "span_end": 91,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F13",
+        "label": "연구 기간",
+        "value": "2026-12-01 ~ 2027-05-31",
+        "span": "2026년 12월 1일부터 2027년 5월 31일까지",
+        "span_start": 267,
+        "span_end": 296,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F14",
+        "label": "배아·유전자 연구 해당",
+        "value": "아니오",
+        "span": "1인 가구 청년의 식습관과 생활 만족도에 관한 온라인 설문조사",
+        "span_start": 7,
+        "span_end": 41,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F15",
+        "label": "연구 참여 인원 규모",
+        "value": 200,
+        "span": "200명",
+        "span_start": 158,
+        "span_end": 162,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F16",
+        "label": "수집·기록하는 식별자",
+        "value": [],
+        "span": "이름이나 연락처는 받지 않고 응답은 익명으로 모읍니다",
+        "span_start": 229,
+        "span_end": 258,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F17",
+        "label": "연구용 식별코드 사용",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F18",
+        "label": "대응표 보관 주체",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      }
+    ]
+  },
+  "expected": {
+    "route": "B",
+    "rule_ids": [
+      "J2",
+      "J6"
+    ],
+    "abstain": [
+      "J3"
+    ],
+    "decided": [
+      "J2",
+      "J6"
+    ],
+    "unscored_facts": [
+      "F17"
+    ]
+  }
+}

@@ -1,0 +1,213 @@
+{
+  "id": "pc4_multisite_trial",
+  "title": "prep 케이스 4: 다기관 제2상 임상시험 (임상시험 경로)",
+  "_note": "T3 확인 전 초안 · 가상 계획서 · 출처: prep/cases/case4_임상시험실시기관.md · 약사법 제34조①·제34조의2③5호. 중앙IRB 위탁은 가능하나 각 실시기관장이 인정해야 함(판단불가).",
+  "institution_name": "가톨릭대학교 서울성모병원",
+  "plan_text": "연구 제목(가제): 고혈압 치료제 알로텐살탄정(가상)의 당뇨병성 신장병 단백뇨 감소 효과를 보는 다기관 제2상 임상시험\n시험책임자는 가톨릭대학교 서울성모병원 신장내과 백지후(가명) 교수이고, 의뢰자는 한결제약(가상)입니다.\n서울성모병원을 포함해 식약처가 지정한 임상시험실시기관 3곳이 참여합니다.\n시험약은 고혈압 적응증으로 이미 허가받아 판매 중입니다.\n허가 용량 범위 안에서 투여하지만, 대상 질환인 당뇨병성 신장병은 허가 적응증이 아닙니다.\n대상자는 만 19세 이상 성인 환자 90명이며, 24주 동안 시험약 또는 위약을 복용합니다.\n4주마다 채혈과 소변 검사를 합니다.\n남은 혈액 일부로 계획서에 적은 탐색적 신장 손상 바이오마커 분석을 함께 합니다.\n참여 기관 IRB 심사를 한 번에 받을 수 있는 방법이 있으면 그렇게 하고 싶습니다.\n다른 두 병원이 중앙IRB와 협약을 맺었는지는 아직 확인하지 못했습니다.\n목표 첫 대상자 등록일은 2026년 12월 1일입니다.",
+  "pending": {
+    "masked_text": "연구 제목(가제): 고혈압 치료제 알로텐살탄정(가상)의 당뇨병성 신장병 단백뇨 감소 효과를 보는 다기관 제2상 임상시험\n시험책임자는 가톨릭대학교 서울성모병원 신장내과 백지후(가명) 교수이고, 의뢰자는 한결제약(가상)입니다.\n서울성모병원을 포함해 식약처가 지정한 임상시험실시기관 3곳이 참여합니다.\n시험약은 고혈압 적응증으로 이미 허가받아 판매 중입니다.\n허가 용량 범위 안에서 투여하지만, 대상 질환인 당뇨병성 신장병은 허가 적응증이 아닙니다.\n대상자는 만 19세 이상 성인 환자 90명이며, 24주 동안 시험약 또는 위약을 복용합니다.\n4주마다 채혈과 소변 검사를 합니다.\n남은 혈액 일부로 계획서에 적은 탐색적 신장 손상 바이오마커 분석을 함께 합니다.\n참여 기관 IRB 심사를 한 번에 받을 수 있는 방법이 있으면 그렇게 하고 싶습니다.\n다른 두 병원이 중앙IRB와 협약을 맺었는지는 아직 확인하지 못했습니다.\n목표 첫 대상자 등록일은 2026년 12월 1일입니다.",
+    "mask_log": [],
+    "facts": [
+      {
+        "key": "F01",
+        "label": "연구 유형",
+        "value": "중재",
+        "span": "24주 동안 시험약 또는 위약을 복용합니다",
+        "span_start": 276,
+        "span_end": 299,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F02",
+        "label": "연구자가 식별정보를 직접 열람하는가",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F03",
+        "label": "제공받는 데이터 형태",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F04",
+        "label": "가명처리 수행 주체",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F05",
+        "label": "데이터 이용 환경",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F06",
+        "label": "타 기관 데이터 결합·반출",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F07",
+        "label": "민감정보 5종 포함",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F08",
+        "label": "취약 대상 포함 (미성년 등)",
+        "value": [],
+        "span": "만 19세 이상 성인 환자 90명",
+        "span_start": 254,
+        "span_end": 272,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F09",
+        "label": "인체유래물 사용",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F10",
+        "label": "의약품·의료기기 임상시험 해당",
+        "value": "예",
+        "span": "다기관 제2상 임상시험",
+        "span_start": 54,
+        "span_end": 66,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F11",
+        "label": "동의 계획",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F12",
+        "label": "수행기관·참여기관",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F13",
+        "label": "연구 기간",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F14",
+        "label": "배아·유전자 연구 해당",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F15",
+        "label": "연구 참여 인원 규모",
+        "value": 90,
+        "span": "환자 90명",
+        "span_start": 266,
+        "span_end": 272,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F16",
+        "label": "수집·기록하는 식별자",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F17",
+        "label": "연구용 식별코드 사용",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F18",
+        "label": "대응표 보관 주체",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      }
+    ]
+  },
+  "expected": {
+    "route": "임상시험",
+    "rule_ids": [
+      "T1",
+      "T6"
+    ],
+    "abstain": [],
+    "decided": [
+      "T1"
+    ],
+    "unscored_facts": [
+      "F07",
+      "F09",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F16"
+    ]
+  }
+}

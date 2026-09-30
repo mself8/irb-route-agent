@@ -1,0 +1,17 @@
+{
+  "id": "cris_29675",
+  "title": "한의약 건강돌봄 사업 참여 환자들의 전후 비교연구: 후향적 연구",
+  "_note": "CRIS 공개 등록 정보(연구책임자 성명 등 개인정보는 뺌). 연구 요약을 계획서 입력으로 쓴다. 승인 위원회와의 관할 비교만 하고 통과 여부는 재지 않는다(승인 예측이 아니라는 원칙). T3 확인 전 초안.",
+  "source_url": "https://cris.nih.go.kr/cris/search/detailSearch.do?seq=29675",
+  "registration": "seq 29675",
+  "checked_at": "2026-09-30",
+  "institution_name": "우석대학교",
+  "plan_text": "연구 제목: 한의약 건강돌봄 사업 참여 환자들의 전후 비교연구: 후향적 연구\n연구책임자 소속: 우석대학교\n연구 종류: 관찰연구(Observational Study)\n연구 참여기관: 단일\n목표 대상자 수: 200 명\n연구 요약: 8. 연구설계",
+  "actual": {
+    "committees": [
+      "우석대학교부속한방병원 기관생명윤리위원회"
+    ],
+    "relation": "different",
+    "memo": "대학 소속 연구자가 부속 한방병원 IRB에서 승인받음"
+  }
+}

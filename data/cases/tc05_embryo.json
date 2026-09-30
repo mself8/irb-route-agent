@@ -1,0 +1,220 @@
+{
+  "id": "tc05_embryo",
+  "title": "잔여배아 연구 (범위 밖)",
+  "_note": "T3 확인 전 초안 · 가상 계획서 · 출처: 팀 문서 「데이터 목록」 4장 시나리오 8 · 배아 연구는 생명윤리법 제4장. 본선 범위에서 뺐다(기획서).",
+  "institution_name": "가상난임연구소",
+  "plan_text": "연구 제목: 체외수정 후 남은 잔여배아를 이용한 배아 발생 연구\n연구책임자: 오세린 (가상난임연구소, 010-8888-9999)\n수행기관: 가상난임연구소\n체외수정 시술 후 폐기 예정인 잔여배아 30개를 기증받아 배아 발생 과정을 관찰합니다.\n기증자에게 서면동의를 받습니다.\n연구 기간: 2026년 12월 1일부터 2027년 12월 31일까지",
+  "pending": {
+    "masked_text": "연구 제목: 체외수정 후 남은 잔여배아를 이용한 배아 발생 연구\n연구책임자: [이름] (가상난임연구소, [전화번호])\n수행기관: 가상난임연구소\n체외수정 시술 후 폐기 예정인 잔여배아 30개를 기증받아 배아 발생 과정을 관찰합니다.\n기증자에게 서면동의를 받습니다.\n연구 기간: 2026년 12월 1일부터 2027년 12월 31일까지",
+    "mask_log": [
+      {
+        "type": "이름",
+        "count": 1
+      },
+      {
+        "type": "전화번호",
+        "count": 1
+      }
+    ],
+    "facts": [
+      {
+        "key": "F01",
+        "label": "연구 유형",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F02",
+        "label": "연구자가 식별정보를 직접 열람하는가",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F03",
+        "label": "제공받는 데이터 형태",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F04",
+        "label": "가명처리 수행 주체",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F05",
+        "label": "데이터 이용 환경",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F06",
+        "label": "타 기관 데이터 결합·반출",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F07",
+        "label": "민감정보 5종 포함",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F08",
+        "label": "취약 대상 포함 (미성년 등)",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F09",
+        "label": "인체유래물 사용",
+        "value": "예",
+        "span": "잔여배아 30개를 기증받아",
+        "span_start": 97,
+        "span_end": 111,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F10",
+        "label": "의약품·의료기기 임상시험 해당",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F11",
+        "label": "동의 계획",
+        "value": "서면동의",
+        "span": "기증자에게 서면동의를 받습니다",
+        "span_start": 129,
+        "span_end": 145,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F12",
+        "label": "수행기관·참여기관",
+        "value": [
+          "가상난임연구소"
+        ],
+        "span": "수행기관: 가상난임연구소",
+        "span_start": 66,
+        "span_end": 79,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F13",
+        "label": "연구 기간",
+        "value": "2026-12-01 ~ 2027-12-31",
+        "span": "2026년 12월 1일부터 2027년 12월 31일까지",
+        "span_start": 154,
+        "span_end": 184,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F14",
+        "label": "배아·유전자 연구 해당",
+        "value": "예",
+        "span": "잔여배아를 이용한 배아 발생 연구",
+        "span_start": 17,
+        "span_end": 35,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F15",
+        "label": "연구 참여 인원 규모",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F16",
+        "label": "수집·기록하는 식별자",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F17",
+        "label": "연구용 식별코드 사용",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F18",
+        "label": "대응표 보관 주체",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      }
+    ]
+  },
+  "expected": {
+    "route": "범위 밖",
+    "rule_ids": [
+      "G1"
+    ],
+    "abstain": [],
+    "decided": [
+      "G1"
+    ],
+    "unscored_facts": [
+      "F01",
+      "F10",
+      "F15",
+      "F16"
+    ]
+  }
+}

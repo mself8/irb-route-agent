@@ -1,0 +1,221 @@
+{
+  "id": "tc03_minor_interview",
+  "title": "미성년 대상 대면 면담, 위험 서술이 모호함 (경로 C, 면제 불가)",
+  "_note": "T3 확인 전 초안 · 가상 계획서 · 출처: 팀 문서 「데이터 목록」 4장 시나리오 5 · 시행규칙 제13조②: 1·2호 연구에 취약한 대상(미성년자, 의약품안전규칙 별표4 더목)이 있으면 심의 대상. 면제 불가가 확정이므로 '위험이 미미한가'(R-10)를 판단불가로 넘기면 부당 기권.",
+  "institution_name": "가상대학교",
+  "plan_text": "연구 제목: 고등학생의 진로 고민과 스마트폰 사용에 관한 면담 연구\n연구책임자: 정다은 (가상대학교 교육학과, 010-4444-5555)\n수행기관: 가상대학교\n대상자는 서울 소재 고등학교 1~2학년 학생 20명(만 16~17세)입니다.\n학생과 60분간 대면 면담을 하며, 녹음하지 않고 연구자가 메모만 합니다.\n면담 항목은 진로 고민과 스마트폰 사용 시간입니다.\n학생 이름이나 연락처는 기록하지 않습니다.\n면담 주제가 예민할 수 있으나 위험은 크지 않다고 봅니다.\n학생 본인과 법정대리인에게 서면동의를 받습니다.\n연구 기간: 2026년 12월 1일부터 2027년 6월 30일까지",
+  "pending": {
+    "masked_text": "연구 제목: 고등학생의 진로 고민과 스마트폰 사용에 관한 면담 연구\n연구책임자: [이름] (가상대학교 교육학과, [전화번호])\n수행기관: 가상대학교\n대상자는 서울 소재 고등학교 1~2학년 학생 20명(만 16~17세)입니다.\n학생과 60분간 대면 면담을 하며, 녹음하지 않고 연구자가 메모만 합니다.\n면담 항목은 진로 고민과 스마트폰 사용 시간입니다.\n학생 이름이나 연락처는 기록하지 않습니다.\n면담 주제가 예민할 수 있으나 위험은 크지 않다고 봅니다.\n학생 본인과 법정대리인에게 서면동의를 받습니다.\n연구 기간: 2026년 12월 1일부터 2027년 6월 30일까지",
+    "mask_log": [
+      {
+        "type": "이름",
+        "count": 1
+      },
+      {
+        "type": "전화번호",
+        "count": 1
+      }
+    ],
+    "facts": [
+      {
+        "key": "F01",
+        "label": "연구 유형",
+        "value": "설문·면담",
+        "span": "학생과 60분간 대면 면담을 하며",
+        "span_start": 126,
+        "span_end": 144,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F02",
+        "label": "연구자가 식별정보를 직접 열람하는가",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F03",
+        "label": "제공받는 데이터 형태",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F04",
+        "label": "가명처리 수행 주체",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F05",
+        "label": "데이터 이용 환경",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F06",
+        "label": "타 기관 데이터 결합·반출",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F07",
+        "label": "민감정보 5종 포함",
+        "value": [],
+        "span": "면담 항목은 진로 고민과 스마트폰 사용 시간입니다",
+        "span_start": 168,
+        "span_end": 195,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F08",
+        "label": "취약 대상 포함 (미성년 등)",
+        "value": [
+          "미성년자"
+        ],
+        "span": "고등학교 1~2학년 학생 20명(만 16~17세)",
+        "span_start": 94,
+        "span_end": 121,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F09",
+        "label": "인체유래물 사용",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F10",
+        "label": "의약품·의료기기 임상시험 해당",
+        "value": "아니오",
+        "span": "면담 연구",
+        "span_start": 32,
+        "span_end": 37,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F11",
+        "label": "동의 계획",
+        "value": "서면동의",
+        "span": "학생 본인과 법정대리인에게 서면동의를 받습니다",
+        "span_start": 254,
+        "span_end": 279,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F12",
+        "label": "수행기관·참여기관",
+        "value": [
+          "가상대학교"
+        ],
+        "span": "수행기관: 가상대학교",
+        "span_start": 71,
+        "span_end": 82,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F13",
+        "label": "연구 기간",
+        "value": "2026-12-01 ~ 2027-06-30",
+        "span": "2026년 12월 1일부터 2027년 6월 30일까지",
+        "span_start": 288,
+        "span_end": 317,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F14",
+        "label": "배아·유전자 연구 해당",
+        "value": "아니오",
+        "span": "고등학생의 진로 고민과 스마트폰 사용에 관한 면담 연구",
+        "span_start": 7,
+        "span_end": 37,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F15",
+        "label": "연구 참여 인원 규모",
+        "value": 20,
+        "span": "20명",
+        "span_start": 108,
+        "span_end": 111,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F16",
+        "label": "수집·기록하는 식별자",
+        "value": [],
+        "span": "학생 이름이나 연락처는 기록하지 않습니다",
+        "span_start": 197,
+        "span_end": 219,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F17",
+        "label": "연구용 식별코드 사용",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F18",
+        "label": "대응표 보관 주체",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      }
+    ]
+  },
+  "expected": {
+    "route": "C",
+    "rule_ids": [
+      "J2"
+    ],
+    "abstain": [],
+    "decided": [
+      "E4",
+      "R-10",
+      "E2"
+    ],
+    "unscored_facts": [
+      "F17"
+    ]
+  }
+}

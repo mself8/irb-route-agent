@@ -1,0 +1,226 @@
+{
+  "id": "tc04_rare_disease_pseudo",
+  "title": "희귀질환 정보가 든 가명정보 연구 (경로 A + 민감정보 경고)",
+  "_note": "T3 확인 전 초안 · 가상 계획서 · 출처: 팀 문서 「데이터 목록」 4장 시나리오 6 · D4: 가이드라인상 희귀질환은 본인 동의 원칙, 가명 활용은 보호조치 계획 필요(기관확인). 가명정보 처리 가이드라인(2026.03.) 인쇄 38쪽: 민감성 높은 정보는 위험도 상향 조정 가능.",
+  "institution_name": "가상대학교병원",
+  "plan_text": "연구 제목: 희귀질환 환자의 진단 지연 기간에 관한 후향적 관찰연구\n연구책임자: 한도윤 (가상대학교병원 소아청소년과, 010-6666-7777)\n수행기관: 가상대학교병원\n연구 방법: 가상대학교병원 데이터팀이 2015년부터 2024년까지 희귀질환 산정특례 환자의 진료기록을 가명처리한 데이터셋(나이, 성별, 희귀질환 진단명, 첫 방문일, 확진일)을 제공받아 원내 분석실에서 분석한다.\n타 기관 자료와 결합하지 않는다.\n대상자는 연구번호로 대체하며, 대응표는 데이터팀이 별도 보관하고 연구자는 접근하지 않는다.\n환자 동의는 따로 받지 않는다.\n대상자 수: 약 800명\n연구 기간: 2026년 12월 1일부터 2027년 11월 30일까지",
+  "pending": {
+    "masked_text": "연구 제목: 희귀질환 환자의 진단 지연 기간에 관한 후향적 관찰연구\n연구책임자: [이름] (가상대학교병원 소아청소년과, [전화번호])\n수행기관: 가상대학교병원\n연구 방법: 가상대학교병원 데이터팀이 2015년부터 2024년까지 희귀질환 산정특례 환자의 진료기록을 가명처리한 데이터셋(나이, 성별, 희귀질환 진단명, 첫 방문일, 확진일)을 제공받아 원내 분석실에서 분석한다.\n타 기관 자료와 결합하지 않는다.\n대상자는 연구번호로 대체하며, 대응표는 데이터팀이 별도 보관하고 연구자는 접근하지 않는다.\n환자 동의는 따로 받지 않는다.\n대상자 수: 약 800명\n연구 기간: 2026년 12월 1일부터 2027년 11월 30일까지",
+    "mask_log": [
+      {
+        "type": "이름",
+        "count": 1
+      },
+      {
+        "type": "전화번호",
+        "count": 1
+      }
+    ],
+    "facts": [
+      {
+        "key": "F01",
+        "label": "연구 유형",
+        "value": "기록 이용",
+        "span": "진료기록을 가명처리한 데이터셋",
+        "span_start": 140,
+        "span_end": 156,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F02",
+        "label": "연구자가 식별정보를 직접 열람하는가",
+        "value": "아니오",
+        "span": "가명처리한 데이터셋",
+        "span_start": 146,
+        "span_end": 156,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F03",
+        "label": "제공받는 데이터 형태",
+        "value": "가명처리",
+        "span": "가명처리한 데이터셋",
+        "span_start": 146,
+        "span_end": 156,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F04",
+        "label": "가명처리 수행 주체",
+        "value": "기관 데이터팀",
+        "span": "가상대학교병원 데이터팀이",
+        "span_start": 96,
+        "span_end": 109,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F05",
+        "label": "데이터 이용 환경",
+        "value": "기관 내부",
+        "span": "원내 분석실에서 분석한다",
+        "span_start": 193,
+        "span_end": 206,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F06",
+        "label": "타 기관 데이터 결합·반출",
+        "value": "아니오",
+        "span": "타 기관 자료와 결합하지 않는다",
+        "span_start": 208,
+        "span_end": 225,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F07",
+        "label": "민감정보 5종 포함",
+        "value": [
+          "희귀질환"
+        ],
+        "span": "희귀질환 진단명",
+        "span_start": 165,
+        "span_end": 173,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F08",
+        "label": "취약 대상 포함 (미성년 등)",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F09",
+        "label": "인체유래물 사용",
+        "value": null,
+        "span": null,
+        "span_start": null,
+        "span_end": null,
+        "status": "not_found",
+        "cross_check": null
+      },
+      {
+        "key": "F10",
+        "label": "의약품·의료기기 임상시험 해당",
+        "value": "아니오",
+        "span": "후향적 관찰연구",
+        "span_start": 29,
+        "span_end": 37,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F11",
+        "label": "동의 계획",
+        "value": "없음",
+        "span": "환자 동의는 따로 받지 않는다",
+        "span_start": 278,
+        "span_end": 294,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F12",
+        "label": "수행기관·참여기관",
+        "value": [
+          "가상대학교병원"
+        ],
+        "span": "수행기관: 가상대학교병원",
+        "span_start": 75,
+        "span_end": 88,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F13",
+        "label": "연구 기간",
+        "value": "2026-12-01 ~ 2027-11-30",
+        "span": "2026년 12월 1일부터 2027년 11월 30일까지",
+        "span_start": 317,
+        "span_end": 347,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F14",
+        "label": "배아·유전자 연구 해당",
+        "value": "아니오",
+        "span": "희귀질환 환자의 진단 지연 기간에 관한 후향적 관찰연구",
+        "span_start": 7,
+        "span_end": 37,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F15",
+        "label": "연구 참여 인원 규모",
+        "value": 800,
+        "span": "약 800명",
+        "span_start": 303,
+        "span_end": 309,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F16",
+        "label": "수집·기록하는 식별자",
+        "value": [],
+        "span": "데이터셋(나이, 성별, 희귀질환 진단명, 첫 방문일, 확진일)",
+        "span_start": 152,
+        "span_end": 186,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F17",
+        "label": "연구용 식별코드 사용",
+        "value": "예",
+        "span": "대상자는 연구번호로 대체하며",
+        "span_start": 227,
+        "span_end": 242,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F18",
+        "label": "대응표 보관 주체",
+        "value": "데이터팀·제3자",
+        "span": "대응표는 데이터팀이 별도 보관하고 연구자는 접근하지 않는다",
+        "span_start": 244,
+        "span_end": 276,
+        "status": "found",
+        "cross_check": "agree"
+      }
+    ]
+  },
+  "expected": {
+    "route": "A",
+    "rule_ids": [
+      "D1",
+      "D6",
+      "J2",
+      "E3"
+    ],
+    "abstain": [
+      "D7",
+      "R-09"
+    ],
+    "decided": [
+      "D1",
+      "D4"
+    ],
+    "unscored_facts": [
+      "F08"
+    ]
+  }
+}
