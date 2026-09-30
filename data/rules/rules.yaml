@@ -1,0 +1,31 @@
+# 규칙표. ⑥ 관문 판정과 ⑦ 경로 결정은 이 파일만 보고 한다.
+# article·text·effective·checked_at은 T1이 국가법령정보센터 현행 원문과 대조한 뒤에만 채운다.
+# type: 사실형 / 사실형(수치) / 사실형(목록) / 판단불가(①) 위원회 판단 / 판단불가(②) 평가어 / 판단불가(③) 기관 재량
+# gate: 범위 / 가명 데이터 / DRB 사전 체크 / IRB·위탁
+# 형식을 보여 주는 예시 2건이다. when 문법은 규칙 엔진을 구현하면서 확정한다. 나머지는 T1이 채운다.
+
+- id: R-04
+  gate: 가명 데이터
+  requirement: 가명처리된 데이터셋을 제공받는가
+  type: 사실형
+  when: {fact: F03, equals: 가명처리}
+  then: DRB 심의 권고
+  basis:
+    law: 보건의료데이터 활용 가이드라인
+    article: (현장 확인 후 기입)
+    text: (현장 확인 후 기입)
+    effective: null
+    checked_at: null
+
+- id: R-09
+  gate: IRB·위탁
+  requirement: IRB 심의면제 결정
+  type: 판단불가(①)
+  when: {fact: F03, equals: 가명처리}
+  then: 사무국 질문
+  basis:
+    law: 생명윤리법 시행규칙
+    article: (현장 확인 후 기입)
+    text: (현장 확인 후 기입)
+    effective: null
+    checked_at: null
