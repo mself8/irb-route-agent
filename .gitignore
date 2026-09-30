@@ -5,3 +5,6 @@ __pycache__/
 .env
 .streamlit/secrets.toml
 .DS_Store
+
+# 데모 도구가 만드는 실행용 묶음
+demo/eirb_fill/run_fill.js
