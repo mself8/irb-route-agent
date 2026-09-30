@@ -131,6 +131,7 @@ class AbstainItem(BaseModel):
     options: list[str] = []                    # (나) 고를 수 있는 값
     input_key: Optional[str] = None            # (나) 입력값이 들어갈 사실 키 (예: F05)
     cites: list[str] = []
+    references: list[dict] = []                # (가) 설명용 참고 근거 [{문서명, 조항, url}] (근거 검색, 판정에는 안 씀)
 
 
 class ReportSentence(BaseModel):

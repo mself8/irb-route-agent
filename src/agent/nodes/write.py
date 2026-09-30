@@ -65,6 +65,8 @@ def _polish(items: list[dict], state: GraphState) -> list[dict]:
         for item, text in zip(asked, texts):
             if text:
                 item["question"] = text
+            if hasattr(impl, "references"):
+                item["references"] = impl.references({**item, "basis": item["_basis"]})
     for item in items:
         item.pop("_basis", None)
     return items
