@@ -319,6 +319,17 @@ def sample(cases: list[dict], which: str, n: int = 100) -> list[dict]:
     return round_robin(cases, lambda c: (c.get("strata", {}).get("origin", ""), c.get("strata", {}).get("type", "")), n)
 
 
+def sealed_alarm() -> dict[str, set]:
+    """규칙마다 '걸림'으로 볼 상태: 그 규칙을 직접 뒤집은 함정의 기대 상태만 쓴다(다른 함정의 부수 기대는 빼고).
+    없는 규칙은 표준 지표에서 미충족·경고를 걸림으로 본다."""
+    alarm: dict[str, set] = {}
+    for c in json.loads(SEALED["traps"].read_text(encoding="utf-8"))["cases"]:
+        st = c["expect"].get(c["rule"]) if c["kind"] == "trap" else None
+        if st:
+            alarm.setdefault(c["rule"], set()).update(("미충족", "경고") if st in FLAG else (st,))
+    return alarm
+
+
 def sealed(which: str, stage: int, workers: int) -> None:
     from agent.nodes import read as read_node, write as write_node
     data = json.loads(SEALED[which].read_text(encoding="utf-8"))
@@ -337,10 +348,7 @@ def sealed(which: str, stage: int, workers: int) -> None:
     else:
         with ThreadPoolExecutor(workers) as pool:
             out = list(pool.map(lambda c: sealed_run(c, 2), cases))
-    alarm: dict[str, set] = {}
-    for c in json.loads(SEALED["traps"].read_text(encoding="utf-8"))["cases"]:
-        for rule, st in c["expect"].items():
-            alarm.setdefault(rule, set()).update(("미충족", "경고") if st in FLAG else (st,))
+    alarm = sealed_alarm()
     commit = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "--short", "HEAD"], capture_output=True, text=True).stdout.strip()
     dest = RESULTS / f"{which}300_stage{stage}.json"
     dest.write_text(json.dumps({"note": f"{SYNTH_NOTE} · 측정 커밋 {commit}", "commit": commit, "stage": stage, "set": which,
