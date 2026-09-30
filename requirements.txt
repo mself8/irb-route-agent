@@ -3,4 +3,5 @@ streamlit==1.64.0
 langgraph==1.2.12
 pydantic==2.13.5
 PyYAML==6.0.3
+openai==3.20.0
 pytest
