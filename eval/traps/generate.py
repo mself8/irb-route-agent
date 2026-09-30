@@ -147,7 +147,8 @@ def base(kind: str, key: str, rng: random.Random) -> dict:
     facts = {k: facts.get(k) for k in KEYS}
     facts["F12"] = None if unaff else [inst] + (["가나대학교"] if kind == "export" and key == "cmc" else [])
     return {"id": f"{kind}-{key}", "kind_base": kind, "institution": inst, "plan": plan, "facts": facts, "route": route,
-            "satisfies": INST_RULES[kind].get(key, []) + LEGAL_NEG[kind], "pii_gold": [{"type": "이름", "text": name},
+            "satisfies": INST_RULES[kind].get(key, []) + [r for r in LEGAL_NEG[kind] if not (unaff and r == "J8")],  # 소속 없으면 J8 충족이 정답
+            "pii_gold": [{"type": "이름", "text": name},
                                                                                     {"type": "전화번호", "text": phone}]}
 
 
