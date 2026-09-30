@@ -1,0 +1,27 @@
+{
+  "model": "qwen3.8-27b",
+  "cases": [
+    {
+      "case": "sample1_crf",
+      "facts": 18,
+      "runs": 5,
+      "accuracy_mean": 1.0,
+      "accuracy_min": 1.0,
+      "agreement": 1.0,
+      "conflicts_per_run": 1.0,
+      "wrong_keys": [],
+      "seconds_mean": 24.4
+    },
+    {
+      "case": "sample2_pseudo",
+      "facts": 18,
+      "runs": 5,
+      "accuracy_mean": 1.0,
+      "accuracy_min": 1.0,
+      "agreement": 1.0,
+      "conflicts_per_run": 0.0,
+      "wrong_keys": [],
+      "seconds_mean": 26.2
+    }
+  ]
+}
