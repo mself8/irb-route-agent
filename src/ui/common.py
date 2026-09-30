@@ -4,6 +4,8 @@ from pathlib import Path
 
 import streamlit as st
 
+from ui.typography import font_face_css
+
 
 def badge(text: str, tone: str = "ai") -> str:
     return f'<span class="badge {tone}">{escape(str(text))}</span>'
@@ -23,9 +25,17 @@ def clear_review() -> None:
 
 def reset() -> None:
     clear_review()
+    clear_document_upload()
     for key in ("plan_text", "institution_name", "start_date", "last_input"):
         st.session_state.pop(key, None)
     st.session_state.step = 0
+
+
+def clear_document_upload() -> None:
+    """새 연구나 예시를 선택하면 이전에 올린 파일 선택도 비운다."""
+    st.session_state.document_upload_version = st.session_state.get('document_upload_version', 0) + 1
+    for key in ('document_message', 'document_error'):
+        st.session_state.pop(key, None)
 
 
 def accept_result(result) -> None:
@@ -40,7 +50,8 @@ def accept_result(result) -> None:
 
 
 def shell(step: int, fake: bool) -> None:
-    st.markdown('<style>' + Path(__file__).with_name("style.css").read_text() + '</style>', unsafe_allow_html=True)
+    css = Path(__file__).with_name("style.css").read_text(encoding="utf-8")
+    st.markdown('<style>' + font_face_css() + css + '</style>', unsafe_allow_html=True)
     with st.sidebar:
         st.markdown('<div class="brand">❖ 여기까지</div><p class="muted">연구윤리 행정지원 시스템</p>', unsafe_allow_html=True)
         st.button("새 연구 입력", icon=":material/add_circle:", on_click=reset, use_container_width=True)
@@ -50,14 +61,10 @@ def shell(step: int, fake: bool) -> None:
                   on_click=lambda: st.session_state.update(step=2), use_container_width=True)
         st.button("판단불가 / 질문", icon=":material/help:", disabled="result" not in st.session_state,
                   on_click=lambda: st.session_state.update(step=3), use_container_width=True)
-        st.divider()
-        with st.expander("이용 안내"):
-            st.write("연구계획 입력 → 사실 확인 → 판정 결과 → 사무국 질문 순서로 진행합니다.")
-            st.write("파랑: AI 추출 / 초록: 규칙 엔진 / 주황: 사람 확인 / 회색: 공공 데이터")
-        st.caption("예시 모드 (FAKE=1)" if fake else "실제 판정 모드")
-    st.markdown('<div class="topbar"><div><b>여기까지</b><span>연구윤리 행정지원 시스템</span></div>'
-                '<small>연구자 작업 공간</small></div>', unsafe_allow_html=True)
-    labels = ["입력", "사실 확인", "판정", "판단불가", "제출 준비"]
+        st.button("모의 e-IRB", icon=":material/assignment:", disabled="result" not in st.session_state,
+                  on_click=lambda: st.session_state.update(step=4), use_container_width=True)
+    st.markdown('<div class="topbar"><div><b>여기까지</b><span>연구윤리 행정지원 시스템</span></div></div>', unsafe_allow_html=True)
+    labels = ["입력", "사실 확인", "판정", "판단불가", "모의 e-IRB"]
     steps = []
     for i, label in enumerate(labels):
         state = "done" if i < step else "current" if i == step else "future"
@@ -70,7 +77,8 @@ def notice(result) -> None:
 
 
 def heading(title: str, subtitle: str = "") -> None:
-    st.markdown(f'<div class="page-title"><h2>{escape(title)}</h2><p>{escape(subtitle)}</p></div>', unsafe_allow_html=True)
+    description = f'<p>{escape(subtitle)}</p>' if subtitle else ''
+    st.markdown(f'<div class="page-title"><h2>{escape(title)}</h2>{description}</div>', unsafe_allow_html=True)
 
 
 def marked_text(text: str, spans) -> str:

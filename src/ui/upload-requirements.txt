@@ -1,0 +1,2 @@
+# PDF 텍스트 읽기용. DOCX와 TXT는 Python 표준 라이브러리로 읽는다.
+pypdf==6.10.0
