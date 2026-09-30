@@ -183,12 +183,24 @@ def test_fifth_review_fixes():
     unsure = run(IDENTIFIED, "없는병원", {"irb_exists": "없음", "contract": "모름"})  # 모름 → 같은 질문 반복 대신 사무국 확인
     assert "contract" not in asks(unsure) and any(a["rule_id"] == "J3" and a["kind"] == "가" for a in unsure["abstain"])
     done = run(IDENTIFIED, "없는병원", {"irb_exists": "없음", "contract": "예"})    # 협약함 → 협약한 위원회, 협약서·계산 불가 없음
-    assert done["route"]["committees"][0].startswith("협약한 위원회")
+    assert done["route"]["committees"][0].startswith("협약한")
     assert not any("협약서" in d["doc"] for d in done["documents"])
     assert next(r for r in done["judgments"] if r["rule_id"] == "J3")["type"] == "사실형"
     assert run({})["route"]["fast_track"]                        # 샘플 2: 자체 IRB · 결합 없음 → 빠른 길
     for overrides, institution in (({}, "없음"), ({"F06": "예"}, "가상대학교병원"), ({"F06": None}, "가상대학교병원")):
         assert not run(overrides, institution)["route"]["fast_track"]  # 공용위원회·결합·결합 미상이면 빠른 길 아님
-    assert not any("DRB" in d["doc"] for d in run({"F10": None})["documents"])
+    docs = [d["doc"] for d in run({"F10": None})["documents"]]   # 전제를 몰라도 DRB 신청서는 두고, 승인서 첨부만 뺀다
+    assert "DRB 심의 신청서" in docs and not any("승인서 첨부" in d for d in docs)
     r09 = next(r for r in run({})["judgments"] if r["rule_id"] == "R-09")
     assert "대상에 해당" not in r09["requirement"]              # 다듬기 판정어 검사에 걸리지 않는 문구
+
+
+def test_sixth_review_fixes():
+    unsure = run(IDENTIFIED, "없는병원", {"irb_exists": "모름"})      # 모름 → 반복 질문 대신 사무국 확인
+    assert "irb_exists" not in asks(unsure) and any(a["rule_id"] == "J2" and a["kind"] == "가" for a in unsure["abstain"])
+    public = run({}, "없음")                                          # 공용위원회면 DRB 승인서 첨부 표시 없음
+    assert not any("승인서 첨부" in d["doc"] for d in public["documents"])
+    joint = run({**IDENTIFIED, "F12": ["가상대학교병원", "다른병원"]})  # 공동연구 → 공동 수행기관 IRB 표시
+    assert any(c.startswith("공동 수행기관 IRB") for c in joint["route"]["committees"]) and "J10" in joint["route"]["trace"]
+    via_public = run(IDENTIFIED, "없는병원", {"irb_exists": "없음", "contract": "예(공용위원회)"})
+    assert [s.get("submit_by") for s in via_public["schedule"]["scenarios"]] == ["2026-11-12", "2026-10-29", "2026-10-13"]
