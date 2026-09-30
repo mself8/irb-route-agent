@@ -60,7 +60,7 @@ class Pending(BaseModel):
 class InstitutionCheck(BaseModel):
     """⑤ 기관 대조 결과. 공공 명단과 문자열로만 대조한다."""
     name: Optional[str] = None
-    affiliated: bool = True                    # 소속 기관이 없으면 공용위원회(J8)
+    affiliated: Optional[bool] = True          # False면 소속 없음 → 공용위원회(J8), None이면 모름
     irb_exists: Optional[bool] = None
     irb_certified: Optional[bool] = None
     clinical_trial_site: Optional[bool] = None
@@ -111,6 +111,7 @@ class DocItem(BaseModel):
 class ScheduleScenario(BaseModel):
     revisions: int                             # 보완 횟수 0·1·2
     submit_by: Optional[str] = None            # None이면 공개 수치 없음
+    step: Optional[str] = None                 # 이 날짜가 무엇의 마감인지 (예: 공용위원회 접수 마감)
 
 
 class Schedule(BaseModel):

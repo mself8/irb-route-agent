@@ -14,7 +14,7 @@ from functools import lru_cache
 from langgraph.types import Command
 
 from . import samples
-from .state import Pending, Result
+from .state import FACT_LABELS, Pending, Result
 
 FAKE = os.getenv("FAKE", "1") == "1"
 
@@ -64,6 +64,9 @@ def rejudge(run_id: str, extra_inputs: dict) -> Result:
         {**f, "value": extra_inputs[f["key"]], "status": "found"} if f["key"] in extra_inputs else f
         for f in v["confirmed_facts"]
     ]
+    known = {f["key"] for f in facts}
+    facts += [{"key": k, "label": FACT_LABELS[k], "value": val, "status": "found"}
+              for k, val in extra_inputs.items() if k in FACT_LABELS and k not in known]
     # ④가 이 값을 확정한 것으로 기록하고 ⑤부터 다시 돌린다
     _graph().update_state(
         cfg,
