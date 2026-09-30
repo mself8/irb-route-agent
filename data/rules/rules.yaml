@@ -1,31 +1,172 @@
-# 규칙표. ⑥ 관문 판정과 ⑦ 경로 결정은 이 파일만 보고 한다.
-# article·text·effective·checked_at은 T1이 국가법령정보센터 현행 원문과 대조한 뒤에만 채운다.
-# type: 사실형 / 사실형(수치) / 사실형(목록) / 판단불가(①) 위원회 판단 / 판단불가(②) 평가어 / 판단불가(③) 기관 재량
-# gate: 범위 / 가명 데이터 / DRB 사전 체크 / IRB·위탁
-# 형식을 보여 주는 예시 2건이다. when 문법은 규칙 엔진을 구현하면서 확정한다. 나머지는 T1이 채운다.
+# 규칙표. 판정 조건은 src/agent/nodes/judge.py, 요건 문구·근거·원문은 이 파일이 정본이다.
+# id: prep 판정규칙표(09-29) ID. G 범위 · T 임상시험 · S 연구 유형 · J 관할 · E 심의면제 · C 동의 · D 보건의료데이터.
+#     prep에 없는 규칙은 팀 문서 번호(R-xx)를 id로 쓴다.
+# team_id: 팀 문서 규칙표(R-01~R-20)에서 같은 규칙의 번호.
+# text: prep이 09-29 국가법령정보센터 원문과 대조한 문장. team_checked는 T1이 현장에서 다시 대조하면 true로 바꾼다.
+# 원문을 확인하지 못한 규칙은 text를 "(현장 확인 후 기입)"으로 둔다.
+# checkpoint: true면 "미충족"이 제출 전에 고칠 점이다(미충족이 있으면 보완 1회 일정을 기본값으로 둔다).
 
-- id: R-04
-  gate: 가명 데이터
-  requirement: 가명처리된 데이터셋을 제공받는가
+- id: G1
+  gate: 범위
+  requirement: 배아·유전자 연구인가
   type: 사실형
-  when: {fact: F03, equals: 가명처리}
-  then: DRB 심의 권고
-  basis:
-    law: 보건의료데이터 활용 가이드라인
-    article: (현장 확인 후 기입)
-    text: (현장 확인 후 기입)
-    effective: null
-    checked_at: null
+  basis: {law: 팀 범위 결정, article: 생명윤리법 제4장·제6장, text: "배아·유전자 연구는 본선 범위에서 뺐다 (기획서)", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률/제20조"}
+
+- id: T1
+  team_id: R-03
+  gate: 범위
+  requirement: 의약품·의료기기 임상시험인가
+  type: 사실형(목록)
+  basis: {law: 약사법, article: 제34조 ①·③1호, text: "제34조의2제1항에 따라 지정된 임상시험실시기관 또는 임상시험검체분석기관에서 임상시험을 실시할 것", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/약사법/제34조"}
+
+- id: T6
+  team_id: R-03
+  gate: 범위
+  requirement: 임상시험이면 공용위원회 심의 대상에서 제외되는가
+  type: 사실형(목록)
+  basis: {law: 공용위원회 운영기관 안내 (2차 출처, 법령 아님), article: e-IRB PT0102R03, text: "약사법 또는 의료기기법에 따라 임상시험실시기관에서 수행되어야 하는 연구는 공용위원회 심의 대상에서 제외", checked_at: "2026-09-29", url: "https://public.irb.or.kr/"}
+
+- id: S3
+  gate: 범위
+  requirement: 식별 가능한 정보(가명정보 포함)를 이용하는 인간대상연구인가
+  type: 사실형
+  basis: {law: 생명윤리법 시행규칙, article: 제2조 ①3호, text: "연구대상자를 직접ㆍ간접적으로 식별할 수 있는 정보를 이용하는 연구", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률시행규칙/제2조"}
+
+- id: S7
+  gate: 범위
+  requirement: 생명윤리법 심의 대상이 아닌가 (식별 불가능한 자료만 이용)
+  type: 사실형
+  basis: {law: 생명윤리법, article: 제15조 ① (반대해석), text: "인간대상연구를 하려는 자는 … 기관위원회의 심의를 받아야 한다.", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률/제15조"}
+
+- id: D1
+  team_id: R-04
+  gate: 가명 데이터
+  requirement: 가명정보를 정보주체 동의 없이 연구에 이용하는가 (DRB 검토 경로)
+  type: 사실형
+  basis: {law: 개인정보 보호법 · 보건의료데이터 활용 가이드라인(2025.12), article: 제28조의2 ①②, text: "과학적 연구 … 등을 위하여 정보주체의 동의 없이 가명정보를 처리할 수 있다.", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/개인정보보호법/제28조의2"}
+
+- id: D2
+  team_id: R-04
+  gate: 가명 데이터
+  requirement: 정보주체 동의를 받아 처리하는가 (DRB 트리거 아님)
+  type: 사실형
+  basis: {law: 보건의료데이터 활용 가이드라인(2025.12), article: FAQ Q15, text: "정보주체의 동의를 받아 가명정보를 수집하여 실시하는 과학적 연구는 개인정보 보호법 제28조의2에 해당하는 가명정보 처리가 아님", checked_at: "2026-09-29", url: "https://www.mohw.go.kr/boardDownload.es?bid=0003&list_no=1488471&seq=1"}
+
+- id: R-05
+  team_id: R-05
+  gate: DRB 사전 체크
+  requirement: 가명정보 위험도 1차 판정 (활용 주체 × 처리 환경)
+  type: 사실형
+  basis: {law: 가명정보 처리 가이드라인(2026.3.31 전면개정), article: "(현장 확인 후 기입)", text: "(현장 확인 후 기입)"}
+
+- id: R-06
+  team_id: R-06
+  gate: DRB 사전 체크
+  requirement: 기관 지침에 따른 위험도 조정
+  type: 판단불가(③)
+  basis: {law: 가명정보 처리 가이드라인(2026.3.31 전면개정), article: "(현장 확인 후 기입)", text: "(현장 확인 후 기입)"}
+
+- id: D3
+  gate: DRB 사전 체크
+  requirement: 서로 다른 기관의 가명정보를 결합하는가
+  type: 사실형
+  basis: {law: 개인정보 보호법, article: 제28조의3 ①②, text: "서로 다른 개인정보처리자 간의 가명정보의 결합은 … 지정하는 전문기관이 수행한다.", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/개인정보보호법/제28조의3"}
+
+- id: D4
+  team_id: R-07
+  gate: DRB 사전 체크
+  requirement: 본인 동의가 원칙인 민감정보(정신질환·HIV·성매개감염병·희귀질환·학대·낙태)가 없는가
+  type: 사실형(목록)
+  checkpoint: true
+  basis: {law: 보건의료데이터 활용 가이드라인(2025.12), article: 개요 및 활용 원칙, text: "본인의 동의를 받아 활용하는 것이 필요한 정보는 아래와 같음", checked_at: "2026-09-29", url: "https://www.mohw.go.kr/boardDownload.es?bid=0003&list_no=1488471&seq=1"}
+
+- id: D6
+  gate: DRB 사전 체크
+  requirement: 가명정보 연구도 IRB 심의 또는 심의면제 확인을 받아야 하는가
+  type: 사실형
+  basis: {law: 보건의료데이터 활용 가이드라인(2025.12), article: 부록3 · FAQ Q14, text: "정보주체의 동의 면제가 해당 연구에 대한 기관위원회 심의 또는 심의면제 확인을 갈음하는 것은 아님", checked_at: "2026-09-29", url: "https://www.mohw.go.kr/boardDownload.es?bid=0003&list_no=1488471&seq=1"}
+
+- id: D7
+  gate: DRB 사전 체크
+  requirement: DRB 승인 뒤 IRB 심의면제를 신청하는 표준절차를 따르는가 (기관마다 다름)
+  type: 판단불가(③)
+  basis: {law: 보건의료데이터 활용 가이드라인(2025.12), article: IRB-DRB 심의 표준절차, text: "가명처리 확인 등 데이터심의위원회 승인을 받은 과제는 해당 서류*를 확인할 수 있는 경우 7일 이내에 심의면제 확인서 발급 가능", checked_at: "2026-09-29", url: "https://www.mohw.go.kr/boardDownload.es?bid=0003&list_no=1488471&seq=1"}
+
+- id: J2
+  gate: IRB·위탁
+  requirement: 소속 기관이 기관위원회(IRB)를 설치·등록했는가
+  type: 사실형(목록)
+  basis: {law: 생명윤리법, article: 제10조 ①④, text: "기관위원회를 설치한 기관은 보건복지부장관에게 그 기관위원회를 등록하여야 한다.", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률/제10조"}
+
+- id: J4
+  team_id: R-01
+  gate: IRB·위탁
+  requirement: 위탁 협약 가능 기관인가 (종사 연구자 5명 이하)
+  type: 사실형(수치)
+  basis: {law: 생명윤리법 시행규칙, article: 제5조 ①1호, text: "해당 기관에 종사하는 연구자가 5명 이하인 기관", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률시행규칙/제5조"}
+
+- id: J5
+  team_id: R-01
+  gate: IRB·위탁
+  requirement: 위탁 협약 가능 기관인가 (최근 3년 심의 30건 이하)
+  type: 사실형(수치)
+  basis: {law: 생명윤리법 시행규칙, article: 제5조 ①2호, text: "해당 기관의 최근 3년간 기관위원회의 심의 건수가 30건 이하인 기관", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률시행규칙/제5조"}
+
+- id: J6
+  team_id: R-01
+  gate: IRB·위탁
+  requirement: 위탁 협약 가능 기관인가 (인증 미취득·취소)
+  type: 판단불가(③)
+  basis: {law: 생명윤리법 시행규칙, article: 제5조 ①3호, text: "법 제14조제1항에 따른 인증을 받지 못하였거나 같은 조 제4항에 따라 인증이 취소된 기관", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률시행규칙/제5조"}
+
+- id: J8
+  gate: IRB·위탁
+  requirement: 어느 기관에도 소속되지 않은 연구자인가 (공용위원회 대상)
+  type: 사실형
+  basis: {law: 생명윤리법, article: 제12조 ①2호, text: "교육ㆍ연구 기관 또는 병원 등에 소속되지 아니한 인간대상연구자 또는 인체유래물연구자가 신청한 업무", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률/제12조"}
+
+- id: J10
+  gate: IRB·위탁
+  requirement: 공동연구라면 한 기관위원회를 선정하는가 (수행기관 합의)
+  type: 판단불가(③)
+  basis: {law: 생명윤리법, article: 제12조 ②, text: "수행 기관은 각각의 소관 기관위원회 중 하나의 기관위원회를 선정하여 해당 연구를 심의하게 할 수 있다.", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률/제12조"}
+
+- id: E2
+  team_id: R-08
+  gate: 심의면제
+  requirement: 대면하더라도 대상자가 특정되지 않고 민감정보를 수집·기록하지 않는가 (심의면제 후보)
+  type: 사실형
+  basis: {law: 생명윤리법 시행규칙, article: 제13조 ①2호, text: "연구대상자등이 특정되지 않고 「개인정보 보호법」 제23조에 따른 민감정보를 수집하거나 기록하지 않는 연구", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률시행규칙/제13조"}
+
+- id: E3
+  team_id: R-08
+  gate: 심의면제
+  requirement: 식별정보를 기록하지 않고 기존 자료·문서를 이용하는가 (심의면제 후보)
+  type: 사실형
+  basis: {law: 생명윤리법 시행규칙, article: 제13조 ①3호, text: "연구대상자등에 대한 기존의 자료나 문서를 이용하는 연구", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률시행규칙/제13조"}
+
+- id: E4
+  gate: 심의면제
+  requirement: 1·2호 면제 후보에 취약한 환경의 대상자가 없는가
+  type: 사실형(목록)
+  basis: {law: 생명윤리법 시행규칙, article: 제13조 ②, text: "취약한 환경에 있는 시험대상자(Vulnerable Subjects)를 대상으로 하는 연구는 기관위원회의 심의를 받아야 한다.", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률시행규칙/제13조"}
 
 - id: R-09
-  gate: IRB·위탁
-  requirement: IRB 심의면제 결정
+  team_id: R-09
+  gate: 심의면제
+  requirement: 심의면제 여부는 관할 기관위원회가 확인한다
   type: 판단불가(①)
-  when: {fact: F03, equals: 가명처리}
-  then: 사무국 질문
-  basis:
-    law: 생명윤리법 시행규칙
-    article: (현장 확인 후 기입)
-    text: (현장 확인 후 기입)
-    effective: null
-    checked_at: null
+  basis: {law: 생명윤리법, article: 제15조 ②, text: "제1항에도 불구하고 연구대상자 및 공공에 미치는 위험이 미미한 경우로서 국가위원회의 심의를 거쳐 보건복지부령으로 정한 기준에 맞는 연구는 기관위원회의 심의를 면제할 수 있다.", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률/제15조"}
+
+- id: R-10
+  team_id: R-10
+  gate: 심의면제
+  requirement: 연구대상자 및 공공에 미치는 위험이 미미한 경우인가
+  type: 판단불가(②)
+  basis: {law: 생명윤리법, article: 제15조 ②, text: "연구대상자 및 공공에 미치는 위험이 미미한 경우로서", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률/제15조"}
+
+- id: C3
+  gate: 동의
+  requirement: 서면동의 면제를 받으려 하는가 (기관위원회 승인 사항)
+  type: 판단불가(①)
+  basis: {law: 생명윤리법, article: 제16조 ③, text: "기관위원회의 승인을 받아 연구대상자의 서면동의를 면제할 수 있다. 이 경우 제2항에 따른 대리인의 서면동의는 면제하지 아니한다.", checked_at: "2026-09-29", url: "https://www.law.go.kr/법령/생명윤리및안전에관한법률/제16조"}

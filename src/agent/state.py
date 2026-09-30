@@ -26,6 +26,7 @@ FACT_LABELS = {
     "F13": "연구 기간",
     "F14": "배아·유전자 연구 해당",
     "F15": "연구 참여 인원 규모",
+    "F16": "식별정보(이름·등록번호 등) 수집·기록",  # 심의면제 후보(E3) 판정에 필요
 }
 
 
@@ -55,6 +56,8 @@ class Pending(BaseModel):
 
 class InstitutionCheck(BaseModel):
     """⑤ 기관 대조 결과. 공공 명단과 문자열로만 대조한다."""
+    name: Optional[str] = None
+    affiliated: bool = True                    # 소속 기관이 없으면 공용위원회(J8)
     irb_exists: Optional[bool] = None
     irb_certified: Optional[bool] = None
     clinical_trial_site: Optional[bool] = None
@@ -69,11 +72,14 @@ class Basis(BaseModel):
     text: str = "(현장 확인 후 기입)"
     effective: Optional[str] = None
     checked_at: Optional[str] = None
+    url: Optional[str] = None
+    team_checked: bool = False                 # T1이 현행 원문과 다시 대조했는가
 
 
 class JudgmentRow(BaseModel):
     """⑥ 관문 판정의 한 행."""
-    rule_id: str
+    rule_id: str                               # prep 규칙표 ID (G·T·S·J·E·C·D) 또는 팀 ID (R-xx)
+    team_id: Optional[str] = None              # 팀 문서의 R-xx와 같은 규칙이면 그 번호
     requirement: str
     result: Literal["충족", "미충족", "판단불가"]
     abstain_reason: Optional[Literal["①", "②", "③", "나"]] = None  # ①위원회 판단 ②평가어 ③기관 재량 (나)정보 없음
@@ -85,7 +91,7 @@ class JudgmentRow(BaseModel):
 
 class Route(BaseModel):
     """⑦ 경로 결정."""
-    route: Literal["A", "B", "C", "범위 밖", "미정"]
+    route: Literal["A", "B", "C", "임상시험", "비대상", "범위 밖", "미정"]
     committees: list[str]
     order: list[int]
     fast_track: bool = False
@@ -155,6 +161,7 @@ class GraphState(TypedDict, total=False):
     edited_by_user: list[str]
     extra_inputs: dict
     institution: dict
+    decision: dict                             # ⑥이 ⑦·⑧에 넘기는 판정 요약
     judgments: list[dict]
     route: dict
     documents: list[dict]

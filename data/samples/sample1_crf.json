@@ -1,11 +1,11 @@
 {
   "id": "sample1_crf",
   "title": "샘플 1 · 진료기록 직접 열람 (CRF)",
-  "_note": "화면 개발용 예시 값이다. 실제 판정 결과가 아니다. 조문·원문 칸은 T1 확인 전이라 비워 둔다.",
+  "_note": "데모용 가상 계획서다. result는 scripts/make_samples.py가 규칙 엔진을 돌려 만든 값이다.",
   "institution_name": "가상대학교병원",
-  "plan_text": "연구 제목: 대장내시경 용종 크기와 재발의 관련성 후향적 관찰연구\n연구책임자: 홍길동 (소화기내과, 010-1234-5678, hong@example.ac.kr)\n수행기관: 가상대학교병원\n연구 방법: 연구자가 2020년 1월부터 2024년 12월까지 대장내시경을 받은 환자의 진료기록을 직접 열람하여 나이, 성별, 용종 크기, 재발 여부만 증례기록서(CRF)에 옮겨 적는다.\n대상자 수: 약 300명\n연구 기간: 2026년 12월 1일부터 2027년 11월 30일까지\n동의: 후향적 기록 연구로 동의면제를 요청한다.",
+  "plan_text": "연구 제목: 대장내시경 용종 크기와 재발의 관련성 후향적 관찰연구\n연구책임자: 홍길동 (소화기내과, 010-1234-5678, hong@example.ac.kr)\n수행기관: 가상대학교병원\n연구 방법: 연구자가 2020년 1월부터 2024년 12월까지 대장내시경을 받은 환자의 진료기록을 직접 열람하여 환자 등록번호, 나이, 성별, 용종 크기, 재발 여부를 증례기록서(CRF)에 옮겨 적는다.\n대상자 수: 약 300명\n연구 기간: 2026년 12월 1일부터 2027년 11월 30일까지\n동의: 후향적 기록 연구로 동의면제를 요청한다.",
   "pending": {
-    "masked_text": "연구 제목: 대장내시경 용종 크기와 재발의 관련성 후향적 관찰연구\n연구책임자: [이름] (소화기내과, [전화번호], [이메일])\n수행기관: 가상대학교병원\n연구 방법: 연구자가 2020년 1월부터 2024년 12월까지 대장내시경을 받은 환자의 진료기록을 직접 열람하여 나이, 성별, 용종 크기, 재발 여부만 증례기록서(CRF)에 옮겨 적는다.\n대상자 수: 약 300명\n연구 기간: 2026년 12월 1일부터 2027년 11월 30일까지\n동의: 후향적 기록 연구로 동의면제를 요청한다.",
+    "masked_text": "연구 제목: 대장내시경 용종 크기와 재발의 관련성 후향적 관찰연구\n연구책임자: [이름] (소화기내과, [전화번호], [이메일])\n수행기관: 가상대학교병원\n연구 방법: 연구자가 2020년 1월부터 2024년 12월까지 대장내시경을 받은 환자의 진료기록을 직접 열람하여 환자 등록번호, 나이, 성별, 용종 크기, 재발 여부를 증례기록서(CRF)에 옮겨 적는다.\n대상자 수: 약 300명\n연구 기간: 2026년 12월 1일부터 2027년 11월 30일까지\n동의: 후향적 기록 연구로 동의면제를 요청한다.",
     "mask_log": [
       {
         "type": "이름",
@@ -85,9 +85,9 @@
         "key": "F07",
         "label": "민감정보 5종 포함",
         "value": [],
-        "span": "나이, 성별, 용종 크기, 재발 여부만",
-        "span_start": 149,
-        "span_end": 170,
+        "span": "나이, 성별, 용종 크기, 재발 여부",
+        "span_start": 158,
+        "span_end": 178,
         "status": "found",
         "cross_check": "agree"
       },
@@ -126,8 +126,8 @@
         "label": "동의 계획",
         "value": "동의면제 요청",
         "span": "동의면제를 요청한다",
-        "span_start": 258,
-        "span_end": 268,
+        "span_start": 267,
+        "span_end": 277,
         "status": "found",
         "cross_check": "agree"
       },
@@ -148,8 +148,8 @@
         "label": "연구 기간",
         "value": "2026-12-01 ~ 2027-11-30",
         "span": "2026년 12월 1일부터 2027년 11월 30일까지",
-        "span_start": 212,
-        "span_end": 242,
+        "span_start": 221,
+        "span_end": 251,
         "status": "found",
         "cross_check": "agree"
       },
@@ -168,8 +168,18 @@
         "label": "연구 참여 인원 규모",
         "value": 300,
         "span": "약 300명",
-        "span_start": 198,
-        "span_end": 204,
+        "span_start": 207,
+        "span_end": 213,
+        "status": "found",
+        "cross_check": "agree"
+      },
+      {
+        "key": "F16",
+        "label": "식별정보(이름·등록번호 등) 수집·기록",
+        "value": "예",
+        "span": "환자 등록번호",
+        "span_start": 149,
+        "span_end": 156,
         "status": "found",
         "cross_check": "agree"
       }
@@ -177,146 +187,162 @@
   },
   "result": {
     "institution": {
+      "name": "가상대학교병원",
+      "affiliated": true,
       "irb_exists": true,
       "irb_certified": true,
       "clinical_trial_site": false,
       "source": [
-        "IRB 평가·인증 결과 공고 (예시)",
-        "식약처 임상시험 실시기관 명단 (예시)"
+        "데모용 가상 기관 (실제 명단 아님)"
       ],
       "checked_at": "2026-09-30"
     },
     "judgments": [
       {
-        "rule_id": "R-03",
-        "requirement": "임상시험실시기관에서 수행해야 하는 연구인가",
-        "result": "미충족",
+        "rule_id": "S3",
+        "team_id": null,
+        "requirement": "식별 가능한 정보(가명정보 포함)를 이용하는 인간대상연구인가",
+        "result": "충족",
         "abstain_reason": null,
-        "result_detail": "임상시험 아님",
-        "type": "사실형(목록)",
-        "basis": {
-          "law": "약사법·의료기기법"
-        },
-        "fact_refs": [
-          "F10"
-        ]
-      },
-      {
-        "rule_id": "R-04",
-        "requirement": "가명처리된 데이터셋을 제공받는가",
-        "result": "미충족",
-        "abstain_reason": null,
-        "result_detail": "DRB 심의 권고 대상 아님",
+        "result_detail": "인간대상연구",
         "type": "사실형",
         "basis": {
-          "law": "보건의료데이터 활용 가이드라인"
+          "law": "생명윤리법 시행규칙",
+          "article": "제2조 ①3호",
+          "text": "연구대상자를 직접ㆍ간접적으로 식별할 수 있는 정보를 이용하는 연구",
+          "checked_at": "2026-09-29",
+          "url": "https://www.law.go.kr/법령/생명윤리및안전에관한법률시행규칙/제2조"
         },
         "fact_refs": [
-          "F02",
+          "F01",
           "F03"
         ]
       },
       {
-        "rule_id": "R-08",
-        "requirement": "IRB 심의면제 신청 가능 후보인가",
-        "result": "미충족",
+        "rule_id": "J2",
+        "team_id": null,
+        "requirement": "소속 기관이 기관위원회(IRB)를 설치·등록했는가",
+        "result": "충족",
         "abstain_reason": null,
-        "result_detail": "식별정보 직접 열람",
-        "type": "사실형",
+        "result_detail": "가상대학교병원 IRB에 신청",
+        "type": "사실형(목록)",
         "basis": {
-          "law": "생명윤리법 시행규칙"
+          "law": "생명윤리법",
+          "article": "제10조 ①④",
+          "text": "기관위원회를 설치한 기관은 보건복지부장관에게 그 기관위원회를 등록하여야 한다.",
+          "checked_at": "2026-09-29",
+          "url": "https://www.law.go.kr/법령/생명윤리및안전에관한법률/제10조"
         },
         "fact_refs": [
-          "F02"
+          "F12"
         ]
       },
       {
-        "rule_id": "R-10",
-        "requirement": "위험이 미미한 경우에 해당하는가",
-        "result": "판단불가",
-        "abstain_reason": "②",
-        "result_detail": null,
-        "type": "판단불가(②)",
+        "rule_id": "E3",
+        "team_id": "R-08",
+        "requirement": "식별정보를 기록하지 않고 기존 자료·문서를 이용하는가 (심의면제 후보)",
+        "result": "미충족",
+        "abstain_reason": null,
+        "result_detail": "식별정보를 기록함 → 심의 대상",
+        "type": "사실형",
         "basis": {
-          "law": "생명윤리법"
+          "law": "생명윤리법 시행규칙",
+          "article": "제13조 ①3호",
+          "text": "연구대상자등에 대한 기존의 자료나 문서를 이용하는 연구",
+          "checked_at": "2026-09-29",
+          "url": "https://www.law.go.kr/법령/생명윤리및안전에관한법률시행규칙/제13조"
         },
-        "fact_refs": []
+        "fact_refs": [
+          "F16"
+        ]
+      },
+      {
+        "rule_id": "C3",
+        "team_id": null,
+        "requirement": "서면동의 면제를 받으려 하는가 (기관위원회 승인 사항)",
+        "result": "판단불가",
+        "abstain_reason": "①",
+        "result_detail": "서면동의 면제는 기관위원회 승인 사항 (위험이 극히 낮은지 등)",
+        "type": "판단불가(①)",
+        "basis": {
+          "law": "생명윤리법",
+          "article": "제16조 ③",
+          "text": "기관위원회의 승인을 받아 연구대상자의 서면동의를 면제할 수 있다. 이 경우 제2항에 따른 대리인의 서면동의는 면제하지 아니한다.",
+          "checked_at": "2026-09-29",
+          "url": "https://www.law.go.kr/법령/생명윤리및안전에관한법률/제16조"
+        },
+        "fact_refs": [
+          "F11"
+        ]
       }
     ],
     "route": {
       "route": "C",
       "committees": [
-        "기관 IRB (신규 심의)"
+        "소속 기관 IRB · 심의"
       ],
       "order": [
         1
       ],
       "fast_track": false,
       "trace": [
-        "R-04",
-        "R-08"
+        "J2"
       ]
     },
     "documents": [
       {
-        "doc": "연구계획서",
-        "level": "법정"
+        "doc": "심의 신청서 · 연구계획서",
+        "level": "기관",
+        "source": "관할 IRB 서식"
       },
       {
-        "doc": "동의면제 사유서",
+        "doc": "서면동의 면제 사유서",
         "level": "기관",
-        "source": "기관 IRB 안내문 (예시)"
-      },
-      {
-        "doc": "증례기록서(CRF) 양식",
-        "level": "기관",
-        "source": "기관 IRB 안내문 (예시)"
+        "source": "관할 IRB 서식",
+        "basis": "C3"
       }
     ],
     "schedule": {
       "scenarios": [
         {
-          "revisions": 0,
-          "submit_by": "2026-10-26"
+          "revisions": 0
         },
         {
-          "revisions": 1,
-          "submit_by": "2026-10-12"
+          "revisions": 1
         },
         {
-          "revisions": 2,
-          "submit_by": null
+          "revisions": 2
         }
       ],
-      "default": 1,
+      "default": 0,
       "missing": [
-        "보완 2회: 공개 수치 없음"
+        "관할 위원회 회의일·접수 마감: 공개 일정 데이터 없음"
       ]
     },
     "abstain": [
       {
-        "rule_id": "R-10",
+        "rule_id": "C3",
         "kind": "가",
-        "reason": "② 평가어 · 위험이 미미한",
-        "question": "본 연구는 진료기록에서 나이, 성별, 용종 크기, 재발 여부만 옮겨 적는 후향적 기록 연구입니다. 연구대상자에게 미치는 위험이 미미한 경우에 해당하는지 위원회의 판단을 요청드립니다.",
+        "reason": "① 위원회 판단 · 서면동의 면제를 받으려 하는가 (기관위원회 승인 사항)",
+        "question": "생명윤리법 제16조 ③ 관련 문의입니다. 본 연구에서 「서면동의 면제를 받으려 하는가 (기관위원회 승인 사항)」에 대해 위원회의 판단을 요청드립니다. (참고: 서면동의 면제는 기관위원회 승인 사항 (위험이 극히 낮은지 등))",
         "cites": [
-          "R-10"
+          "C3",
+          "F11"
         ]
       }
     ],
     "report": [
       {
-        "text": "가명처리된 데이터셋을 받지 않으므로 DRB 심의 권고 대상이 아닙니다.",
+        "text": "소속 기관에 IRB가 있어 그 IRB에 신청합니다.",
         "refs": [
-          "R-04",
-          "F03"
+          "J2"
         ]
       },
       {
-        "text": "연구자가 식별정보를 직접 열람하므로 심의면제 신청 후보가 아니며, 소속기관 IRB의 신규 심의를 받습니다.",
+        "text": "식별정보를 기록하므로 심의면제 후보가 아니며, 심의를 받아야 합니다.",
         "refs": [
-          "R-08",
-          "F02"
+          "E3",
+          "F16"
         ]
       }
     ]
