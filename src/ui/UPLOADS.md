@@ -29,6 +29,8 @@ DOCX, TXT: Python 표준 라이브러리로 읽는다. 외부 변환 서버에 �
 
 ## 통합 담당자 요청
 
+> 반영 완료(10-01, c592414): 1·2는 main에 반영했고, 3은 `LLM_BASE_URL=http://127.0.0.1:8000/v1` · `LLM_MODEL=qwen3.8-27b`로 확인했다.
+
 담당 범위가 app.py와 src/ui/이므로 루트 requirements.txt와 README는 수정하지 않았다.
 
 1. requirements.txt에 `-r src/ui/upload-requirements.txt`를 추가한다.

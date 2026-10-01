@@ -280,7 +280,6 @@ def committee(result: dict) -> str:
 
 def sealed_run(case: dict, stage: int) -> dict:
     """1단계: ③을 정답 사실로 바꿔 끼우고 엔진만(LLM 없음). 2단계: ② 마스킹·③ 추출부터 끝까지(LLM). 둘 다 설명문 다듬기(AI)는 끈다."""
-    from agent.nodes import read as read_node, write as write_node
     t = time.time()
     got = None
     try:

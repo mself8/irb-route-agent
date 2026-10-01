@@ -1,4 +1,4 @@
-"""data/samples의 데모 샘플(가상 계획서 + 예시 결과). FAKE 모드와 자리표시자 노드가 쓴다."""
+"""data/samples의 데모 샘플(가상 계획서 + 예시 결과). FAKE 모드가 쓰고, LLM=0이면 ②③ 대신 쓴다."""
 import json
 from functools import lru_cache
 from pathlib import Path

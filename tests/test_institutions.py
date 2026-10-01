@@ -6,8 +6,6 @@ from pathlib import Path
 import pytest
 import yaml
 
-from agent.nodes import judge
-
 ROOT = Path(__file__).resolve().parents[1]
 PROFILES = sorted((ROOT / "data" / "institutions" / "profiles").glob("*.yaml"))
 STD = yaml.safe_load((ROOT / "data" / "institutions" / "standard.yaml").read_text(encoding="utf-8"))
